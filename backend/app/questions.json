@@ -1,0 +1,127 @@
+[
+  {
+    "question": "¿Quién creó Minecraft?",
+    "options": ["Notch", "Valve", "EA", "Nintendo"],
+    "correct": 0
+  },
+  {
+    "question": "¿En qué ciudad vive la familia Simpson?",
+    "options": ["Springfield", "Shelbyville", "Metropolis", "Gotham"],
+    "correct": 0
+  },
+  {
+    "question": "¿De qué país es el artista Bad Bunny?",
+    "options": ["Puerto Rico", "Colombia", "México", "Rep. Dominicana"],
+    "correct": 0
+  },
+  {
+    "question": "¿Cuál es el animal terrestre más rápido del mundo?",
+    "options": ["Guepardo", "León", "Avestruz", "Antílope"],
+    "correct": 0
+  },
+  {
+    "question": "¿Cuántas temporadas tiene Breaking Bad?",
+    "options": ["5", "4", "6", "7"],
+    "correct": 0
+  },
+  {
+    "question": "¿Qué empresa desarrolla Grand Theft Auto?",
+    "options": ["EA Games", "Rockstar Games", "Activision", "Ubisoft"],
+    "correct": 1
+  },
+  {
+    "question": "¿Cuántos integrantes tenía One Direction?",
+    "options": ["4", "5", "6", "7"],
+    "correct": 1
+  },
+  {
+    "question": "¿Cuántos planetas tiene el sistema solar?",
+    "options": ["7", "8", "9", "10"],
+    "correct": 1
+  },
+  {
+    "question": "¿En qué año se fundó YouTube?",
+    "options": ["2003", "2005", "2007", "2009"],
+    "correct": 1
+  },
+  {
+    "question": "¿En qué continente está Egipto?",
+    "options": ["Asia", "África", "Europa", "Oceanía"],
+    "correct": 1
+  },
+  {
+    "question": "¿Qué selección ganó el Mundial 2022?",
+    "options": ["Francia", "Brasil", "Argentina", "España"],
+    "correct": 2
+  },
+  {
+    "question": "¿Cuántas Infinity Stones hay en el universo Marvel?",
+    "options": ["4", "5", "6", "7"],
+    "correct": 2
+  },
+  {
+    "question": "¿Cuál es la raza del perro del meme 'Doge'?",
+    "options": ["Husky", "Labrador", "Shiba Inu", "Pomerania"],
+    "correct": 2
+  },
+  {
+    "question": "¿Quién cantó 'Shape of You'?",
+    "options": ["Justin Bieber", "Shawn Mendes", "Ed Sheeran", "Harry Styles"],
+    "correct": 2
+  },
+  {
+    "question": "¿Cuál es el apodo de la selección argentina?",
+    "options": ["La Roja", "La Celeste", "La Albiceleste", "Los Charrúas"],
+    "correct": 2
+  },
+  {
+    "question": "¿Cuántos jugadores hay en un equipo de fútbol en cancha?",
+    "options": ["9", "10", "11", "12"],
+    "correct": 2
+  },
+  {
+    "question": "¿A qué temperatura hierve el agua a nivel del mar?",
+    "options": ["80°C", "90°C", "100°C", "110°C"],
+    "correct": 2
+  },
+  {
+    "question": "¿Cuál es el Pokémon eléctrico más famoso?",
+    "options": ["Charmander", "Bulbasaur", "Squirtle", "Pikachu"],
+    "correct": 3
+  },
+  {
+    "question": "¿Cuántos jugadores caen en Fortnite por partida?",
+    "options": ["50", "75", "150", "100"],
+    "correct": 3
+  },
+  {
+    "question": "¿Quién mató a Mufasa en El Rey León?",
+    "options": ["Simba", "Pumba", "Zazu", "Scar"],
+    "correct": 3
+  },
+  {
+    "question": "¿Cuántos colores tiene el arcoíris?",
+    "options": ["5", "6", "8", "7"],
+    "correct": 3
+  },
+  {
+    "question": "¿En qué país se ambienta la serie Squid Game?",
+    "options": ["Japón", "China", "Vietnam", "Corea del Sur"],
+    "correct": 3
+  },
+  {
+    "question": "¿En qué año salió el primer iPhone?",
+    "options": ["2004", "2005", "2009", "2007"],
+    "correct": 3
+  },
+  {
+    "question": "¿Qué red social compró Elon Musk y renombró como X?",
+    "options": ["Facebook", "Instagram", "TikTok", "Twitter"],
+    "correct": 3
+  },
+  {
+    "question": "¿Cuántas temporadas tiene Game of Thrones?",
+    "options": ["6", "7", "9", "8"],
+    "correct": 3
+  }
+]

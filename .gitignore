@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+
+# Root (workspace detection artifacts)
+node_modules/
+package-lock.json
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
