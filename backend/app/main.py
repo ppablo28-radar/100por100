@@ -11,6 +11,11 @@ from app.game_manager import GameManager
 
 app = FastAPI()
 
+
+@app.on_event("startup")
+async def startup_event():
+    await game_manager.load_questions()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

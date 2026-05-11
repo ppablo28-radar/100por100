@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import random
 import time
 
@@ -18,9 +19,74 @@ class GameManager:
         self.answers = {}
         self.start_task = None
         self.start_time = None
+        self.questions: list[dict] = []
+        self._load_from_json()  # fallback síncrono inicial
 
-        with open("app/questions.json", "r", encoding="utf-8") as f:
-            self.questions = json.load(f)
+    def _load_from_json(self) -> None:
+        try:
+            with open("app/questions.json", "r", encoding="utf-8") as f:
+                self.questions = json.load(f)
+        except FileNotFoundError:
+            pass
+
+    async def load_questions(self) -> None:
+        """Carga preguntas desde Supabase si DATABASE_URL está configurado."""
+        if not os.getenv("DATABASE_URL"):
+            self._load_from_json()
+            return
+        try:
+            from sqlalchemy import select
+            from sqlalchemy.orm import selectinload
+            from app.db.session import AsyncSessionLocal
+            from app.models.questions import Question
+
+            async with AsyncSessionLocal() as db:
+                result = await db.execute(
+                    select(Question)
+                    .where(
+                        Question.status == "approved",
+                        Question.enabled == True,
+                        Question.archived == False,
+                        Question.answer_mode == "multiple_choice",
+                    )
+                    .options(
+                        selectinload(Question.translations),
+                        selectinload(Question.answer_options),
+                    )
+                )
+                db_questions = result.scalars().all()
+
+            question_list = []
+            for q in db_questions:
+                title = q.slug
+                for t in q.translations:
+                    if t.language == "es":
+                        title = t.title
+                        break
+
+                options = sorted(
+                    [o for o in q.answer_options if o.enabled],
+                    key=lambda o: o.display_order,
+                )
+                if not options:
+                    continue
+
+                correct_index = next(
+                    (i for i, o in enumerate(options) if o.is_correct), 0
+                )
+                question_list.append({
+                    "question": title,
+                    "options": [o.text for o in options],
+                    "correct": correct_index,
+                })
+
+            if question_list:
+                self.questions = question_list
+                print(f"[DB] {len(question_list)} preguntas cargadas desde Supabase")
+        except Exception as e:
+            print(f"[DB] Error cargando preguntas, usando JSON: {e}")
+            if not self.questions:
+                self._load_from_json()
 
     async def add_player(self, player_id, nickname):
         if self.state not in ("WAITING", "STARTING"):
@@ -114,6 +180,7 @@ class GameManager:
 
     async def game_loop(self):
         self.state = "QUESTION"
+        await self.load_questions()  # refresca para incluir preguntas nuevas
 
         selected_questions = random.sample(
             self.questions,
