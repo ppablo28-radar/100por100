@@ -208,14 +208,40 @@ class GameManager:
             correct_text = question["options"][correct_index]
 
             correct_count = 0
+            question_results = []
+
             for pid, answer_data in self.answers.items():
                 if pid not in self.players:
                     continue
-                if answer_data["answer"] == correct_index:
+                is_correct = answer_data["answer"] == correct_index
+                t = answer_data["response_time"]
+                pts = int(100 + 50 * (1 - t / 10)) if is_correct else 0
+                if is_correct:
                     correct_count += 1
-                    t = answer_data["response_time"]
-                    points = int(100 + 50 * (1 - t / 10))
-                    self.players[pid]["score"] += points
+                    self.players[pid]["score"] += pts
+                question_results.append({
+                    "nickname": self.players[pid]["nickname"],
+                    "correct": is_correct,
+                    "response_time_ms": int(t * 1000),
+                    "points_earned": pts,
+                })
+
+            # Jugadores que no respondieron
+            answered_ids = set(self.answers.keys())
+            for pid, player_data in self.players.items():
+                if pid not in answered_ids:
+                    question_results.append({
+                        "nickname": player_data["nickname"],
+                        "correct": None,
+                        "response_time_ms": None,
+                        "points_earned": 0,
+                    })
+
+            # Orden: correctos por velocidad, luego incorrectos, luego sin respuesta
+            question_results.sort(key=lambda x: (
+                0 if x["correct"] is True else (1 if x["correct"] is False else 2),
+                x["response_time_ms"] if x["response_time_ms"] is not None else 99999,
+            ))
 
             total_players = len(self.players)
             correct_pct = (
@@ -228,6 +254,7 @@ class GameManager:
                 "correct": correct_text,
                 "correct_index": correct_index,
                 "correct_pct": correct_pct,
+                "question_results": question_results,
             })
 
             scoreboard = sorted(

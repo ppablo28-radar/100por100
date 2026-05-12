@@ -12,10 +12,18 @@ type QuestionData = {
   total_questions: number;
 };
 
+type QuestionResult = {
+  nickname: string;
+  correct: boolean | null;
+  response_time_ms: number | null;
+  points_earned: number;
+};
+
 type RevealData = {
   correct: string;
   correct_index: number;
   correct_pct: number;
+  question_results: QuestionResult[];
 };
 
 type Player = {
@@ -366,11 +374,8 @@ export default function Home() {
       {/* REVEAL */}
       {phase === "REVEAL" && revealData && question && (
         <div className="flex flex-col gap-4 w-full max-w-xl items-center">
-          <h2 className="text-xl text-center text-zinc-300 leading-snug">
-            {question.question}
-          </h2>
-
-          <div className="grid grid-cols-2 gap-3 w-full">
+          {/* Opciones con correcto/incorrecto */}
+          <div className="grid grid-cols-2 gap-2 w-full">
             {question.options.map((option, index) => {
               const isCorrect = index === revealData.correct_index;
               const wasSelected = selectedAnswer === index;
@@ -379,39 +384,91 @@ export default function Home() {
                 <div
                   key={index}
                   className={`
-                    p-4 rounded-lg text-base font-medium text-left transition-all
-                    ${isCorrect ? "bg-green-600 ring-4 ring-green-400" : OPTION_COLORS_BASE[index]}
-                    ${isWrong ? "opacity-50 line-through" : ""}
+                    p-3 rounded-lg text-sm font-medium text-left transition-all
+                    ${isCorrect ? "bg-green-600 ring-2 ring-green-400" : OPTION_COLORS_BASE[index]}
+                    ${isWrong ? "opacity-40 line-through" : ""}
                     ${isCorrect && wasSelected ? "scale-105" : ""}
                   `}
                 >
-                  <span className="font-bold mr-2">{["A", "B", "C", "D"][index]}.</span>
+                  <span className="font-bold mr-1">{["A", "B", "C", "D"][index]}.</span>
                   {option}
                 </div>
               );
             })}
           </div>
 
-          {selectedAnswer !== null ? (
-            <div
-              className={`text-2xl font-bold ${
+          {/* Resultado personal */}
+          <div className="flex items-center gap-3">
+            {selectedAnswer !== null ? (
+              <span className={`text-xl font-bold ${
                 selectedAnswer === revealData.correct_index ? "text-green-400" : "text-red-400"
-              }`}
-            >
-              {selectedAnswer === revealData.correct_index ? "✓ ¡Correcto!" : "✗ Incorrecto"}
-            </div>
-          ) : (
-            <div className="text-2xl font-bold text-zinc-500">Sin respuesta</div>
-          )}
-
-          <div className="text-zinc-400 text-sm">
-            {revealData.correct_pct}% de jugadores acertó
+              }`}>
+                {selectedAnswer === revealData.correct_index ? "✓ ¡Correcto!" : "✗ Incorrecto"}
+              </span>
+            ) : (
+              <span className="text-xl font-bold text-zinc-500">Sin respuesta</span>
+            )}
+            <span className="text-zinc-500 text-sm">
+              ({revealData.correct_pct}% acertó)
+            </span>
           </div>
+
+          {/* Tabla de resultados de esta pregunta */}
+          {revealData.question_results && revealData.question_results.length > 0 && (
+            <div className="w-full bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+              <div className="px-4 py-2 border-b border-zinc-800">
+                <p className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                  Esta pregunta
+                </p>
+              </div>
+              <div className="divide-y divide-zinc-800">
+                {revealData.question_results.map((r, i) => {
+                  const isMe = r.nickname === nickname;
+                  return (
+                    <div
+                      key={i}
+                      className={`flex items-center gap-3 px-4 py-2 text-sm ${
+                        isMe ? "bg-yellow-400/10" : ""
+                      }`}
+                    >
+                      {/* ícono resultado */}
+                      <span className="w-5 text-center text-base shrink-0">
+                        {r.correct === true && "✓"}
+                        {r.correct === false && "✗"}
+                        {r.correct === null && "—"}
+                      </span>
+
+                      {/* nickname */}
+                      <span className={`flex-1 truncate ${
+                        isMe ? "text-yellow-400 font-bold" : "text-zinc-300"
+                      }`}>
+                        {r.nickname}
+                      </span>
+
+                      {/* tiempo */}
+                      <span className="text-zinc-500 text-xs w-10 text-right shrink-0">
+                        {r.response_time_ms !== null
+                          ? `${(r.response_time_ms / 1000).toFixed(1)}s`
+                          : "—"}
+                      </span>
+
+                      {/* puntos */}
+                      <span className={`text-xs font-mono w-16 text-right shrink-0 ${
+                        r.points_earned > 0 ? "text-green-400" : "text-zinc-600"
+                      }`}>
+                        {r.points_earned > 0 ? `+${r.points_earned}` : "0"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* SCOREBOARD */}
-      {scoreboard.length > 0 && (phase === "REVEAL" || phase === "FINISHED") && (
+      {/* SCOREBOARD — solo en FINISHED (en REVEAL está en el panel derecho) */}
+      {scoreboard.length > 0 && phase === "FINISHED" && (
         <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
           <h2 className="text-lg font-bold mb-3 text-zinc-300">Ranking</h2>
           {scoreboard.map((player, index) => {
