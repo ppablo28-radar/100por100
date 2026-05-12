@@ -216,8 +216,9 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 gap-6"
-      style={{ paddingRight: showSidebar ? "13.5rem" : undefined }}
+      className={`min-h-screen bg-black text-white flex flex-col items-center justify-center p-6 gap-6 transition-all ${
+        showSidebar ? "pb-16 md:pb-6 md:pr-[13.5rem]" : ""
+      }`}
     >
 
       {/* Nickname badge — visible en todas las fases excepto JOIN */}
@@ -228,9 +229,22 @@ export default function Home() {
         </div>
       )}
 
-      {/* Panel de posiciones lateral */}
+      {/* Barra inferior mobile — solo en pantallas chicas */}
+      {showSidebar && myRank >= 0 && (
+        <div className="fixed bottom-0 left-0 right-0 md:hidden bg-zinc-900 border-t border-zinc-700 px-4 py-2 flex justify-between items-center z-50">
+          <span className="text-zinc-400 text-sm">Posición</span>
+          <span className="text-white font-bold">
+            #{myRank + 1} de {scoreboard.length}
+          </span>
+          <span className="text-zinc-300 text-sm font-mono">
+            {scoreboard[myRank]?.score ?? 0} pts
+          </span>
+        </div>
+      )}
+
+      {/* Panel de posiciones lateral — oculto en mobile */}
       {showSidebar && (
-        <aside className="fixed right-0 top-0 h-full w-52 bg-zinc-900 border-l border-zinc-800 flex flex-col">
+        <aside className="hidden md:flex fixed right-0 top-0 h-full w-52 bg-zinc-900 border-l border-zinc-800 flex-col">
           <div className="px-3 py-3 border-b border-zinc-800">
             <p className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Posiciones</p>
           </div>
@@ -256,11 +270,12 @@ export default function Home() {
                   <span className={`flex-1 truncate text-xs ${isMe ? "text-yellow-400 font-bold" : "text-zinc-300"}`}>
                     {player.nickname}
                   </span>
-                  <span className="text-zinc-500 text-xs shrink-0 mr-1">
-                    {player.avg_time_ms != null
-                      ? `${(player.avg_time_ms / 1000).toFixed(1)}s`
-                      : ""}
-                  </span>
+                  {player.answered_count != null && player.answered_count > 0 && (
+                    <span className="text-zinc-500 text-xs shrink-0 mr-1.5">
+                      <span className="text-green-400">{player.correct_count}</span>
+                      <span className="text-zinc-600">/{player.answered_count}</span>
+                    </span>
+                  )}
                   <span className="text-zinc-400 text-xs font-mono shrink-0">
                     {player.score}
                   </span>

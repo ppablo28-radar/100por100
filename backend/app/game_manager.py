@@ -295,7 +295,16 @@ class GameManager:
 
         final_scoreboard = sorted(
             [
-                {"nickname": p["nickname"], "score": p["score"]}
+                {
+                    "nickname": p["nickname"],
+                    "score": p["score"],
+                    "correct_count": p["correct_count"],
+                    "answered_count": p["answered_count"],
+                    "avg_time_ms": (
+                        p["total_time_ms"] // p["answered_count"]
+                        if p["answered_count"] > 0 else None
+                    ),
+                }
                 for p in self.players.values()
             ],
             key=lambda x: x["score"],
