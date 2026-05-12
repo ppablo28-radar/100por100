@@ -29,6 +29,9 @@ type RevealData = {
 type Player = {
   nickname: string;
   score: number;
+  correct_count?: number;
+  answered_count?: number;
+  avg_time_ms?: number;
 };
 
 const OPTION_COLORS = [
@@ -89,6 +92,11 @@ export default function Home() {
 
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+
+      if (data.type === "PING") {
+        socket.send(JSON.stringify({ type: "PONG" }));
+        return;
+      }
 
       if (data.type === "PLAYER_JOINED") {
         setPlayerCount(data.count);
@@ -247,6 +255,11 @@ export default function Home() {
                   </span>
                   <span className={`flex-1 truncate text-xs ${isMe ? "text-yellow-400 font-bold" : "text-zinc-300"}`}>
                     {player.nickname}
+                  </span>
+                  <span className="text-zinc-500 text-xs shrink-0 mr-1">
+                    {player.avg_time_ms != null
+                      ? `${(player.avg_time_ms / 1000).toFixed(1)}s`
+                      : ""}
                   </span>
                   <span className="text-zinc-400 text-xs font-mono shrink-0">
                     {player.score}
@@ -467,25 +480,41 @@ export default function Home() {
         </div>
       )}
 
-      {/* SCOREBOARD — solo en FINISHED (en REVEAL está en el panel derecho) */}
+      {/* SCOREBOARD FINAL */}
       {scoreboard.length > 0 && phase === "FINISHED" && (
-        <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-4 rounded-xl">
-          <h2 className="text-lg font-bold mb-3 text-zinc-300">Ranking</h2>
+        <div className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-zinc-800 grid grid-cols-12 text-xs text-zinc-500 font-medium uppercase tracking-wider">
+            <span className="col-span-1">#</span>
+            <span className="col-span-4">Jugador</span>
+            <span className="col-span-2 text-center">Pts</span>
+            <span className="col-span-2 text-center">Aciertos</span>
+            <span className="col-span-3 text-center">Vel. prom.</span>
+          </div>
           {scoreboard.map((player, index) => {
             const isMe = player.nickname === nickname;
+            const total = player.answered_count ?? 0;
+            const correct = player.correct_count ?? 0;
+            const avg = player.avg_time_ms;
             return (
               <div
                 key={index}
-                className={`flex justify-between py-2 border-b border-zinc-800 last:border-0 ${
-                  isMe ? "text-yellow-400 font-bold" : "text-zinc-300"
+                className={`grid grid-cols-12 items-center px-4 py-2.5 border-b border-zinc-800 last:border-0 text-sm ${
+                  isMe ? "bg-yellow-400/10 text-yellow-400 font-bold" : "text-zinc-300"
                 }`}
               >
-                <span>
-                  <span className="text-zinc-500 mr-2">#{index + 1}</span>
+                <span className="col-span-1 text-zinc-500 text-xs">#{index + 1}</span>
+                <span className="col-span-4 truncate">
                   {player.nickname}
-                  {isMe && <span className="ml-2 text-xs text-yellow-600">(tú)</span>}
+                  {isMe && <span className="ml-1 text-xs text-yellow-600 font-normal">(tú)</span>}
                 </span>
-                <span>{player.score} pts</span>
+                <span className="col-span-2 text-center font-mono">{player.score}</span>
+                <span className="col-span-2 text-center">
+                  <span className="text-green-400">{correct}</span>
+                  <span className="text-zinc-600">/{total}</span>
+                </span>
+                <span className="col-span-3 text-center text-zinc-400">
+                  {avg != null ? `${(avg / 1000).toFixed(1)}s` : "—"}
+                </span>
               </div>
             );
           })}

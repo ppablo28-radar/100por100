@@ -94,7 +94,13 @@ class GameManager:
         if len(self.players) >= MAX_PLAYERS:
             return
 
-        self.players[player_id] = {"nickname": nickname, "score": 0}
+        self.players[player_id] = {
+            "nickname": nickname,
+            "score": 0,
+            "correct_count": 0,
+            "answered_count": 0,
+            "total_time_ms": 0,
+        }
 
         starts_in = None
         if self.state == "STARTING" and self.start_time is not None:
@@ -219,6 +225,9 @@ class GameManager:
                 if is_correct:
                     correct_count += 1
                     self.players[pid]["score"] += pts
+                    self.players[pid]["correct_count"] += 1
+                self.players[pid]["answered_count"] += 1
+                self.players[pid]["total_time_ms"] += int(t * 1000)
                 question_results.append({
                     "nickname": self.players[pid]["nickname"],
                     "correct": is_correct,
@@ -259,7 +268,16 @@ class GameManager:
 
             scoreboard = sorted(
                 [
-                    {"nickname": p["nickname"], "score": p["score"]}
+                    {
+                        "nickname": p["nickname"],
+                        "score": p["score"],
+                        "correct_count": p["correct_count"],
+                        "answered_count": p["answered_count"],
+                        "avg_time_ms": (
+                            p["total_time_ms"] // p["answered_count"]
+                            if p["answered_count"] > 0 else None
+                        ),
+                    }
                     for p in self.players.values()
                 ],
                 key=lambda x: x["score"],
@@ -271,7 +289,7 @@ class GameManager:
                 "players": scoreboard,
             })
 
-            await asyncio.sleep(3)
+            await asyncio.sleep(5)
 
         self.state = "FINISHED"
 

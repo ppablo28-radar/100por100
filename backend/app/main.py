@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 
 from fastapi import FastAPI
@@ -15,6 +16,7 @@ app = FastAPI()
 @app.on_event("startup")
 async def startup_event():
     await game_manager.load_questions()
+    asyncio.create_task(manager.start_keepalive())
 
 app.add_middleware(
     CORSMiddleware,
