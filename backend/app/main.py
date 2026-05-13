@@ -175,7 +175,7 @@ async def procedural_generate(type: str | None = None):
     return payload
 
 
-@app.post("/procedural/reload")
+@app.get("/procedural/reload")
 async def procedural_reload():
     """Recarga los datos del motor procedural desde la DB."""
     import os
