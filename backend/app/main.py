@@ -44,7 +44,7 @@ async def rooms():
     }
 
 
-@app.post("/reload")
+@app.get("/reload")
 async def reload_questions():
     """Recarga las preguntas desde Supabase sin reiniciar el servidor."""
     before = len(game_manager.questions)
