@@ -691,37 +691,75 @@ export default function Home() {
             </>
           )}
 
-          {/* ── Higher / Lower ── */}
-          {question.question_type === "higher_lower" && (
+          {/* ── Higher / Lower (2-10 opciones) ── */}
+          {question.question_type === "higher_lower" && (() => {
+            const opts = question.options as {id: string; name: string}[];
+            const isLocked = selectedAnswerId !== null;
+            const BG = ["bg-blue-700 hover:bg-blue-600","bg-red-700 hover:bg-red-600","bg-yellow-600 hover:bg-yellow-500","bg-green-700 hover:bg-green-600","bg-purple-700 hover:bg-purple-600","bg-pink-700 hover:bg-pink-600","bg-orange-600 hover:bg-orange-500","bg-teal-700 hover:bg-teal-600","bg-indigo-700 hover:bg-indigo-600","bg-cyan-700 hover:bg-cyan-600"];
+            return (
+              <>
+                {question.attribute_name && (
+                  <p className="text-center text-zinc-500 text-sm -mt-2">
+                    {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
+                  </p>
+                )}
+                <div className={`grid gap-3 mt-1 ${opts.length <= 2 ? "grid-cols-2" : opts.length <= 4 ? "grid-cols-2" : "grid-cols-2"}`}>
+                  {opts.map((opt, i) => {
+                    const isSelected = selectedAnswerId === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => submitHigherLower(opt.id)}
+                        disabled={isLocked}
+                        className={`${BG[i % BG.length]} ${isSelected ? "ring-4 ring-white scale-95" : ""} ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"} p-4 rounded-xl text-center font-bold transition-all duration-150 ${opts.length <= 4 ? "text-xl py-6" : "text-base py-4"}`}
+                      >
+                        {opt.name}
+                      </button>
+                    );
+                  })}
+                </div>
+                {isLocked && (
+                  <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
+                )}
+              </>
+            );
+          })()}
+
+          {/* ── Ranking order ── */}
+          {question.question_type === "ranking_order" && (
             <>
               {question.attribute_name && (
                 <p className="text-center text-zinc-500 text-sm -mt-2">
-                  {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
+                  Ordenar por {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
                 </p>
               )}
-              <div className="grid grid-cols-2 gap-4 mt-1">
-                {(question.options as {id: string; name: string}[]).map((opt, i) => {
-                  const isSelected = selectedAnswerId === opt.id;
-                  const isLocked = selectedAnswerId !== null;
+              <div className="flex flex-col gap-2 mt-1">
+                {(question.events ?? (question.options as {id:string;name:string}[])).map((item) => {
+                  const id = (item as any).id;
+                  const name = (item as any).name ?? (item as any).title;
+                  const pos = timelineOrder.indexOf(id);
+                  const selected = pos !== -1;
+                  const isLocked = timelineSubmittedRef.current;
                   return (
                     <button
-                      key={opt.id}
-                      onClick={() => submitHigherLower(opt.id)}
-                      disabled={isLocked}
-                      className={`
-                        ${i === 0 ? "bg-blue-700 hover:bg-blue-600" : "bg-red-700 hover:bg-red-600"}
-                        ${isSelected ? "ring-4 ring-white scale-95" : ""}
-                        ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"}
-                        p-6 rounded-xl text-center font-bold text-xl transition-all duration-150
-                      `}
+                      key={id}
+                      onClick={() => clickTimelineEvent(id)}
+                      disabled={selected || isLocked}
+                      className={`flex items-center gap-3 p-3 rounded-lg text-left font-medium transition-all duration-150 ${selected ? "bg-blue-700 opacity-80 cursor-default" : "bg-zinc-700 hover:bg-zinc-600 active:scale-95"} ${isLocked && !selected ? "opacity-40 cursor-default" : ""}`}
                     >
-                      {opt.name}
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${selected ? "bg-blue-400 text-white" : "bg-zinc-600 text-zinc-400"}`}>
+                        {selected ? pos + 1 : "?"}
+                      </span>
+                      {name}
                     </button>
                   );
                 })}
               </div>
-              {selectedAnswerId !== null && (
+              {timelineSubmittedRef.current && (
                 <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
+              )}
+              {!timelineSubmittedRef.current && timelineOrder.length > 0 && (
+                <p className="text-center text-zinc-500 text-xs">{timelineOrder.length} de {(question.events ?? question.options).length} seleccionados</p>
               )}
             </>
           )}
@@ -811,6 +849,26 @@ export default function Home() {
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* ── Reveal: ranking_order ── */}
+          {revealData.question_type === "ranking_order" && (
+            <div className="w-full flex flex-col gap-2">
+              <p className="text-center text-zinc-400 text-sm font-semibold mb-1">Orden correcto:</p>
+              {(revealData.correct_order ?? []).map((id, i) => {
+                const name = revealData.correct_order_titles?.[i] ?? id;
+                const val = revealData.values?.[id];
+                return (
+                  <div key={id} className="flex items-center gap-3 bg-blue-800/60 border border-blue-600/40 p-3 rounded-lg animate-zoom-in-fast" style={{ animationDelay: `${i * 100}ms` }}>
+                    <span className="w-7 h-7 rounded-full bg-blue-500 text-white text-sm font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                    <span className="text-sm font-medium flex-1">{name}</span>
+                    {val != null && (
+                      <span className="text-xs text-zinc-400 font-mono">{val.toLocaleString()} {revealData.unit ?? ""}</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 

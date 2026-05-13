@@ -8,8 +8,8 @@ import time
 MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
-PROCEDURAL_RATIO = 0.30        # 30 % de preguntas procedurales
-PROCEDURAL_TYPES = ["higher_lower", "timeline_order"]
+PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
+PROCEDURAL_TYPES = ["higher_lower", "ranking_order"]  # TEST: solo países
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {
@@ -291,6 +291,14 @@ class GameRoom:
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),
             })
+        elif qtype == "ranking_order":
+            await self._broadcast({
+                **base,
+                "question": question.get("question_text", "Ordená según el valor"),
+                "options": question.get("options", []),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
+            })
         elif qtype == "timeline_order":
             await self._broadcast({
                 **base,
@@ -322,6 +330,18 @@ class GameRoom:
                 **base,
                 "correct_id": correct_id,
                 "correct_name": correct_name,
+                "values": question.get("values", {}),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
+                "options": question.get("options", []),
+            })
+        elif qtype == "ranking_order":
+            correct_order = question.get("correct_order", [])
+            opts_by_id = {o["id"]: o["name"] for o in question.get("options", [])}
+            await self._broadcast({
+                **base,
+                "correct_order": correct_order,
+                "correct_order_titles": [opts_by_id.get(eid, eid) for eid in correct_order],
                 "values": question.get("values", {}),
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),

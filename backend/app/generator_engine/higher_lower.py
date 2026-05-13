@@ -28,20 +28,23 @@ class HigherLowerGenerator(BaseGenerator):
         entities: list[dict] = pool.get("entities_with_attribute", [])
         rng = random.SystemRandom()
 
-        candidates = self._pick(entities, 2, rng)
+        n = rng.randint(
+            self.config.get("min_options", 2),
+            self.config.get("max_options", 2),
+        )
+        candidates = self._pick(entities, n, rng)
         if not candidates:
             return None
 
-        a, b = candidates
         direction = self.config.get("direction", "higher")
         attr_name = self.config.get("attribute_name", "valor")
         unit = self.config.get("unit", "")
 
         if direction == "higher":
-            correct = a if a["value"] >= b["value"] else b
+            correct = max(candidates, key=lambda e: e["value"])
             verb = "más"
         else:
-            correct = a if a["value"] <= b["value"] else b
+            correct = min(candidates, key=lambda e: e["value"])
             verb = "menos"
 
         question_text = self.config.get(
@@ -49,7 +52,7 @@ class HigherLowerGenerator(BaseGenerator):
             f"¿Cuál tiene {verb} {attr_name.lower()}?"
         )
 
-        options = [a, b]
+        options = candidates[:]
         rng.shuffle(options)
 
         return {
