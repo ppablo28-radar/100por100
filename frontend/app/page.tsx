@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import {
+  soundCorrect, soundIncorrect, soundCountdownBeep,
+  soundGameStart, soundReveal, soundEpic, soundStreak,
+  soundGameOver, initAudio,
+} from "./sounds";
 
 type Phase = "JOIN" | "LOBBY" | "COUNTDOWN" | "QUESTION" | "REVEAL" | "FINISHED";
 
@@ -55,6 +60,9 @@ export default function Home() {
   const countdownStartedRef = useRef(false);
   const scoreboardRef = useRef<Player[]>([]);
   const prevPositionsRef = useRef<Record<string, number>>({});
+  const streakRef = useRef(0);
+  const lastBeepRef = useRef(0);
+  const nicknameRef = useRef("");
 
   const [nickname, setNickname] = useState("");
   const [phase, setPhase] = useState<Phase>("JOIN");
@@ -67,6 +75,20 @@ export default function Home() {
   const [revealData, setRevealData] = useState<RevealData | null>(null);
   const [scoreboard, setScoreboard] = useState<Player[]>([]);
   const [connected, setConnected] = useState(false);
+  const [funMessage, setFunMessage] = useState<string | null>(null);
+  const [streakCount, setStreakCount] = useState(0);
+  const [answerAnim, setAnswerAnim] = useState<"correct" | "wrong" | null>(null);
+  const [floatingPts, setFloatingPts] = useState<number | null>(null);
+
+  // Beep en los últimos 3 segundos de cada pregunta
+  useEffect(() => {
+    if (phase === "QUESTION" && timeLeft <= 3 && timeLeft > 0) {
+      if (lastBeepRef.current !== timeLeft) {
+        lastBeepRef.current = timeLeft;
+        soundCountdownBeep();
+      }
+    }
+  }, [timeLeft, phase]);
 
   const beginStartCountdown = (seconds: number) => {
     if (startTimerRef.current) clearInterval(startTimerRef.current);
@@ -126,6 +148,7 @@ export default function Home() {
         setStartCountdown(null);
         setPhase("COUNTDOWN");
         setCountdown(data.value);
+        if (data.value === 1) soundGameStart();
       }
 
       if (data.type === "NEW_QUESTION") {
@@ -133,6 +156,10 @@ export default function Home() {
         setQuestion(data as QuestionData);
         setSelectedAnswer(null);
         setRevealData(null);
+        setFunMessage(null);
+        setAnswerAnim(null);
+        setFloatingPts(null);
+        lastBeepRef.current = 0;
 
         const duration = data.duration as number;
         setTimeLeft(duration);
@@ -147,9 +174,61 @@ export default function Home() {
       }
 
       if (data.type === "ANSWER_REVEAL") {
+        const reveal = data as RevealData;
         setPhase("REVEAL");
-        setRevealData(data as RevealData);
+        setRevealData(reveal);
         if (timerRef.current) clearInterval(timerRef.current);
+        soundReveal();
+
+        // Determinar si el jugador actual acertó
+        const myResult = reveal.question_results?.find(
+          (r: QuestionResult) => r.nickname === nicknameRef.current
+        );
+        const isCorrect = myResult?.correct === true;
+
+        // Sonido y animación según resultado
+        setTimeout(() => {
+          if (isCorrect) {
+            soundCorrect();
+            setAnswerAnim("correct");
+            setFloatingPts(myResult?.points_earned ?? null);
+            streakRef.current += 1;
+            setStreakCount(streakRef.current);
+          } else {
+            soundIncorrect();
+            setAnswerAnim("wrong");
+            streakRef.current = 0;
+            setStreakCount(0);
+          }
+        }, 300);
+
+        // Racha épica
+        if (isCorrect && streakRef.current + 1 >= 3) {
+          setTimeout(() => soundStreak(), 600);
+        }
+
+        // Momento épico: solo vos acertaste
+        const totalPlayers = reveal.question_results?.length ?? 0;
+        const correctCount = reveal.question_results?.filter(
+          (r: QuestionResult) => r.correct === true
+        ).length ?? 0;
+        const soloCorrect = isCorrect && correctCount === 1;
+        const soloWrong   = !isCorrect && correctCount === totalPlayers - 1 && totalPlayers > 1;
+
+        if (soloCorrect) setTimeout(() => soundEpic(), 700);
+
+        // Mensaje contextual
+        const pct = reveal.correct_pct ?? 0;
+        let msg: string | null = null;
+        if (soloCorrect)            msg = "🎯 ¡SOLO VOS ACERTASTE! Sos un genio";
+        else if (soloWrong)         msg = "💀 ¡Solo vos fallaste! Qué mala suerte...";
+        else if (pct === 0)         msg = "💀 ¡NADIE lo sabía! Pregunta imposible";
+        else if (pct === 100)       msg = "😴 Todos acertaron... demasiado fácil";
+        else if (pct < 20)          msg = "🤯 ¡Casi nadie la sabía! Difícil difícil";
+        else if (pct >= 80)         msg = "😎 Pan comido, todos la sabían";
+        if (streakRef.current >= 3) msg = `🔥 ¡${streakRef.current} correctas seguidas! En llamas`;
+        if (streakRef.current >= 5) msg = `🔥🔥 ¡${streakRef.current} EN FILA! ¡IMPARABLE!`;
+        setFunMessage(msg);
       }
 
       if (data.type === "SCOREBOARD") {
@@ -165,6 +244,9 @@ export default function Home() {
       if (data.type === "GAME_FINISHED") {
         setPhase("FINISHED");
         if (data.players) setScoreboard(data.players as Player[]);
+        soundGameOver();
+        streakRef.current = 0;
+        setStreakCount(0);
       }
     };
 
@@ -178,6 +260,8 @@ export default function Home() {
   const joinGame = () => {
     const socket = ws.current;
     if (!nickname.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
+    initAudio();
+    nicknameRef.current = nickname.trim();
     socket.send(JSON.stringify({ type: "JOIN_GAME", nickname: nickname.trim() }));
     setPhase("LOBBY");
   };
@@ -352,7 +436,11 @@ export default function Home() {
             <span>
               Pregunta {question.question_number}/{question.total_questions}
             </span>
-            <span className={`font-bold text-lg ${timeLeft <= 3 ? "text-red-500" : "text-white"}`}>
+            <span className={`font-bold text-lg ${
+              timeLeft <= 3
+                ? "text-red-500 animate-pulse-urgent"
+                : "text-white"
+            }`}>
               {timeLeft}s
             </span>
           </div>
@@ -412,11 +500,12 @@ export default function Home() {
                 <div
                   key={index}
                   className={`
-                    p-3 rounded-lg text-sm font-medium text-left transition-all
-                    ${isCorrect ? "bg-green-600 ring-2 ring-green-400" : OPTION_COLORS_BASE[index]}
-                    ${isWrong ? "opacity-40 line-through" : ""}
+                    p-3 rounded-lg text-sm font-medium text-left transition-all animate-zoom-in-fast
+                    ${isCorrect ? "bg-green-600 ring-2 ring-green-400 animate-glow-green" : OPTION_COLORS_BASE[index]}
+                    ${isWrong ? "opacity-40 line-through animate-shake" : ""}
                     ${isCorrect && wasSelected ? "scale-105" : ""}
                   `}
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
                   <span className="font-bold mr-1">{["A", "B", "C", "D"][index]}.</span>
                   {option}
@@ -426,20 +515,38 @@ export default function Home() {
           </div>
 
           {/* Resultado personal */}
-          <div className="flex items-center gap-3">
-            {selectedAnswer !== null ? (
-              <span className={`text-xl font-bold ${
-                selectedAnswer === revealData.correct_index ? "text-green-400" : "text-red-400"
-              }`}>
-                {selectedAnswer === revealData.correct_index ? "✓ ¡Correcto!" : "✗ Incorrecto"}
-              </span>
-            ) : (
-              <span className="text-xl font-bold text-zinc-500">Sin respuesta</span>
-            )}
+          <div className="flex flex-col items-center gap-1">
+            <div className="flex items-center gap-3">
+              {selectedAnswer !== null ? (
+                <span className={`text-2xl font-bold ${
+                  answerAnim === "correct"
+                    ? "text-green-400 animate-bounce-correct"
+                    : answerAnim === "wrong"
+                    ? "text-red-400 animate-shake"
+                    : selectedAnswer === revealData.correct_index ? "text-green-400" : "text-red-400"
+                }`}>
+                  {selectedAnswer === revealData.correct_index ? "✓ ¡Correcto!" : "✗ Incorrecto"}
+                </span>
+              ) : (
+                <span className="text-2xl font-bold text-zinc-500">Sin respuesta</span>
+              )}
+              {floatingPts != null && floatingPts > 0 && (
+                <span className="text-green-300 font-bold text-lg animate-float-score">
+                  +{floatingPts}
+                </span>
+              )}
+            </div>
             <span className="text-zinc-500 text-sm">
-              ({revealData.correct_pct}% acertó)
+              {revealData.correct_pct}% de jugadores acertó
             </span>
           </div>
+
+          {/* Mensaje épico / racha */}
+          {funMessage && (
+            <div className="text-center text-base font-bold text-yellow-300 animate-epic-pop px-4 py-2 bg-yellow-400/10 rounded-xl border border-yellow-400/20">
+              {funMessage}
+            </div>
+          )}
 
           {/* Tabla de resultados de esta pregunta */}
           {revealData.question_results && revealData.question_results.length > 0 && (
