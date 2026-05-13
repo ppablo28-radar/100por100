@@ -9,7 +9,10 @@ MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
 PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
-PROCEDURAL_TYPES = ["higher_lower", "ranking_order"]  # TEST: solo países
+PROCEDURAL_SLUGS = [           # TEST: solo estos dos generadores
+    "higher-lower-paises-poblacion",
+    "ranking-paises-area",
+]
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {
@@ -251,8 +254,8 @@ class GameRoom:
             and self.runtime_engine.loaded
             and random.random() < PROCEDURAL_RATIO
         ):
-            gtype = random.choice(PROCEDURAL_TYPES)
-            payload = self.runtime_engine.generate_question(generator_type=gtype)
+            slug = random.choice(PROCEDURAL_SLUGS)
+            payload = self.runtime_engine.generate_question(generator_slug=slug)
             if payload:
                 return {"_type": payload["question_type"], **payload}
         q = random.choice(pool)
