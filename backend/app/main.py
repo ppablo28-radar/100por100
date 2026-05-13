@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import uuid
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -6,6 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.websocket_manager import WebSocketManager
 from app.game_manager import GameManager
+from app.generator_engine.engine import RuntimeEngine
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -19,6 +23,7 @@ app.add_middleware(
 
 manager = WebSocketManager()
 game_manager = GameManager(manager)
+runtime_engine = RuntimeEngine()
 
 # player_id → modo actual (para saber a qué sala pertenece al responder)
 player_modes: dict[str, str] = {}
@@ -28,6 +33,22 @@ player_modes: dict[str, str] = {}
 async def startup_event():
     await game_manager.load_questions()
     asyncio.create_task(manager.start_keepalive())
+    # Intentar cargar el motor procedural (falla silenciosamente si no hay DB)
+    asyncio.create_task(_load_procedural_engine())
+
+
+async def _load_procedural_engine():
+    import os
+    db_url = os.getenv("DATABASE_URL", "")
+    if not db_url:
+        logger.info("RuntimeEngine: DATABASE_URL no configurada, saltando carga procedural.")
+        return
+    try:
+        from app.db.session import AsyncSessionLocal
+        async with AsyncSessionLocal() as session:
+            await runtime_engine.load(session)
+    except Exception as e:
+        logger.warning("RuntimeEngine: no se pudo cargar (no afecta el juego normal): %s", e)
 
 
 @app.get("/")
@@ -134,6 +155,42 @@ async def available_modes():
         [{"mode": k, "count": v} for k, v in tag_counts.items() if v >= 1],
         key=lambda x: -x["count"],
     )
+
+
+@app.get("/procedural/stats")
+async def procedural_stats():
+    """Estado del motor procedural en memoria."""
+    return runtime_engine.stats()
+
+
+@app.get("/procedural/generate")
+async def procedural_generate(type: str | None = None):
+    """
+    Genera una pregunta procedural de muestra (sin persistir).
+    Parámetro opcional: ?type=timeline_order | higher_lower | closest_number | ranking_order
+    """
+    if not runtime_engine.loaded:
+        return {"error": "Motor procedural no cargado. Verificá DATABASE_URL y ejecutá seed_knowledge.py"}
+    payload = runtime_engine.generate_question(generator_type=type)
+    if payload is None:
+        return {"error": f"No hay datos suficientes para generar preguntas de tipo '{type}'"}
+    return payload
+
+
+@app.post("/procedural/reload")
+async def procedural_reload():
+    """Recarga los datos del motor procedural desde la DB."""
+    import os
+    db_url = os.getenv("DATABASE_URL", "")
+    if not db_url:
+        return {"error": "DATABASE_URL no configurada"}
+    try:
+        from app.db.session import AsyncSessionLocal
+        async with AsyncSessionLocal() as session:
+            await runtime_engine.load(session)
+        return {"ok": True, **runtime_engine.stats()}
+    except Exception as e:
+        return {"error": str(e)}
 
 
 @app.websocket("/ws")

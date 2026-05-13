@@ -5,6 +5,14 @@ from app.models.media import MediaAsset
 from app.models.analytics import QuestionAnalytics, QuestionFeedback, QuestionAttempt
 from app.models.ai import AIGenerationJob, AIReviewResult
 from app.models.collections import QuestionCollection, QuestionCollectionItem, QuestionEvent
+from app.models.procedural import (
+    TimelineEvent,
+    KnowledgeEntity,
+    KnowledgeAttribute,
+    KnowledgeEntityAttribute,
+    ProceduralGenerator,
+    GeneratedMatchQuestion,
+)
 
 __all__ = [
     "Question", "QuestionTranslation", "AnswerOption", "AnswerValidationRule",
@@ -14,4 +22,7 @@ __all__ = [
     "QuestionAnalytics", "QuestionFeedback", "QuestionAttempt",
     "AIGenerationJob", "AIReviewResult",
     "QuestionCollection", "QuestionCollectionItem", "QuestionEvent",
+    "TimelineEvent",
+    "KnowledgeEntity", "KnowledgeAttribute", "KnowledgeEntityAttribute",
+    "ProceduralGenerator", "GeneratedMatchQuestion",
 ]
