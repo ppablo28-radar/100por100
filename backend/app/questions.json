@@ -1,1932 +1,1449 @@
 [
   {
     "question": "¿Quién creó Minecraft?",
-    "options": [
-      "EA",
-      "Valve",
-      "Nintendo",
-      "Notch"
-    ],
-    "correct": 3
+    "options": ["EA", "Valve", "Nintendo", "Notch"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué ciudad vive la familia Simpson?",
-    "options": [
-      "Gotham",
-      "Metropolis",
-      "Springfield",
-      "Shelbyville"
-    ],
-    "correct": 2
+    "options": ["Gotham", "Metropolis", "Springfield", "Shelbyville"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es el artista Bad Bunny?",
-    "options": [
-      "Colombia",
-      "Rep. Dominicana",
-      "México",
-      "Puerto Rico"
-    ],
-    "correct": 3
+    "options": ["Colombia", "Rep. Dominicana", "México", "Puerto Rico"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el animal terrestre más rápido del mundo?",
-    "options": [
-      "León",
-      "Avestruz",
-      "Guepardo",
-      "Antílope"
-    ],
-    "correct": 2
+    "options": ["León", "Avestruz", "Guepardo", "Antílope"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas temporadas tiene Breaking Bad?",
-    "options": [
-      "4",
-      "6",
-      "7",
-      "5"
-    ],
-    "correct": 3
+    "options": ["4", "6", "7", "5"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa desarrolla Grand Theft Auto?",
-    "options": [
-      "Rockstar Games",
-      "Ubisoft",
-      "Activision",
-      "EA Games"
-    ],
-    "correct": 0
+    "options": ["Rockstar Games", "Ubisoft", "Activision", "EA Games"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos integrantes tenía One Direction?",
-    "options": [
-      "6",
-      "5",
-      "4",
-      "7"
-    ],
-    "correct": 1
+    "options": ["6", "5", "4", "7"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos planetas tiene el sistema solar?",
-    "options": [
-      "8",
-      "10",
-      "7",
-      "9"
-    ],
-    "correct": 0
+    "options": ["8", "10", "7", "9"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se fundó YouTube?",
-    "options": [
-      "2003",
-      "2007",
-      "2005",
-      "2009"
-    ],
-    "correct": 2
+    "options": ["2003", "2007", "2005", "2009"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué continente está Egipto?",
-    "options": [
-      "Europa",
-      "Oceanía",
-      "Asia",
-      "África"
-    ],
-    "correct": 3
+    "options": ["Europa", "Oceanía", "Asia", "África"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué selección ganó el Mundial 2022?",
-    "options": [
-      "Argentina",
-      "Brasil",
-      "España",
-      "Francia"
-    ],
-    "correct": 0
+    "options": ["Argentina", "Brasil", "España", "Francia"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas Infinity Stones hay en el universo Marvel?",
-    "options": [
-      "7",
-      "6",
-      "5",
-      "4"
-    ],
-    "correct": 1
+    "options": ["7", "6", "5", "4"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es la raza del perro del meme 'Doge'?",
-    "options": [
-      "Pomerania",
-      "Labrador",
-      "Husky",
-      "Shiba Inu"
-    ],
-    "correct": 3
+    "options": ["Pomerania", "Labrador", "Husky", "Shiba Inu"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién cantó 'Shape of You'?",
-    "options": [
-      "Ed Sheeran",
-      "Harry Styles",
-      "Shawn Mendes",
-      "Justin Bieber"
-    ],
-    "correct": 0
+    "options": ["Ed Sheeran", "Harry Styles", "Shawn Mendes", "Justin Bieber"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el apodo de la selección argentina?",
-    "options": [
-      "La Roja",
-      "La Celeste",
-      "Los Charrúas",
-      "La Albiceleste"
-    ],
-    "correct": 3
+    "options": ["La Roja", "La Celeste", "Los Charrúas", "La Albiceleste"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos jugadores hay en un equipo de fútbol en cancha?",
-    "options": [
-      "12",
-      "9",
-      "11",
-      "10"
-    ],
-    "correct": 2
+    "options": ["12", "9", "11", "10"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿A qué temperatura hierve el agua a nivel del mar?",
-    "options": [
-      "90°C",
-      "110°C",
-      "100°C",
-      "80°C"
-    ],
-    "correct": 2
+    "options": ["90°C", "110°C", "100°C", "80°C"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el Pokémon eléctrico más famoso?",
-    "options": [
-      "Bulbasaur",
-      "Pikachu",
-      "Charmander",
-      "Squirtle"
-    ],
-    "correct": 1
+    "options": ["Bulbasaur", "Pikachu", "Charmander", "Squirtle"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos jugadores caen en Fortnite por partida?",
-    "options": [
-      "100",
-      "150",
-      "75",
-      "50"
-    ],
-    "correct": 0
+    "options": ["100", "150", "75", "50"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién mató a Mufasa en El Rey León?",
-    "options": [
-      "Simba",
-      "Pumba",
-      "Zazu",
-      "Scar"
-    ],
-    "correct": 3
+    "options": ["Simba", "Pumba", "Zazu", "Scar"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos colores tiene el arcoíris?",
-    "options": [
-      "5",
-      "8",
-      "7",
-      "6"
-    ],
-    "correct": 2
+    "options": ["5", "8", "7", "6"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país se ambienta la serie Squid Game?",
-    "options": [
-      "Japón",
-      "Corea del Sur",
-      "Vietnam",
-      "China"
-    ],
-    "correct": 1
+    "options": ["Japón", "Corea del Sur", "Vietnam", "China"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió el primer iPhone?",
-    "options": [
-      "2005",
-      "2007",
-      "2009",
-      "2004"
-    ],
-    "correct": 1
+    "options": ["2005", "2007", "2009", "2004"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué red social compró Elon Musk y renombró como X?",
-    "options": [
-      "TikTok",
-      "Twitter",
-      "Facebook",
-      "Instagram"
-    ],
-    "correct": 1
+    "options": ["TikTok", "Twitter", "Facebook", "Instagram"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas temporadas tiene Game of Thrones?",
-    "options": [
-      "9",
-      "6",
-      "7",
-      "8"
-    ],
-    "correct": 3
+    "options": ["9", "6", "7", "8"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el protagonista de The Legend of Zelda?",
-    "options": [
-      "Zelda",
-      "Mario",
-      "Link",
-      "Ganon"
-    ],
-    "correct": 2
+    "options": ["Zelda", "Mario", "Link", "Ganon"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué color es el fantasma 'Blinky' en Pac-Man?",
-    "options": [
-      "Rosa",
-      "Amarillo",
-      "Azul",
-      "Rojo"
-    ],
-    "correct": 3
+    "options": ["Rosa", "Amarillo", "Azul", "Rojo"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es la moneda en Roblox?",
-    "options": [
-      "V-Bucks",
-      "Coins",
-      "Robux",
-      "Gems"
-    ],
-    "correct": 2
+    "options": ["V-Bucks", "Coins", "Robux", "Gems"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué Pokémon evoluciona de Eevee usando una piedra de agua?",
-    "options": [
-      "Espeon",
-      "Flareon",
-      "Vaporeon",
-      "Jolteon"
-    ],
-    "correct": 2
+    "options": ["Espeon", "Flareon", "Vaporeon", "Jolteon"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué apodo tiene la selección de Paraguay?",
-    "options": [
-      "La Albirroja",
-      "La Celeste",
-      "La Roja",
-      "La Tricolor"
-    ],
-    "correct": 0
+    "options": ["La Albirroja", "La Celeste", "La Roja", "La Tricolor"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el álbum más vendido de la historia?",
-    "options": [
-      "Dark Side of the Moon",
-      "Thriller",
-      "Led Zeppelin IV",
-      "Back in Black"
-    ],
-    "correct": 1
+    "options": ["Dark Side of the Moon", "Thriller", "Led Zeppelin IV", "Back in Black"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos huesos tiene el cuerpo humano adulto?",
-    "options": [
-      "206",
-      "196",
-      "216",
-      "186"
-    ],
-    "correct": 0
+    "options": ["206", "196", "216", "186"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué país tiene más habitantes en el mundo (2024)?",
-    "options": [
-      "India",
-      "China",
-      "Estados Unidos",
-      "Indonesia"
-    ],
-    "correct": 0
+    "options": ["India", "China", "Estados Unidos", "Indonesia"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas cartas tiene una baraja española?",
-    "options": [
-      "48",
-      "54",
-      "40",
-      "52"
-    ],
-    "correct": 2
+    "options": ["48", "54", "40", "52"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el animal más grande del mundo?",
-    "options": [
-      "Elefante africano",
-      "Tiburón blanco",
-      "Ballena azul",
-      "Cocodrilo de mar"
-    ],
-    "correct": 2
+    "options": ["Elefante africano", "Tiburón blanco", "Ballena azul", "Cocodrilo de mar"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el protagonista de Red Dead Redemption 2?",
-    "options": [
-      "Arthur Morgan",
-      "Dutch Van der Linde",
-      "Jesse James",
-      "John Marston"
-    ],
-    "correct": 0
+    "options": ["Arthur Morgan", "Dutch Van der Linde", "Jesse James", "John Marston"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el personaje más famoso de Nintendo?",
-    "options": [
-      "Mario",
-      "Sonic",
-      "Crash Bandicoot",
-      "Master Chief"
-    ],
-    "correct": 0
+    "options": ["Mario", "Sonic", "Crash Bandicoot", "Master Chief"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué juego aparece el personaje 'Kratos'?",
-    "options": [
-      "Halo",
-      "Doom",
-      "God of War",
-      "Devil May Cry"
-    ],
-    "correct": 2
+    "options": ["Halo", "Doom", "God of War", "Devil May Cry"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué animal es Sonic the Hedgehog?",
-    "options": [
-      "Erizo",
-      "Zorro",
-      "Mapache",
-      "Conejo"
-    ],
-    "correct": 0
+    "options": ["Erizo", "Zorro", "Mapache", "Conejo"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál de estos juegos es de terror?",
-    "options": [
-      "Animal Crossing",
-      "Resident Evil",
-      "Gran Turismo",
-      "FIFA"
-    ],
-    "correct": 1
+    "options": ["Animal Crossing", "Resident Evil", "Gran Turismo", "FIFA"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál de estos personajes es de Mortal Kombat?",
-    "options": [
-      "Guile",
-      "Sub-Zero",
-      "Ryu",
-      "Ken"
-    ],
-    "correct": 1
+    "options": ["Guile", "Sub-Zero", "Ryu", "Ken"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió el primer Call of Duty?",
-    "options": [
-      "2005",
-      "2003",
-      "2001",
-      "2007"
-    ],
-    "correct": 1
+    "options": ["2005", "2003", "2001", "2007"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas tarjetas amarillas equivalen a una roja?",
-    "options": [
-      "4",
-      "2",
-      "3",
-      "1"
-    ],
-    "correct": 1
+    "options": ["4", "2", "3", "1"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país se jugó el Mundial 2014?",
-    "options": [
-      "Qatar",
-      "Sudáfrica",
-      "Rusia",
-      "Brasil"
-    ],
-    "correct": 3
+    "options": ["Qatar", "Sudáfrica", "Rusia", "Brasil"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos sets hay que ganar primero en un Grand Slam masculino?",
-    "options": [
-      "3",
-      "2",
-      "5",
-      "4"
-    ],
-    "correct": 0
+    "options": ["3", "2", "5", "4"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos metros mide una pileta olímpica?",
-    "options": [
-      "75",
-      "25",
-      "100",
-      "50"
-    ],
-    "correct": 3
+    "options": ["75", "25", "100", "50"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se jugó el primer Mundial de Fútbol?",
-    "options": [
-      "1938",
-      "1930",
-      "1934",
-      "1926"
-    ],
-    "correct": 1
+    "options": ["1938", "1930", "1934", "1926"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién interpreta a Tony Stark/Iron Man en el UCM?",
-    "options": [
-      "Robert Downey Jr.",
-      "Chris Hemsworth",
-      "Chris Evans",
-      "Mark Ruffalo"
-    ],
-    "correct": 0
+    "options": ["Robert Downey Jr.", "Chris Hemsworth", "Chris Evans", "Mark Ruffalo"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió la primera película de Harry Potter?",
-    "options": [
-      "2005",
-      "1999",
-      "2001",
-      "2003"
-    ],
-    "correct": 2
+    "options": ["2005", "1999", "2001", "2003"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué color es la túnica de Gandalf el Gris?",
-    "options": [
-      "Gris",
-      "Negro",
-      "Marrón",
-      "Blanco"
-    ],
-    "correct": 0
+    "options": ["Gris", "Negro", "Marrón", "Blanco"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué actriz interpreta a Katniss Everdeen en Los Juegos del Hambre?",
-    "options": [
-      "Shailene Woodley",
-      "Jennifer Lawrence",
-      "Kristen Stewart",
-      "Emma Watson"
-    ],
-    "correct": 1
+    "options": ["Shailene Woodley", "Jennifer Lawrence", "Kristen Stewart", "Emma Watson"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién dirigió 'Inception' e 'Interstellar'?",
-    "options": [
-      "Christopher Nolan",
-      "Ridley Scott",
-      "James Cameron",
-      "Steven Spielberg"
-    ],
-    "correct": 0
+    "options": ["Christopher Nolan", "Ridley Scott", "James Cameron", "Steven Spielberg"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas películas tiene la trilogía de El Señor de los Anillos?",
-    "options": [
-      "2",
-      "6",
-      "4",
-      "3"
-    ],
-    "correct": 3
+    "options": ["2", "6", "4", "3"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el villano de 'The Dark Knight'?",
-    "options": [
-      "Bane",
-      "El Acertijo",
-      "Dos Caras",
-      "El Joker"
-    ],
-    "correct": 3
+    "options": ["Bane", "El Acertijo", "Dos Caras", "El Joker"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió 'The Lion King' original de Disney?",
-    "options": [
-      "1998",
-      "1992",
-      "1996",
-      "1994"
-    ],
-    "correct": 3
+    "options": ["1998", "1992", "1996", "1994"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió la primera película de Shrek?",
-    "options": [
-      "1999",
-      "2005",
-      "2001",
-      "2003"
-    ],
-    "correct": 2
+    "options": ["1999", "2005", "2001", "2003"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué video tiene más visitas en YouTube de todos los tiempos?",
-    "options": [
-      "Gangnam Style",
-      "Baby Shark",
-      "Despacito",
-      "Shape of You"
-    ],
-    "correct": 1
+    "options": ["Gangnam Style", "Baby Shark", "Despacito", "Shape of You"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas integrantes tenía el grupo Destiny's Child?",
-    "options": [
-      "3",
-      "4",
-      "5",
-      "2"
-    ],
-    "correct": 0
+    "options": ["3", "4", "5", "2"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué instrumento tocaba Beethoven principalmente?",
-    "options": [
-      "Flauta",
-      "Guitarra",
-      "Piano",
-      "Violín"
-    ],
-    "correct": 2
+    "options": ["Flauta", "Guitarra", "Piano", "Violín"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién cantó 'Blinding Lights'?",
-    "options": [
-      "Travis Scott",
-      "Drake",
-      "Post Malone",
-      "The Weeknd"
-    ],
-    "correct": 3
+    "options": ["Travis Scott", "Drake", "Post Malone", "The Weeknd"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es el cantante J Balvin?",
-    "options": [
-      "Colombia",
-      "México",
-      "Venezuela",
-      "Puerto Rico"
-    ],
-    "correct": 0
+    "options": ["Colombia", "México", "Venezuela", "Puerto Rico"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se fundó Facebook?",
-    "options": [
-      "2008",
-      "2006",
-      "2002",
-      "2004"
-    ],
-    "correct": 3
+    "options": ["2008", "2006", "2002", "2004"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos caracteres permitía Twitter originalmente?",
-    "options": [
-      "140",
-      "280",
-      "120",
-      "160"
-    ],
-    "correct": 0
+    "options": ["140", "280", "120", "160"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se lanzó Instagram?",
-    "options": [
-      "2008",
-      "2010",
-      "2014",
-      "2012"
-    ],
-    "correct": 1
+    "options": ["2008", "2010", "2014", "2012"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se lanzó TikTok a nivel global?",
-    "options": [
-      "2020",
-      "2016",
-      "2019",
-      "2018"
-    ],
-    "correct": 3
+    "options": ["2020", "2016", "2019", "2018"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se fundó Amazon?",
-    "options": [
-      "1997",
-      "1994",
-      "1991",
-      "2000"
-    ],
-    "correct": 1
+    "options": ["1997", "1994", "1991", "2000"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Por qué se llama 'Python' el lenguaje de programación?",
-    "options": [
-      "Por los Monty Python",
-      "Por su creador Peter Python",
-      "Por ser rápido como serpiente",
-      "Por su sintaxis"
-    ],
-    "correct": 0
+    "options": ["Por los Monty Python", "Por su creador Peter Python", "Por ser rápido como serpiente", "Por su sintaxis"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos suscriptores mínimos se necesitan para monetizar YouTube?",
-    "options": [
-      "10000",
-      "1000",
-      "5000",
-      "500"
-    ],
-    "correct": 1
+    "options": ["10000", "1000", "5000", "500"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se fundó Google?",
-    "options": [
-      "1996",
-      "2002",
-      "1998",
-      "2000"
-    ],
-    "correct": 2
+    "options": ["1996", "2002", "1998", "2000"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos bits tiene un byte?",
-    "options": [
-      "8",
-      "4",
-      "16",
-      "32"
-    ],
-    "correct": 0
+    "options": ["8", "4", "16", "32"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el planeta más cercano al Sol?",
-    "options": [
-      "Tierra",
-      "Mercurio",
-      "Marte",
-      "Venus"
-    ],
-    "correct": 1
+    "options": ["Tierra", "Mercurio", "Marte", "Venus"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos cromosomas tiene una célula humana normal?",
-    "options": [
-      "46",
-      "92",
-      "23",
-      "48"
-    ],
-    "correct": 0
+    "options": ["46", "92", "23", "48"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuánto tarda la luz del Sol en llegar a la Tierra?",
-    "options": [
-      "15 minutos",
-      "30 minutos",
-      "1 minuto",
-      "8 minutos"
-    ],
-    "correct": 3
+    "options": ["15 minutos", "30 minutos", "1 minuto", "8 minutos"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año cayó el Muro de Berlín?",
-    "options": [
-      "1991",
-      "1987",
-      "1993",
-      "1989"
-    ],
-    "correct": 3
+    "options": ["1991", "1987", "1993", "1989"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos países tiene América del Sur?",
-    "options": [
-      "15",
-      "10",
-      "12",
-      "13"
-    ],
-    "correct": 2
+    "options": ["15", "10", "12", "13"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año llegó el hombre a la Luna?",
-    "options": [
-      "1969",
-      "1971",
-      "1967",
-      "1965"
-    ],
-    "correct": 2
+    "options": ["1969", "1971", "1967", "1965"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se declaró la independencia de Argentina?",
-    "options": [
-      "1816",
-      "1825",
-      "1820",
-      "1810"
-    ],
-    "correct": 0
+    "options": ["1816", "1825", "1820", "1810"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos países tiene la Unión Europea actualmente?",
-    "options": [
-      "25",
-      "27",
-      "30",
-      "24"
-    ],
-    "correct": 0
+    "options": ["25", "27", "30", "24"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos lados tiene un pentágono?",
-    "options": [
-      "4",
-      "6",
-      "5",
-      "7"
-    ],
-    "correct": 2
+    "options": ["4", "6", "5", "7"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos continentes tiene la Tierra?",
-    "options": [
-      "7",
-      "5",
-      "8",
-      "6"
-    ],
-    "correct": 3
+    "options": ["7", "5", "8", "6"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas letras tiene el abecedario español?",
-    "options": [
-      "28",
-      "26",
-      "29",
-      "27"
-    ],
-    "correct": 3
+    "options": ["28", "26", "29", "27"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué juego se gastan 'V-Bucks'?",
-    "options": [
-      "Roblox",
-      "Fortnite",
-      "Minecraft",
-      "Free Fire"
-    ],
-    "correct": 1
+    "options": ["Roblox", "Fortnite", "Minecraft", "Free Fire"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué consola lanzó Nintendo en 2017?",
-    "options": [
-      "Wii U",
-      "GameBoy",
-      "3DS",
-      "Nintendo Switch"
-    ],
-    "correct": 3
+    "options": ["Wii U", "GameBoy", "3DS", "Nintendo Switch"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos jugadores hay en un equipo de League of Legends?",
-    "options": [
-      "5",
-      "6",
-      "3",
-      "4"
-    ],
-    "correct": 0
+    "options": ["5", "6", "3", "4"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué color de seta te hace crecer en Super Mario?",
-    "options": [
-      "Amarilla",
-      "Roja",
-      "Verde",
-      "Azul"
-    ],
-    "correct": 1
+    "options": ["Amarilla", "Roja", "Verde", "Azul"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos colores tiene el cubo de Rubik original?",
-    "options": [
-      "5",
-      "8",
-      "4",
-      "6"
-    ],
-    "correct": 3
+    "options": ["5", "8", "4", "6"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año salió Grand Theft Auto V?",
-    "options": [
-      "2012",
-      "2011",
-      "2013",
-      "2014"
-    ],
-    "correct": 2
+    "options": ["2012", "2011", "2013", "2014"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos 'mundos' tiene el juego original de Super Mario Bros.?",
-    "options": [
-      "6",
-      "10",
-      "8",
-      "4"
-    ],
-    "correct": 2
+    "options": ["6", "10", "8", "4"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué personaje dice 'It's-a me, Mario!'?",
-    "options": [
-      "Yoshi",
-      "Mario",
-      "Luigi",
-      "Wario"
-    ],
-    "correct": 1
+    "options": ["Yoshi", "Mario", "Luigi", "Wario"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué juego de fútbol es el más vendido históricamente?",
-    "options": [
-      "EA Sports FC/FIFA",
-      "PES",
-      "Rocket League",
-      "eFootball"
-    ],
-    "correct": 0
+    "options": ["EA Sports FC/FIFA", "PES", "Rocket League", "eFootball"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién fue el primer YouTuber en superar los 100 millones de suscriptores?",
-    "options": [
-      "Markiplier",
-      "MrBeast",
-      "PewDiePie",
-      "Ninja"
-    ],
-    "correct": 2
+    "options": ["Markiplier", "MrBeast", "PewDiePie", "Ninja"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos Balones de Oro tiene Lionel Messi?",
-    "options": [
-      "9",
-      "8",
-      "7",
-      "6"
-    ],
-    "correct": 1
+    "options": ["9", "8", "7", "6"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas copas del mundo tiene Brasil?",
-    "options": [
-      "6",
-      "4",
-      "3",
-      "5"
-    ],
-    "correct": 3
+    "options": ["6", "4", "3", "5"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué selección ganó el Mundial 2018?",
-    "options": [
-      "Alemania",
-      "Francia",
-      "Brasil",
-      "Argentina"
-    ],
-    "correct": 1
+    "options": ["Alemania", "Francia", "Brasil", "Argentina"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos minutos dura un partido de fútbol oficial?",
-    "options": [
-      "80",
-      "95",
-      "90",
-      "85"
-    ],
-    "correct": 2
+    "options": ["80", "95", "90", "85"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué club tiene más Champions League ganadas?",
-    "options": [
-      "Real Madrid",
-      "Barcelona",
-      "Bayern Munich",
-      "Manchester United"
-    ],
-    "correct": 0
+    "options": ["Real Madrid", "Barcelona", "Bayern Munich", "Manchester United"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿A qué distancia se cobra un penal?",
-    "options": [
-      "11 metros",
-      "12 metros",
-      "10 metros",
-      "8 metros"
-    ],
-    "correct": 0
+    "options": ["11 metros", "12 metros", "10 metros", "8 metros"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién es el máximo goleador histórico de la Champions League?",
-    "options": [
-      "Raúl",
-      "Benzema",
-      "Cristiano Ronaldo",
-      "Messi"
-    ],
-    "correct": 2
+    "options": ["Raúl", "Benzema", "Cristiano Ronaldo", "Messi"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas selecciones participarán en el Mundial 2026?",
-    "options": [
-      "64",
-      "36",
-      "32",
-      "48"
-    ],
-    "correct": 3
+    "options": ["64", "36", "32", "48"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién ganó más Grand Slams en la historia (hombres)?",
-    "options": [
-      "Djokovic",
-      "Nadal",
-      "Sampras",
-      "Federer"
-    ],
-    "correct": 0
+    "options": ["Djokovic", "Nadal", "Sampras", "Federer"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas películas tiene la saga Avengers?",
-    "options": [
-      "5",
-      "3",
-      "2",
-      "4"
-    ],
-    "correct": 3
+    "options": ["5", "3", "2", "4"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas películas tiene la saga principal de Star Wars?",
-    "options": [
-      "7",
-      "6",
-      "12",
-      "9"
-    ],
-    "correct": 3
+    "options": ["7", "6", "12", "9"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué película aparece Buzz Lightyear?",
-    "options": [
-      "Up",
-      "Cars",
-      "Wall-E",
-      "Toy Story"
-    ],
-    "correct": 3
+    "options": ["Up", "Cars", "Wall-E", "Toy Story"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas temporadas tiene 'The Office' (USA)?",
-    "options": [
-      "9",
-      "7",
-      "10",
-      "8"
-    ],
-    "correct": 0
+    "options": ["9", "7", "10", "8"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué película ganó el Oscar a mejor película en la ceremonia 2020?",
-    "options": [
-      "Joker",
-      "Marriage Story",
-      "Parasite",
-      "1917"
-    ],
-    "correct": 2
+    "options": ["Joker", "Marriage Story", "Parasite", "1917"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué ciudad se desarrolla la primera temporada de 'Narcos'?",
-    "options": [
-      "Cartagena",
-      "Bogotá",
-      "Cali",
-      "Medellín"
-    ],
-    "correct": 3
+    "options": ["Cartagena", "Bogotá", "Cali", "Medellín"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué década se ambienta Stranger Things?",
-    "options": [
-      "1990s",
-      "1970s",
-      "1960s",
-      "1980s"
-    ],
-    "correct": 3
+    "options": ["1990s", "1970s", "1960s", "1980s"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién mató a Jon Snow en Game of Thrones?",
-    "options": [
-      "La Guardia de la Noche",
-      "Ramsay Bolton",
-      "Cersei Lannister",
-      "Daenerys"
-    ],
-    "correct": 0
+    "options": ["La Guardia de la Noche", "Ramsay Bolton", "Cersei Lannister", "Daenerys"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas temporadas tiene 'Friends'?",
-    "options": [
-      "11",
-      "9",
-      "10",
-      "8"
-    ],
-    "correct": 2
+    "options": ["11", "9", "10", "8"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué ciudad se desarrolla 'Friends'?",
-    "options": [
-      "Chicago",
-      "Boston",
-      "Los Ángeles",
-      "Nueva York"
-    ],
-    "correct": 3
+    "options": ["Chicago", "Boston", "Los Ángeles", "Nueva York"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué plataforma está disponible 'Stranger Things'?",
-    "options": [
-      "Amazon Prime",
-      "Disney+",
-      "HBO",
-      "Netflix"
-    ],
-    "correct": 3
+    "options": ["Amazon Prime", "Disney+", "HBO", "Netflix"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos Oscars ganó 'Titanic'?",
-    "options": [
-      "9",
-      "14",
-      "11",
-      "10"
-    ],
-    "correct": 2
+    "options": ["9", "14", "11", "10"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué personaje de Marvel tiene un escudo de vibranio?",
-    "options": [
-      "Iron Man",
-      "Thor",
-      "Capitán América",
-      "Black Panther"
-    ],
-    "correct": 2
+    "options": ["Iron Man", "Thor", "Capitán América", "Black Panther"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué personaje dice 'Yo soy tu padre' en Star Wars?",
-    "options": [
-      "Palpatine",
-      "Darth Vader",
-      "Yoda",
-      "Obi-Wan"
-    ],
-    "correct": 1
+    "options": ["Palpatine", "Darth Vader", "Yoda", "Obi-Wan"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es el cantante Peso Pluma?",
-    "options": [
-      "México",
-      "España",
-      "Venezuela",
-      "Colombia"
-    ],
-    "correct": 0
+    "options": ["México", "España", "Venezuela", "Colombia"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos integrantes tiene BTS?",
-    "options": [
-      "6",
-      "7",
-      "5",
-      "8"
-    ],
-    "correct": 1
+    "options": ["6", "7", "5", "8"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es Shakira?",
-    "options": [
-      "México",
-      "Venezuela",
-      "Argentina",
-      "Colombia"
-    ],
-    "correct": 3
+    "options": ["México", "Venezuela", "Argentina", "Colombia"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién es conocido como el 'Rey del Pop'?",
-    "options": [
-      "Elvis Presley",
-      "David Bowie",
-      "Prince",
-      "Michael Jackson"
-    ],
-    "correct": 3
+    "options": ["Elvis Presley", "David Bowie", "Prince", "Michael Jackson"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es Daddy Yankee?",
-    "options": [
-      "Rep. Dominicana",
-      "Puerto Rico",
-      "Cuba",
-      "Colombia"
-    ],
-    "correct": 1
+    "options": ["Rep. Dominicana", "Puerto Rico", "Cuba", "Colombia"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el ex integrante de One Direction que falleció en 2024?",
-    "options": [
-      "Louis Tomlinson",
-      "Liam Payne",
-      "Niall Horan",
-      "Zayn Malik"
-    ],
-    "correct": 1
+    "options": ["Louis Tomlinson", "Liam Payne", "Niall Horan", "Zayn Malik"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es el DJ David Guetta?",
-    "options": [
-      "Francia",
-      "Bélgica",
-      "Alemania",
-      "Holanda"
-    ],
-    "correct": 0
+    "options": ["Francia", "Bélgica", "Alemania", "Holanda"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas cuerdas tiene una guitarra clásica?",
-    "options": [
-      "4",
-      "7",
-      "6",
-      "5"
-    ],
-    "correct": 2
+    "options": ["4", "7", "6", "5"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién es conocida como 'La Reina del Pop'?",
-    "options": [
-      "Rihanna",
-      "Beyoncé",
-      "Madonna",
-      "Britney Spears"
-    ],
-    "correct": 2
+    "options": ["Rihanna", "Beyoncé", "Madonna", "Britney Spears"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué canción de Luis Fonsi ft. Daddy Yankee rompió récords en YouTube?",
-    "options": [
-      "Gasolina",
-      "Bailando",
-      "La Tortura",
-      "Despacito"
-    ],
-    "correct": 3
+    "options": ["Gasolina", "Bailando", "La Tortura", "Despacito"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año murió Michael Jackson?",
-    "options": [
-      "2009",
-      "2008",
-      "2007",
-      "2010"
-    ],
-    "correct": 0
+    "options": ["2009", "2008", "2007", "2010"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa fundó Steve Jobs?",
-    "options": [
-      "Apple",
-      "Amazon",
-      "Microsoft",
-      "Google"
-    ],
-    "correct": 0
+    "options": ["Apple", "Amazon", "Microsoft", "Google"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cómo se llama el asistente virtual de Apple?",
-    "options": [
-      "Google",
-      "Alexa",
-      "Cortana",
-      "Siri"
-    ],
-    "correct": 3
+    "options": ["Google", "Alexa", "Cortana", "Siri"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa compró WhatsApp?",
-    "options": [
-      "Microsoft",
-      "Facebook/Meta",
-      "Google",
-      "Apple"
-    ],
-    "correct": 1
+    "options": ["Microsoft", "Facebook/Meta", "Google", "Apple"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos GB tiene 1 Terabyte?",
-    "options": [
-      "100",
-      "1000",
-      "500",
-      "2000"
-    ],
-    "correct": 1
+    "options": ["100", "1000", "500", "2000"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué red social inventó los hashtags (#)?",
-    "options": [
-      "LinkedIn",
-      "Twitter",
-      "Instagram",
-      "Facebook"
-    ],
-    "correct": 1
+    "options": ["LinkedIn", "Twitter", "Instagram", "Facebook"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se lanzó el primer iPad?",
-    "options": [
-      "2008",
-      "2009",
-      "2010",
-      "2011"
-    ],
-    "correct": 2
+    "options": ["2008", "2009", "2010", "2011"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el planeta más grande del sistema solar?",
-    "options": [
-      "Júpiter",
-      "Neptuno",
-      "Urano",
-      "Saturno"
-    ],
-    "correct": 0
+    "options": ["Júpiter", "Neptuno", "Urano", "Saturno"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos lados tiene un octágono?",
-    "options": [
-      "6",
-      "9",
-      "8",
-      "7"
-    ],
-    "correct": 2
+    "options": ["6", "9", "8", "7"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos corazones tiene un pulpo?",
-    "options": [
-      "3",
-      "2",
-      "4",
-      "1"
-    ],
-    "correct": 0
+    "options": ["3", "2", "4", "1"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿A qué velocidad aproximada viaja la luz?",
-    "options": [
-      "200.000 km/s",
-      "300.000 km/s",
-      "500.000 km/s",
-      "400.000 km/s"
-    ],
-    "correct": 3
+    "options": ["200.000 km/s", "300.000 km/s", "500.000 km/s", "400.000 km/s"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos días aproximadamente dura un año en Marte?",
-    "options": [
-      "500",
-      "365",
-      "687",
-      "900"
-    ],
-    "correct": 2
+    "options": ["500", "365", "687", "900"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el río más largo de América del Sur?",
-    "options": [
-      "Amazonas",
-      "Nilo",
-      "Paraná",
-      "Orinoco"
-    ],
-    "correct": 0
+    "options": ["Amazonas", "Nilo", "Paraná", "Orinoco"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es la montaña más alta del mundo?",
-    "options": [
-      "Aconcagua",
-      "Kilimanjaro",
-      "K2",
-      "Monte Everest"
-    ],
-    "correct": 3
+    "options": ["Aconcagua", "Kilimanjaro", "K2", "Monte Everest"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país está la Torre Eiffel?",
-    "options": [
-      "Bélgica",
-      "España",
-      "Francia",
-      "Italia"
-    ],
-    "correct": 2
+    "options": ["Bélgica", "España", "Francia", "Italia"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos países tiene América Central?",
-    "options": [
-      "8",
-      "5",
-      "6",
-      "7"
-    ],
-    "correct": 3
+    "options": ["8", "5", "6", "7"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos días tiene un año bisiesto?",
-    "options": [
-      "364",
-      "365",
-      "367",
-      "366"
-    ],
-    "correct": 3
+    "options": ["364", "365", "367", "366"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas semanas tiene un año?",
-    "options": [
-      "54",
-      "50",
-      "52",
-      "48"
-    ],
-    "correct": 2
+    "options": ["54", "50", "52", "48"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué tipo es el Pokémon Charmander?",
-    "options": [
-      "Agua",
-      "Planta",
-      "Fuego",
-      "Eléctrico"
-    ],
-    "correct": 2
+    "options": ["Agua", "Planta", "Fuego", "Eléctrico"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa creó la consola PlayStation?",
-    "options": [
-      "Microsoft",
-      "Sony",
-      "Nintendo",
-      "Sega"
-    ],
-    "correct": 1
+    "options": ["Microsoft", "Sony", "Nintendo", "Sega"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas 'vidas' tiene Mario al inicio en Super Mario Bros.?",
-    "options": [
-      "3",
-      "5",
-      "1",
-      "2"
-    ],
-    "correct": 0
+    "options": ["3", "5", "1", "2"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
-    "question": "¿Qué empresa hace los juegos publicados de Pokémon?",
-    "options": [
-      "Game Freak",
-      "Nintendo",
-      "Capcom",
-      "Bandai"
-    ],
-    "correct": 1
+    "question": "¿Qué empresa publica los juegos de Pokémon?",
+    "options": ["Game Freak", "Nintendo", "Capcom", "Bandai"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué club juega Cristiano Ronaldo actualmente?",
-    "options": [
-      "Juventus",
-      "Manchester United",
-      "Al-Nassr",
-      "Real Madrid"
-    ],
-    "correct": 2
+    "options": ["Juventus", "Manchester United", "Al-Nassr", "Real Madrid"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué color de tarjeta expulsa a un jugador en el fútbol?",
-    "options": [
-      "Negra",
-      "Amarilla",
-      "Naranja",
-      "Roja"
-    ],
-    "correct": 3
+    "options": ["Negra", "Amarilla", "Naranja", "Roja"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué deporte se meten 'tries'?",
-    "options": [
-      "Fútbol",
-      "Hockey",
-      "Rugby",
-      "Cricket"
-    ],
-    "correct": 2
+    "options": ["Fútbol", "Hockey", "Rugby", "Cricket"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos puntos vale un try en el rugby?",
-    "options": [
-      "3",
-      "5",
-      "4",
-      "7"
-    ],
-    "correct": 1
+    "options": ["3", "5", "4", "7"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué deporte se usa una raqueta y una pelota amarilla?",
-    "options": [
-      "Pádel",
-      "Bádminton",
-      "Tenis",
-      "Squash"
-    ],
-    "correct": 2
+    "options": ["Pádel", "Bádminton", "Tenis", "Squash"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país está el estadio Maracaná?",
-    "options": [
-      "Colombia",
-      "Argentina",
-      "Brasil",
-      "Uruguay"
-    ],
-    "correct": 2
+    "options": ["Colombia", "Argentina", "Brasil", "Uruguay"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas películas tiene la saga 'Fast & Furious' principal?",
-    "options": [
-      "8",
-      "9",
-      "11",
-      "10"
-    ],
-    "correct": 3
+    "options": ["8", "9", "11", "10"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Quién es el protagonista de 'Breaking Bad'?",
-    "options": [
-      "Hank Schrader",
-      "Walter White",
-      "Saul Goodman",
-      "Jesse Pinkman"
-    ],
-    "correct": 1
+    "options": ["Hank Schrader", "Walter White", "Saul Goodman", "Jesse Pinkman"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es The Beatles?",
-    "options": [
-      "Reino Unido",
-      "Canadá",
-      "Estados Unidos",
-      "Australia"
-    ],
-    "correct": 0
+    "options": ["Reino Unido", "Canadá", "Estados Unidos", "Australia"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos integrantes tenía The Beatles?",
-    "options": [
-      "4",
-      "5",
-      "6",
-      "3"
-    ],
-    "correct": 0
-  },
-  {
-    "question": "¿En qué año se lanzó Instagram?",
-    "options": [
-      "2010",
-      "2008",
-      "2012",
-      "2014"
-    ],
-    "correct": 0
+    "options": ["4", "5", "6", "3"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa desarrolló el sistema operativo Android?",
-    "options": [
-      "Microsoft",
-      "Apple",
-      "Samsung",
-      "Google"
-    ],
-    "correct": 3
+    "options": ["Microsoft", "Apple", "Samsung", "Google"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué significa 'IA' en tecnología?",
-    "options": [
-      "Internet Avanzado",
-      "Información Automatizada",
-      "Inteligencia Artificial",
-      "Interfaz de Audio"
-    ],
-    "correct": 2
+    "options": ["Internet Avanzado", "Información Automatizada", "Inteligencia Artificial", "Interfaz de Audio"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa fabrica el chip 'M1'?",
-    "options": [
-      "Apple",
-      "NVIDIA",
-      "Intel",
-      "AMD"
-    ],
-    "correct": 0
+    "options": ["Apple", "NVIDIA", "Intel", "AMD"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué empresa desarrolló el navegador Chrome?",
-    "options": [
-      "Apple",
-      "Google",
-      "Mozilla",
-      "Microsoft"
-    ],
-    "correct": 1
+    "options": ["Apple", "Google", "Mozilla", "Microsoft"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el gas que el cuerpo humano necesita para vivir?",
-    "options": [
-      "Nitrógeno",
-      "Hidrógeno",
-      "CO2",
-      "Oxígeno"
-    ],
-    "correct": 3
+    "options": ["Nitrógeno", "Hidrógeno", "CO2", "Oxígeno"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué animal tiene la gestación más larga?",
-    "options": [
-      "Ballena azul",
-      "Hipopótamo",
-      "Jirafa",
-      "Elefante"
-    ],
-    "correct": 3
+    "options": ["Ballena azul", "Hipopótamo", "Jirafa", "Elefante"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el metal más abundante en la corteza terrestre?",
-    "options": [
-      "Cobre",
-      "Oro",
-      "Aluminio",
-      "Hierro"
-    ],
-    "correct": 2
+    "options": ["Cobre", "Oro", "Aluminio", "Hierro"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué está hecho el Sol principalmente?",
-    "options": [
-      "Lava y roca",
-      "Oxígeno y carbono",
-      "Hidrógeno y helio",
-      "Hierro y níquel"
-    ],
-    "correct": 2
+    "options": ["Lava y roca", "Oxígeno y carbono", "Hidrógeno y helio", "Hierro y níquel"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas patas tiene una araña?",
-    "options": [
-      "6",
-      "8",
-      "10",
-      "12"
-    ],
-    "correct": 1
+    "options": ["6", "8", "10", "12"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el país más grande del mundo por superficie?",
-    "options": [
-      "Canadá",
-      "Estados Unidos",
-      "China",
-      "Rusia"
-    ],
-    "correct": 3
+    "options": ["Canadá", "Estados Unidos", "China", "Rusia"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es la capital de Australia?",
-    "options": [
-      "Brisbane",
-      "Sydney",
-      "Melbourne",
-      "Canberra"
-    ],
-    "correct": 3
+    "options": ["Brisbane", "Sydney", "Melbourne", "Canberra"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el océano más pequeño del mundo?",
-    "options": [
-      "Océano Índico",
-      "Océano Ártico",
-      "Mar Mediterráneo",
-      "Atlántico Sur"
-    ],
-    "correct": 1
+    "options": ["Océano Índico", "Océano Ártico", "Mar Mediterráneo", "Atlántico Sur"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué ciudad está la Estatua de la Libertad?",
-    "options": [
-      "Washington D.C.",
-      "Miami",
-      "Nueva York",
-      "Boston"
-    ],
-    "correct": 2
+    "options": ["Washington D.C.", "Miami", "Nueva York", "Boston"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos colores tiene la bandera de Italia?",
-    "options": [
-      "5",
-      "3",
-      "4",
-      "2"
-    ],
-    "correct": 1
+    "options": ["5", "3", "4", "2"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el idioma con más hablantes nativos en el mundo?",
-    "options": [
-      "Inglés",
-      "Chino mandarín",
-      "Hindi",
-      "Español"
-    ],
-    "correct": 1
+    "options": ["Inglés", "Chino mandarín", "Hindi", "Español"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el animal más venenoso del mundo?",
-    "options": [
-      "Araña viuda negra",
-      "Cobra real",
-      "Medusa caja",
-      "Rana dardo"
-    ],
-    "correct": 2
+    "options": ["Araña viuda negra", "Cobra real", "Medusa caja", "Rana dardo"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué país es Rosalía?",
-    "options": [
-      "España",
-      "Colombia",
-      "Argentina",
-      "México"
-    ],
-    "correct": 0
+    "options": ["España", "Colombia", "Argentina", "México"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué juego tiene el personaje 'Master Chief'?",
-    "options": [
-      "Halo",
-      "Doom",
-      "Gears of War",
-      "Battlefield"
-    ],
-    "correct": 0
+    "options": ["Halo", "Doom", "Gears of War", "Battlefield"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas ruedas tiene un auto de Fórmula 1?",
-    "options": [
-      "6",
-      "8",
-      "2",
-      "4"
-    ],
-    "correct": 3
-  },
-  {
-    "question": "¿En qué año salió Grand Theft Auto V?",
-    "options": [
-      "2011",
-      "2013",
-      "2012",
-      "2015"
-    ],
-    "correct": 1
+    "options": ["6", "8", "2", "4"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué significan las siglas 'URL'?",
-    "options": [
-      "Uniform Resource Locator",
-      "Universal Route Locator",
-      "Universal Resource Link",
-      "Unified Reference Link"
-    ],
-    "correct": 0
+    "options": ["Uniform Resource Locator", "Universal Route Locator", "Universal Resource Link", "Unified Reference Link"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos jugadores hay en cada equipo de básquet en cancha?",
-    "options": [
-      "6",
-      "4",
-      "5",
-      "7"
-    ],
-    "correct": 2
+    "options": ["6", "4", "5", "7"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué deporte se usa un 'birdie'?",
-    "options": [
-      "Golf",
-      "Tenis",
-      "Pádel",
-      "Bádminton"
-    ],
-    "correct": 0
+    "options": ["Golf", "Tenis", "Pádel", "Bádminton"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos aros tiene el logo de los Juegos Olímpicos?",
-    "options": [
-      "4",
-      "7",
-      "5",
-      "6"
-    ],
-    "correct": 2
+    "options": ["4", "7", "5", "6"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué año se fundó Netflix?",
-    "options": [
-      "1997",
-      "1995",
-      "1999",
-      "2001"
-    ],
-    "correct": 0
+    "options": ["1997", "1995", "1999", "2001"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué personaje de Marvel lanza telarañas?",
-    "options": [
-      "Ant-Man",
-      "Spider-Man",
-      "Daredevil",
-      "Hawkeye"
-    ],
-    "correct": 1
+    "options": ["Ant-Man", "Spider-Man", "Daredevil", "Hawkeye"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas películas tiene la saga de El Hobbit de Peter Jackson?",
-    "options": [
-      "3",
-      "1",
-      "2",
-      "4"
-    ],
-    "correct": 0
+    "options": ["3", "1", "2", "4"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país nació Lionel Messi?",
-    "options": [
-      "Uruguay",
-      "España",
-      "Brasil",
-      "Argentina"
-    ],
-    "correct": 3
+    "options": ["Uruguay", "España", "Brasil", "Argentina"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos jugadores de campo hay en el cricket por equipo?",
-    "options": [
-      "11",
-      "9",
-      "12",
-      "10"
-    ],
-    "correct": 0
+    "options": ["11", "9", "12", "10"],
+    "correct": 0,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué significa 'MVP' en deportes?",
-    "options": [
-      "Most Voted Player",
-      "Main Victory Prize",
-      "Maximum Victory Points",
-      "Most Valuable Player"
-    ],
-    "correct": 3
+    "options": ["Most Voted Player", "Main Victory Prize", "Maximum Victory Points", "Most Valuable Player"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿De qué material está hecha la pelota de tenis?",
-    "options": [
-      "Silicona",
-      "Plástico sólido",
-      "Goma hueca con fieltro",
-      "Cuero"
-    ],
-    "correct": 2
+    "options": ["Silicona", "Plástico sólido", "Goma hueca con fieltro", "Cuero"],
+    "correct": 2,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántos juegos tiene que ganar un equipo en una serie al mejor de 7?",
-    "options": [
-      "5",
-      "3",
-      "6",
-      "4"
-    ],
-    "correct": 3
+    "options": ["5", "3", "6", "4"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Qué país inventó el fútbol moderno?",
-    "options": [
-      "Italia",
-      "Inglaterra",
-      "España",
-      "Brasil"
-    ],
-    "correct": 1
+    "options": ["Italia", "Inglaterra", "España", "Brasil"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuántas caras tiene un dado estándar?",
-    "options": [
-      "8",
-      "5",
-      "4",
-      "6"
-    ],
-    "correct": 3
+    "options": ["8", "5", "4", "6"],
+    "correct": 3,
+    "tags": ["general"]
   },
   {
     "question": "¿Cuál es el río más largo del mundo?",
-    "options": [
-      "Amazonas",
-      "Nilo",
-      "Mississippi",
-      "Yangtsé"
-    ],
-    "correct": 1
+    "options": ["Amazonas", "Nilo", "Mississippi", "Yangtsé"],
+    "correct": 1,
+    "tags": ["general"]
   },
   {
     "question": "¿En qué país está Machu Picchu?",
-    "options": [
-      "Bolivia",
-      "Colombia",
-      "Ecuador",
-      "Perú"
-    ],
-    "correct": 3
+    "options": ["Bolivia", "Colombia", "Ecuador", "Perú"],
+    "correct": 3,
+    "tags": ["general"]
+  },
+
+  {
+    "question": "¿En qué año fue fundada Bahía Blanca?",
+    "options": ["1816", "1828", "1835", "1810"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Quién fundó la ciudad de Bahía Blanca?",
+    "options": ["Juan Manuel de Rosas", "Coronel Ramón Estomba", "General San Martín", "General Roca"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué provincia argentina está ubicada Bahía Blanca?",
+    "options": ["La Pampa", "Río Negro", "Buenos Aires", "Santa Fe"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué fecha exacta fue fundada Bahía Blanca?",
+    "options": ["25 de mayo", "9 de julio", "11 de abril", "17 de agosto"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el nombre del puerto principal de Bahía Blanca?",
+    "options": ["Puerto Madero", "Puerto Belgrano", "Ingeniero White", "Puerto Quequén"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la universidad nacional de Bahía Blanca?",
+    "options": ["UBA", "UTN Bahía Blanca", "UNS", "UNICEN"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué año se fundó la Universidad Nacional del Sur?",
+    "options": ["1948", "1956", "1962", "1970"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el club de fútbol más conocido de Bahía Blanca?",
+    "options": ["Huracán", "Olimpo", "Villa Mitre", "Liniers"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿De qué colores es la camiseta de Olimpo de Bahía Blanca?",
+    "options": ["Azul y blanco", "Rojo y blanco", "Negro y blanco", "Verde y blanco"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el nombre del estadio de Olimpo de Bahía Blanca?",
+    "options": ["Estadio Mario Kempes", "Estadio Roberto Carminatti", "Estadio Centenario", "Estadio Mundialista"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál de estos también es un club de fútbol de Bahía Blanca?",
+    "options": ["San Lorenzo", "Racing", "Villa Mitre", "Lanús"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cómo se llaman los habitantes de Bahía Blanca?",
+    "options": ["Bahienses", "Bonaerenses", "Bahíanos", "Blancenses"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el parque más grande de Bahía Blanca?",
+    "options": ["Parque San Martín", "Parque de Mayo", "Parque Independencia", "Parque Sarmiento"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la plaza principal de Bahía Blanca?",
+    "options": ["Plaza de Mayo", "Plaza Rivadavia", "Plaza San Martín", "Plaza Independencia"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el polo industrial más importante de Bahía Blanca?",
+    "options": ["Polo Automotriz", "Polo Petroquímico", "Polo Tecnológico", "Polo Metalúrgico"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Aproximadamente a cuántos km está Bahía Blanca de Buenos Aires?",
+    "options": ["200 km", "400 km", "650 km", "900 km"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la playa más cercana a Bahía Blanca?",
+    "options": ["Mar del Plata", "Pinamar", "Monte Hermoso", "Miramar"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la zona serrana más cercana a Bahía Blanca?",
+    "options": ["Sierras de Córdoba", "Sierras de Tandil", "Sierras de la Ventana", "Sierra de los Padres"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué ruta nacional conecta Buenos Aires con Bahía Blanca?",
+    "options": ["Ruta 2", "Ruta 3", "Ruta 9", "Ruta 7"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué río atraviesa la ciudad de Bahía Blanca?",
+    "options": ["Río Napostá", "Río Salado", "Río Sauce Grande", "Río Colorado"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cómo se llama el aeropuerto de Bahía Blanca?",
+    "options": ["Aeropuerto Internacional Ezeiza", "Aeropuerto Sauce Viejo", "Comandante Espora", "Aeropuerto General Pueyrredón"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la calle peatonal principal de Bahía Blanca?",
+    "options": ["Florida", "Lavalle", "O'Higgins", "San Martín"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la base naval más importante de Argentina, ubicada cerca de Bahía Blanca?",
+    "options": ["Base Naval Mar del Plata", "Puerto Belgrano", "Base Ushuaia", "Arsenal Naval Azopardo"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cómo se llama el barrio industrial y portuario de Bahía Blanca?",
+    "options": ["Villa del Mar", "Ingeniero White", "Barrio Industrial", "Puerto Nuevo"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué se exporta principalmente por el puerto de Bahía Blanca?",
+    "options": ["Automóviles", "Petróleo crudo", "Cereales y granos", "Productos textiles"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el diario más tradicional de Bahía Blanca?",
+    "options": ["La Nación", "La Nueva Provincia", "El Día", "Clarín"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Con qué nombre original se fundó el fuerte de Bahía Blanca?",
+    "options": ["Fuerte San Martín", "Fortaleza Protectora Argentina", "Fuerte Buenos Aires", "Fortín del Sur"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué empresa química internacional tiene una planta importante en Bahía Blanca?",
+    "options": ["BASF", "Dow Chemical", "Dupont", "3M"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el equipo de básquet más conocido de Bahía Blanca?",
+    "options": ["Bahía Basket", "Club Peñarol", "Estudiantes La Plata", "Racing Club"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Con qué ciudad del mundo se compara Bahía Blanca por su carácter industrial y portuario?",
+    "options": ["Liverpool", "Chicago", "Rotterdam", "Génova"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el hospital público más importante de Bahía Blanca?",
+    "options": ["Hospital Italiano", "Hospital Austral", "Hospital Penna", "Hospital Leónidas Lucero"],
+    "correct": 3,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué partido limítrofe de Bahía Blanca se encuentra Puerto Belgrano?",
+    "options": ["Coronel Rosales", "General Pueyrredón", "Necochea", "Tornquist"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuántos habitantes tiene aproximadamente Bahía Blanca?",
+    "options": ["150.000", "200.000", "300.000", "500.000"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué año llegó el ferrocarril a Bahía Blanca?",
+    "options": ["1884", "1895", "1900", "1910"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el shopping principal de Bahía Blanca?",
+    "options": ["Alto Palermo", "Bahía Blanca Plaza Shopping", "Portal Palermo", "Paseo La Plaza"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el clima predominante de Bahía Blanca?",
+    "options": ["Tropical húmedo", "Frío patagónico", "Templado semiárido", "Subtropical"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la catedral de Bahía Blanca?",
+    "options": ["Catedral San Pedro", "Catedral Nuestra Señora de la Merced", "Catedral San Martín", "Catedral Santa Rosa"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué mes se celebra el aniversario de la fundación de Bahía Blanca?",
+    "options": ["Enero", "Febrero", "Abril", "Julio"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Para qué campaña militar sirvió Bahía Blanca como base de operaciones en el siglo XIX?",
+    "options": ["Guerra del Paraguay", "Conquista del Desierto", "Guerra de la Triple Alianza", "Campaña de los Andes"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué apodo recibe Bahía Blanca como centro regional del sur bonaerense?",
+    "options": ["La Perla del Atlántico", "La Capital del Sur", "La Ciudad Luz", "La Gran Aldea"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la empresa de fertilizantes con planta en Bahía Blanca?",
+    "options": ["YPF Agro", "Profertil", "Bunge Argentina", "Nidera"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el teatro municipal de Bahía Blanca?",
+    "options": ["Teatro Colón", "Teatro Municipal", "Teatro San Martín", "Teatro Independencia"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es el indicativo de la radio histórica más conocida de Bahía Blanca?",
+    "options": ["LU2", "LU5", "LT8", "LW3"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la reserva natural del estuario de Bahía Blanca?",
+    "options": ["Reserva Ecológica Napostá", "Reserva Natural Bahía Blanca-Bahía Falsa-Bahía Verde", "Parque Natural del Sur", "Reserva Costera Bonaerense"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál es la temperatura media anual aproximada de Bahía Blanca?",
+    "options": ["8°C", "14°C", "20°C", "24°C"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué partido bonaerense está la localidad de Sierra de la Ventana?",
+    "options": ["Coronel Suárez", "Tornquist", "Saavedra", "Puan"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué viento fuerte y frío es característico de la zona de Bahía Blanca?",
+    "options": ["Zonda", "Sudestada", "Pampero", "Viento Norte"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿En qué año cumple Bahía Blanca su bicentenario?",
+    "options": ["2026", "2027", "2028", "2030"],
+    "correct": 2,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Cuál de estas ciudades está en la Ruta 3 entre Buenos Aires y Bahía Blanca?",
+    "options": ["Mar del Plata", "Azul", "Tandil", "Necochea"],
+    "correct": 1,
+    "tags": ["bahia_blanca"]
+  },
+  {
+    "question": "¿Qué ave es característica de la reserva natural de la bahía de Bahía Blanca?",
+    "options": ["Flamencos", "Pingüinos", "Cóndores", "Cigüeñas"],
+    "correct": 0,
+    "tags": ["bahia_blanca"]
   }
 ]

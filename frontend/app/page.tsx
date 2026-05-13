@@ -7,7 +7,16 @@ import {
   soundGameOver, initAudio,
 } from "./sounds";
 
-type Phase = "JOIN" | "LOBBY" | "COUNTDOWN" | "QUESTION" | "REVEAL" | "FINISHED";
+type Phase = "SELECT" | "JOIN" | "LOBBY" | "COUNTDOWN" | "QUESTION" | "REVEAL" | "FINISHED";
+
+const PRESET_MODES = [
+  { key: "general",    emoji: "🌍", name: "General",   desc: "De todo para todos" },
+  { key: "gaming",     emoji: "🎮", name: "Gaming",    desc: "Videojuegos y streamers" },
+  { key: "futbol",     emoji: "⚽", name: "Fútbol",    desc: "Solo fútbol" },
+  { key: "anime",      emoji: "⛩️", name: "Anime",     desc: "Anime y manga" },
+  { key: "ciencia",    emoji: "🔬", name: "Ciencia",   desc: "Datos y curiosidades" },
+  { key: "custom",     emoji: "📍", name: "Otro modo", desc: "Escribí el tema" },
+] as const;
 
 type QuestionData = {
   question: string;
@@ -65,7 +74,9 @@ export default function Home() {
   const nicknameRef = useRef("");
 
   const [nickname, setNickname] = useState("");
-  const [phase, setPhase] = useState<Phase>("JOIN");
+  const [phase, setPhase] = useState<Phase>("SELECT");
+  const [selectedMode, setSelectedMode] = useState("general");
+  const [customMode, setCustomMode] = useState("");
   const [playerCount, setPlayerCount] = useState(0);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [startCountdown, setStartCountdown] = useState<number | null>(null);
@@ -101,6 +112,20 @@ export default function Home() {
       if (remaining <= 0 && startTimerRef.current) clearInterval(startTimerRef.current);
     }, 500);
   };
+
+  // Preseleccionar modo desde URL (?mode=gaming)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const urlMode = new URLSearchParams(window.location.search).get("mode");
+    if (!urlMode) return;
+    const isPreset = PRESET_MODES.some(m => m.key === urlMode && m.key !== "custom");
+    if (isPreset) {
+      setSelectedMode(urlMode);
+    } else {
+      setSelectedMode("custom");
+      setCustomMode(urlMode);
+    }
+  }, []);
 
   useEffect(() => {
     const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://127.0.0.1:8000/ws";
@@ -257,13 +282,31 @@ export default function Home() {
     };
   }, []);
 
+  const activeMode = selectedMode === "custom"
+    ? customMode.trim().toLowerCase().replace(/\s+/g, "-") || "general"
+    : selectedMode;
+
+  const activeModeLabel = selectedMode === "custom"
+    ? (customMode.trim() || "Personalizado")
+    : PRESET_MODES.find(m => m.key === selectedMode)?.name ?? selectedMode;
+
   const joinGame = () => {
     const socket = ws.current;
     if (!nickname.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
     initAudio();
     nicknameRef.current = nickname.trim();
-    socket.send(JSON.stringify({ type: "JOIN_GAME", nickname: nickname.trim() }));
+    socket.send(JSON.stringify({
+      type: "JOIN_GAME",
+      nickname: nickname.trim(),
+      mode: activeMode,
+    }));
     setPhase("LOBBY");
+    // Sincronizar URL para poder compartir el link del modo
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("mode", activeMode);
+      window.history.replaceState({}, "", url.toString());
+    }
   };
 
   const submitAnswer = (index: number) => {
@@ -276,7 +319,7 @@ export default function Home() {
   const resetGame = () => {
     if (startTimerRef.current) clearInterval(startTimerRef.current);
     countdownStartedRef.current = false;
-    setPhase("JOIN");
+    setPhase("SELECT");
     setScoreboard([]);
     setPlayerCount(0);
     setQuestion(null);
@@ -379,10 +422,72 @@ export default function Home() {
 
       <h1 className="text-5xl font-bold tracking-tight">100×100</h1>
 
-      {/* JOIN */}
+      {/* SELECT — elegir modo */}
+      {phase === "SELECT" && (
+        <div className="flex flex-col items-center gap-6 w-full max-w-lg animate-zoom-in-fast">
+          <p className="text-zinc-400 text-sm tracking-wide">¿Qué tipo de partida querés jugar?</p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full">
+            {PRESET_MODES.map((m) => {
+              const isSelected = selectedMode === m.key;
+              return (
+                <button
+                  key={m.key}
+                  onClick={() => setSelectedMode(m.key)}
+                  className={`p-4 rounded-xl text-left border-2 transition-all duration-150 ${
+                    isSelected
+                      ? "border-red-500 bg-red-500/10 scale-95"
+                      : "border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800/50"
+                  }`}
+                >
+                  <div className="text-2xl">{m.emoji}</div>
+                  <div className="font-bold text-sm mt-1 text-white">{m.name}</div>
+                  <div className="text-zinc-500 text-xs mt-0.5">{m.desc}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {selectedMode === "custom" && (
+            <input
+              autoFocus
+              className="bg-zinc-800 border border-zinc-600 text-white px-4 py-2 rounded-lg w-full text-center placeholder-zinc-500 focus:border-red-500 focus:outline-none"
+              placeholder="Ej: bahia-blanca, 4to-ing-industrial..."
+              value={customMode}
+              onChange={(e) => setCustomMode(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && setPhase("JOIN")}
+              maxLength={40}
+            />
+          )}
+
+          <button
+            onClick={() => setPhase("JOIN")}
+            disabled={selectedMode === "custom" && !customMode.trim()}
+            className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-lg font-bold transition-colors w-full"
+          >
+            {selectedMode === "custom" && customMode.trim()
+              ? `Jugar "${customMode.trim()}" →`
+              : selectedMode !== "custom"
+              ? `Jugar ${PRESET_MODES.find(m => m.key === selectedMode)?.name} →`
+              : "Escribí el modo primero"}
+          </button>
+        </div>
+      )}
+
+      {/* JOIN — ingresar nickname */}
       {phase === "JOIN" && (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 animate-zoom-in-fast">
+          <div className="text-zinc-400 text-sm">
+            Modo: <span className="text-white font-bold">{activeModeLabel}</span>
+            <button
+              onClick={() => setPhase("SELECT")}
+              className="ml-3 text-zinc-600 hover:text-zinc-400 text-xs underline"
+            >
+              cambiar
+            </button>
+          </div>
           <input
+            autoFocus
             className="bg-white text-black px-4 py-3 rounded-lg text-lg w-64 text-center font-medium placeholder-zinc-400"
             placeholder="Tu nickname"
             value={nickname}
@@ -403,6 +508,9 @@ export default function Home() {
       {/* LOBBY */}
       {phase === "LOBBY" && (
         <div className="text-center flex flex-col items-center gap-3">
+          <div className="text-xs text-zinc-600 uppercase tracking-widest font-bold mb-1">
+            {activeModeLabel}
+          </div>
           <div className="text-7xl font-bold text-red-500">{playerCount}</div>
           <div className="text-zinc-300 text-lg">
             jugador{playerCount !== 1 ? "es" : ""} en sala
