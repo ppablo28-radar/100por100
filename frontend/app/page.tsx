@@ -379,8 +379,11 @@ export default function Home() {
     if (timelineOrder.includes(id)) return;
     const newOrder = [...timelineOrder, id];
     setTimelineOrder(newOrder);
-    const totalEvents = (question?.events ?? []).length;
-    if (newOrder.length === totalEvents) {
+    // timeline_order usa events, ranking_order usa options
+    const totalItems = question?.question_type === "ranking_order"
+      ? (question?.options ?? []).length
+      : (question?.events ?? []).length;
+    if (newOrder.length === totalItems) {
       timelineSubmittedRef.current = true;
       socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: newOrder }));
     }

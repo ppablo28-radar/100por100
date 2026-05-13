@@ -378,8 +378,24 @@ class GameRoom:
         await self.game_loop(all_questions)
 
     async def game_loop(self, all_questions: list[dict]):
+        try:
+            await self._game_loop(all_questions)
+        except Exception as e:
+            import traceback
+            print(f"[game_loop CRASH] {e}")
+            traceback.print_exc()
+            await self._broadcast({"type": "ERROR", "message": str(e)})
+            self.state = "WAITING"
+            self.players = {}
+            self.player_ids = set()
+            self.current_question = None
+            self.answers = {}
+
+    async def _game_loop(self, all_questions: list[dict]):
         self.state = "QUESTION"
         pool = self._get_questions(all_questions)
+        if not pool and not (self.runtime_engine and self.runtime_engine.loaded):
+            raise RuntimeError("Sin preguntas disponibles y motor procedural no cargado")
         total = QUESTIONS_PER_GAME
 
         for i in range(total):
