@@ -28,10 +28,10 @@ class RankingOrderGenerator(BaseGenerator):
 
     def generate(self, pool: dict) -> dict | None:
         entities: list[dict] = pool.get("entities_with_attribute", [])
+        rng = random.SystemRandom()
         n_min = self.config.get("min_items", self.config.get("n_items", 4))
         n_max = self.config.get("max_items", self.config.get("n_items", 4))
         n = rng.randint(n_min, n_max)
-        rng = random.SystemRandom()
 
         candidates = self._pick(entities, n, rng)
         if not candidates:
