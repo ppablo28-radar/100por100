@@ -50,94 +50,103 @@ class RuntimeEngine:
 
     # ─── Carga inicial ─────────────────────────────────────────────────────
 
-    async def load(self, db) -> None:
+    async def load_from_asyncpg(self, db_url: str) -> None:
         """
-        db: AsyncSession de SQLAlchemy.
-        Carga timeline_events, knowledge_entities con sus atributos, y
-        procedural_generators habilitados.
+        Carga todos los datos usando asyncpg directo (sin SQLAlchemy).
+        db_url debe ser formato postgresql:// (no postgresql+asyncpg://).
         """
-        from sqlalchemy import select, text
-        from app.models.procedural import (
-            TimelineEvent, KnowledgeEntity, KnowledgeAttribute,
-            KnowledgeEntityAttribute, ProceduralGenerator,
-        )
+        import asyncpg
 
-        # — Timeline events —
-        result = await db.execute(select(TimelineEvent))
-        raw_events = result.scalars().all()
-        self._pools["timeline_events"] = [
-            {
-                "id": str(e.id),
-                "title": e.title,
-                "short_title": e.short_title,
-                "description": e.description,
-                "event_date": e.event_date,
-                "region": e.region,
-                "kid_friendly": e.kid_friendly,
-            }
-            for e in raw_events
-        ]
+        conn = await asyncpg.connect(db_url, timeout=10)
+        try:
+            # — Timeline events —
+            rows = await conn.fetch(
+                "SELECT id, title, short_title, description, event_date, region, kid_friendly "
+                "FROM timeline_events"
+            )
+            self._pools["timeline_events"] = [
+                {
+                    "id": str(r["id"]),
+                    "title": r["title"],
+                    "short_title": r["short_title"],
+                    "description": r["description"],
+                    "event_date": r["event_date"],
+                    "region": r["region"],
+                    "kid_friendly": r["kid_friendly"],
+                }
+                for r in rows
+            ]
 
-        # — Knowledge entities + attributes —
-        result = await db.execute(select(KnowledgeEntity))
-        entities = result.scalars().all()
+            # — Knowledge attributes (slug → metadata) —
+            attr_rows = await conn.fetch(
+                "SELECT id, slug, name, data_type, unit FROM knowledge_attributes"
+            )
+            attributes = {str(r["id"]): dict(r) for r in attr_rows}
 
-        result = await db.execute(select(KnowledgeAttribute))
-        attributes = {str(a.id): a for a in result.scalars().all()}
+            # — Knowledge entities —
+            entity_rows = await conn.fetch(
+                "SELECT id, entity_type, name, slug, description, region, "
+                "kid_friendly, popularity_score, mainstream_score, metadata "
+                "FROM knowledge_entities"
+            )
+            import json
+            entity_map: dict[str, dict] = {}
+            for r in entity_rows:
+                meta = r["metadata"] if isinstance(r["metadata"], dict) else json.loads(r["metadata"] or "{}")
+                entity_map[str(r["id"])] = {
+                    "id": str(r["id"]),
+                    "entity_type": r["entity_type"],
+                    "name": r["name"],
+                    "slug": r["slug"],
+                    "description": r["description"],
+                    "region": r["region"],
+                    "kid_friendly": r["kid_friendly"],
+                    "popularity_score": r["popularity_score"],
+                    "mainstream_score": r["mainstream_score"],
+                    "image_url": meta.get("image_url"),
+                    "attrs": {},
+                }
 
-        result = await db.execute(select(KnowledgeEntityAttribute))
-        entity_attr_rows = result.scalars().all()
+            # — Entity attribute values —
+            val_rows = await conn.fetch(
+                "SELECT entity_id, attribute_id, value_number, value_text "
+                "FROM knowledge_entity_attributes"
+            )
+            for r in val_rows:
+                eid = str(r["entity_id"])
+                aid = str(r["attribute_id"])
+                if eid not in entity_map or aid not in attributes:
+                    continue
+                attr = attributes[aid]
+                value = r["value_number"] if r["value_number"] is not None else r["value_text"]
+                entity_map[eid]["attrs"][attr["slug"]] = {
+                    "value": value,
+                    "name": attr["name"],
+                    "unit": attr["unit"],
+                    "data_type": attr["data_type"],
+                }
 
-        # Build entity dict keyed by id
-        entity_map: dict[str, dict] = {
-            str(e.id): {
-                "id": str(e.id),
-                "entity_type": e.entity_type,
-                "name": e.name,
-                "slug": e.slug,
-                "description": e.description,
-                "region": e.region,
-                "kid_friendly": e.kid_friendly,
-                "popularity_score": e.popularity_score,
-                "mainstream_score": e.mainstream_score,
-                "image_url": e.metadata_.get("image_url"),
-                "attrs": {},      # attr_slug → value
-            }
-            for e in entities
-        }
+            self._pools["entities"] = list(entity_map.values())
 
-        for row in entity_attr_rows:
-            eid = str(row.entity_id)
-            aid = str(row.attribute_id)
-            if eid not in entity_map or aid not in attributes:
-                continue
-            attr = attributes[aid]
-            value = row.value_number if row.value_number is not None else row.value_text
-            entity_map[eid]["attrs"][attr.slug] = {
-                "value": value,
-                "name": attr.name,
-                "unit": attr.unit,
-                "data_type": attr.data_type,
-            }
+            # — Procedural generators —
+            gen_rows = await conn.fetch(
+                "SELECT id, slug, generator_type, config "
+                "FROM procedural_generators WHERE enabled = true"
+            )
+            self._generators = []
+            for r in gen_rows:
+                cfg = r["config"] if isinstance(r["config"], dict) else json.loads(r["config"] or "{}")
+                gtype = r["generator_type"]
+                self._generators.append({
+                    "id": str(r["id"]),
+                    "slug": r["slug"],
+                    "type": gtype,
+                    "config": cfg,
+                    "instance": GENERATOR_CLASSES[gtype](cfg) if gtype in GENERATOR_CLASSES else None,
+                })
 
-        self._pools["entities"] = list(entity_map.values())
-
-        # — Procedural generators —
-        result = await db.execute(
-            select(ProceduralGenerator).where(ProceduralGenerator.enabled == True)
-        )
-        generators = result.scalars().all()
-        self._generators = [
-            {
-                "id": str(g.id),
-                "slug": g.slug,
-                "type": g.generator_type,
-                "config": g.config,
-                "instance": GENERATOR_CLASSES[g.generator_type](g.config)
-                if g.generator_type in GENERATOR_CLASSES else None,
-            }
-            for g in generators
-        ]
+        finally:
+            await conn.close()
 
         self.loaded = True
         logger.info(
@@ -146,6 +155,10 @@ class RuntimeEngine:
             len(self._pools["entities"]),
             len(self._generators),
         )
+
+    async def load(self, db) -> None:
+        """Compatibilidad: acepta AsyncSession de SQLAlchemy (delega a load_from_asyncpg)."""
+        raise NotImplementedError("Usar load_from_asyncpg(db_url) directamente.")
 
     # ─── Generación ────────────────────────────────────────────────────────
 

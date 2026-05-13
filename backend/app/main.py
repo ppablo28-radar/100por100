@@ -39,16 +39,14 @@ async def startup_event():
 
 async def _load_procedural_engine():
     import os
-    db_url = os.getenv("DATABASE_URL", "")
+    db_url = os.getenv("DATABASE_URL", "").replace("postgresql+asyncpg://", "postgresql://")
     if not db_url:
         logger.info("RuntimeEngine: DATABASE_URL no configurada, saltando carga procedural.")
         return
     try:
-        from app.db.session import AsyncSessionLocal
-        async with AsyncSessionLocal() as session:
-            await runtime_engine.load(session)
+        await runtime_engine.load_from_asyncpg(db_url)
     except Exception as e:
-        logger.warning("RuntimeEngine: no se pudo cargar (no afecta el juego normal): %s", e)
+        logger.warning("RuntimeEngine: no se pudo cargar: %s", e)
 
 
 @app.get("/")
@@ -181,13 +179,11 @@ async def procedural_generate(type: str | None = None):
 async def procedural_reload():
     """Recarga los datos del motor procedural desde la DB."""
     import os
-    db_url = os.getenv("DATABASE_URL", "")
+    db_url = os.getenv("DATABASE_URL", "").replace("postgresql+asyncpg://", "postgresql://")
     if not db_url:
         return {"error": "DATABASE_URL no configurada"}
     try:
-        from app.db.session import AsyncSessionLocal
-        async with AsyncSessionLocal() as session:
-            await runtime_engine.load(session)
+        await runtime_engine.load_from_asyncpg(db_url)
         return {"ok": True, **runtime_engine.stats()}
     except Exception as e:
         return {"error": str(e)}
