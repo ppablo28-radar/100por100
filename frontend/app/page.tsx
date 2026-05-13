@@ -86,6 +86,7 @@ export default function Home() {
   const [revealData, setRevealData] = useState<RevealData | null>(null);
   const [scoreboard, setScoreboard] = useState<Player[]>([]);
   const [connected, setConnected] = useState(false);
+  const [modeCounts, setModeCounts] = useState<Record<string, number>>({});
   const [funMessage, setFunMessage] = useState<string | null>(null);
   const [streakCount, setStreakCount] = useState(0);
   const [answerAnim, setAnswerAnim] = useState<"correct" | "wrong" | null>(null);
@@ -112,6 +113,18 @@ export default function Home() {
       if (remaining <= 0 && startTimerRef.current) clearInterval(startTimerRef.current);
     }, 500);
   };
+
+  // Fetch question counts per mode
+  useEffect(() => {
+    const base = (process.env.NEXT_PUBLIC_WS_URL ?? "ws://127.0.0.1:8000/ws")
+      .replace("wss://", "https://")
+      .replace("ws://", "http://")
+      .replace("/ws", "");
+    fetch(`${base}/counts`)
+      .then((r) => r.json())
+      .then(setModeCounts)
+      .catch(() => {});
+  }, []);
 
   // Preseleccionar modo desde URL (?mode=gaming)
   useEffect(() => {
@@ -443,6 +456,11 @@ export default function Home() {
                   <div className="text-2xl">{m.emoji}</div>
                   <div className="font-bold text-sm mt-1 text-white">{m.name}</div>
                   <div className="text-zinc-500 text-xs mt-0.5">{m.desc}</div>
+                  {m.key !== "custom" && modeCounts[m.key] != null && (
+                    <div className="text-zinc-600 text-xs mt-1">
+                      {modeCounts[m.key].toLocaleString()} preguntas
+                    </div>
+                  )}
                 </button>
               );
             })}

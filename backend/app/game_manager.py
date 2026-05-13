@@ -2,11 +2,141 @@ import asyncio
 import json
 import os
 import random
+import re
 import time
 
 MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
+
+# ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
+TAG_KEYWORDS: dict[str, list[str]] = {
+    "gaming": [
+        "minecraft", "roblox", "fortnite", "pokemon", "videojuego", "nintendo",
+        "playstation", "xbox", "valorant", "counter-strike", "gta", "zelda",
+        "mario", "sonic", "gaming", "consola", "among us", "among-us",
+        "mrbeast", "mr beast", "rubius", "vegetta", "ibai", "spreen", "dream smp",
+        "v-bucks", "robux", "league of legends", "free fire", "overwatch", "apex",
+        "call of duty", "kratos", "god of war", "master chief", "halo",
+        "red dead", "animal crossing", "breath of the wild", "twitch",
+        "streamer", "creeper", "enderman", "nether", "pikachu", "charmander",
+        "bulbasaur", "squirtle", "eevee", "mewtwo", "pokédex", "pokémon",
+        "saiyan", "duel monsters", "yu-gi", "hollow knight", "undertale",
+        "mortal kombat", "street fighter", "super smash", "megaman", "kirby",
+    ],
+    "anime": [
+        "anime", "manga", "naruto", "dragon ball", "one piece", "my hero academia",
+        "demon slayer", "attack on titan", "sword art online", "goku", "vegeta",
+        "one punch man", "bleach", "luffy", "sasuke", "sakura", "midoriya",
+        "tanjiro", "shingeki", "kimetsu", "boku no hero", "fullmetal",
+        "death note", "saint seiya", "caballeros del zodiaco", "yu-gi-oh",
+        "tokyo revengers", "jujutsu kaisen", "spy x family", "re:zero",
+        "hunter x hunter", "fairy tail", "dragon quest", "digimon", "hashira",
+        "quirk", "kamehameha", "sharingan", "byakugan", "jutsu", "shinigami",
+    ],
+    "futbol": [
+        "fútbol", "futbol", "mundial", "messi", "ronaldo", "cristiano",
+        "champions league", "copa america", "copa del mundo", "selección",
+        "gol", "penalti", "penal", "árbitro", "balón de oro", "fifa",
+        "premier league", "mbappé", "neymar", "maradona", "liga",
+        "albiceleste", "offside", "fuera de juego", "corner", "portero",
+        "arquero", "delantero", "mediocampista", "defensor", "cancha",
+    ],
+    "deportes": [
+        "nba", "básquet", "basquet", "tenis", "olímpico", "olimpiadas",
+        "atletismo", "natación", "rugby", "voleibol", "béisbol",
+        "fórmula 1", "f1", "michael jordan", "lebron", "federer",
+        "djokovic", "nadal", "usain bolt", "set de tenis", "grand slam",
+        "try", "touchdown", "home run", "slam dunk", "triple", "three-pointer",
+    ],
+    "musica": [
+        "música", "musica", "cantante", "canción", "cancion", "álbum", "album",
+        "bts", "taylor swift", "billie eilish", "bad bunny", "shakira",
+        "bizarrap", "karol g", "j balvin", "maluma", "daddy yankee",
+        "beatles", "michael jackson", "despacito", "one direction", "blackpink",
+        "grammy", "spotify", "concierto", "banda", "reggaetón", "reggaeton",
+        "trap", "pop", "rock", "nicki nicole", "rosalía", "rosalia",
+        "olivia rodrigo", "the weeknd", "abel tesfaye", "harry styles",
+        "justin bieber", "ariana grande", "dua lipa", "liam payne",
+        "zayn", "peso pluma", "anitta", "ozuna",
+    ],
+    "ciencia": [
+        "planeta", "sistema solar", "temperatura", "química", "quimica",
+        "física", "fisica", "biología", "biologia", "hueso", "corazón",
+        "cerebro", "velocidad de la luz", "elemento", "oxígeno", "oxigeno",
+        "sangre", "músculo", "musculo", "célula", "celula", "átomo", "atomo",
+        "tabla periódica", "tabla periodica", "newton", "einstein", "voltio",
+        "neutron", "radiación", "fotosíntesis", "fotosintesis", "ecosistema",
+        "gravedad", "relatividad", "evolución", "adn", "dna", "bacteria",
+        "virus", "molécula", "molecula", "reacción química", "isótopo",
+        "fémur", "femur", "costilla", "vértebra", "vertebra", "diente",
+        "cromosoma", "litro", "kilómetro", "kilogramo", "hectárea",
+    ],
+    "series": [
+        "harry potter", "hogwarts", "voldemort", "hermione", "dumbledore",
+        "star wars", "darth vader", "jedi", "yoda", "mandalorian",
+        "marvel", "avengers", "spider-man", "iron man", "captain america",
+        "thor", "batman", "superman", "joker", "dc comics",
+        "frozen", "arendelle", "toy story", "pixar", "disney",
+        "stranger things", "squid game", "la casa de papel", "cobra kai",
+        "friends", "the office", "breaking bad", "game of thrones",
+        "el señor de los anillos", "lord of the rings", "hobbit",
+        "piratas del caribe", "jack sparrow", "rey leon", "el rey leon",
+        "gravity falls", "teen titans", "miraculous", "ladybug",
+        "hunger games", "juegos del hambre", "black panther", "shrek",
+        "los simpsons", "simpson",
+    ],
+    "internet": [
+        "tiktok", "instagram", "twitter", "redes sociales", "meme",
+        "emoji", "viral", "streaming", "discord", "hashtag", "influencer",
+        "youtuber", "doge", "lol", "afk", "gg", "goat", "khaby lame",
+        "charlie d'amelio", "renegade", "url", "http", "byte", "terabyte",
+        "wi-fi", "whatsapp", "facebook", "snapchat", "linkedin",
+        "navegador", "chrome", "safari", "firefox", "gmail",
+    ],
+}
+
+_SLUG_RE = re.compile(r"[^a-z0-9]")
+
+
+def _text_to_slug(text: str) -> str:
+    t = text.lower()
+    for a, b in [("á","a"),("é","e"),("í","i"),("ó","o"),("ú","u"),("ñ","n")]:
+        t = t.replace(a, b)
+    return t
+
+
+def infer_tags(question_text: str) -> list[str]:
+    """Infiere los tags de una pregunta por coincidencia de keywords."""
+    slug = _text_to_slug(question_text)
+    found = [tag for tag, kws in TAG_KEYWORDS.items()
+             if any(kw in slug for kw in kws)]
+    return found or ["general"]
+
+
+def _filter_by_mode(mode: str, all_questions: list[dict]) -> list[dict]:
+    """Filtra preguntas por modo SIN fallback. Puede devolver lista vacía."""
+    if mode == "general":
+        return all_questions
+    result = []
+    for q in all_questions:
+        db_tags = set(q.get("tags") or [])
+        inferred = set(infer_tags(q.get("question", "")))
+        if mode in (db_tags | inferred):
+            result.append(q)
+    return result
+
+
+def get_questions_for_mode(mode: str, all_questions: list[dict]) -> list[dict]:
+    """Retorna preguntas para un modo; cae a 'general' si el modo tiene < 5."""
+    filtered = _filter_by_mode(mode, all_questions)
+    return filtered if len(filtered) >= 5 else all_questions
+
+
+def count_per_mode(all_questions: list[dict]) -> dict[str, int]:
+    """Cuenta preguntas REALES por modo (sin fallback)."""
+    modes = ["general"] + list(TAG_KEYWORDS.keys())
+    return {m: len(_filter_by_mode(m, all_questions)) for m in modes}
 
 
 class GameRoom:
@@ -28,12 +158,7 @@ class GameRoom:
         await self.ws.broadcast_to(self.player_ids, message)
 
     def _get_questions(self, all_questions: list[dict]) -> list[dict]:
-        """Filtra preguntas por el modo de la sala."""
-        if self.mode == "general":
-            filtered = [q for q in all_questions if "general" in q.get("tags", [])]
-            return filtered if filtered else all_questions
-        filtered = [q for q in all_questions if self.mode in q.get("tags", [])]
-        return filtered if filtered else all_questions
+        return get_questions_for_mode(self.mode, all_questions)
 
     async def add_player(self, player_id: str, nickname: str, all_questions: list[dict]):
         if self.state not in ("WAITING", "STARTING"):

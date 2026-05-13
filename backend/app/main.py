@@ -39,12 +39,16 @@ async def root():
 async def rooms():
     """Lista de salas activas (para debug)."""
     return {
-        mode: {
-            "state": room.state,
-            "players": len(room.players),
-        }
+        mode: {"state": room.state, "players": len(room.players)}
         for mode, room in game_manager.rooms.items()
     }
+
+
+@app.get("/counts")
+async def question_counts():
+    """Cuántas preguntas hay por modo — usado por el frontend en el selector."""
+    from app.game_manager import count_per_mode
+    return count_per_mode(game_manager.questions)
 
 
 @app.websocket("/ws")
