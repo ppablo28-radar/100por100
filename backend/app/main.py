@@ -44,6 +44,15 @@ async def rooms():
     }
 
 
+@app.post("/reload")
+async def reload_questions():
+    """Recarga las preguntas desde Supabase sin reiniciar el servidor."""
+    before = len(game_manager.questions)
+    await game_manager.load_questions()
+    after = len(game_manager.questions)
+    return {"before": before, "after": after, "new": after - before}
+
+
 @app.get("/counts")
 async def question_counts():
     """Cuántas preguntas hay por modo — usado por el frontend en el selector."""
