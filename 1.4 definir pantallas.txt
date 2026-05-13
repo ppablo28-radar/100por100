@@ -1,0 +1,267 @@
+definir la experiencia exacta del jugador pantalla por pantalla.
+
+Porque eso:
+
+descubre problemas
+obliga a tomar decisiones reales
+después se traduce fácil a frontend
+Vamos a diseñar el flujo UX/UI completo del MVP
+PANTALLA 1 — HOME
+
+Minimalista.
+
+Debe tener:
+logo 100×100
+botón JUGAR
+nickname
+Ejemplo
+------------------
+      100×100
+
+ nickname: [ Pablo ]
+
+      [ JUGAR ]
+------------------
+DECISIÓN IMPORTANTE
+¿Cuenta o nickname temporal?
+
+Mi recomendación:
+
+nickname temporal.
+
+Porque:
+
+menos fricción
+más testing rápido
+más divertido
+PANTALLA 2 — MATCHMAKING / LOBBY
+
+Cuando entra:
+ve cuántos jugadores hay.
+
+Ejemplo
+PARTIDA ENCONTRADA
+
+Jugadores: 7/10
+
+Comienza en:
+00:34
+Acá necesitás decidir:
+¿La partida empieza:
+al llenar
+o
+con timer?
+
+Mi recomendación:
+
+ambas.
+
+Ejemplo:
+
+empieza instantáneamente si llega a 10
+o empieza cuando timer llega a 0
+IMPORTANTE
+
+Necesitás:
+
+sensación de movimiento.
+
+Mostrá:
+
+jugadores entrando
+sonidos
+contador
+PANTALLA 3 — COUNTDOWN
+
+MUY importante visualmente.
+
+Ejemplo
+3
+
+Pantalla limpia.
+Grande.
+Con sonido fuerte.
+
+PANTALLA 4 — PREGUNTA
+
+Esta es:
+
+LA pantalla principal.
+Estructura recomendada
+--------------------------------
+
+Pregunta 4/20
+
+Tiempo: 08
+
+¿Quién creó Minecraft?
+
+[A] Notch
+[B] Valve
+[C] EA
+[D] Nintendo
+
+--------------------------------
+IMPORTANTÍSIMO
+El timer debe sentirse agresivo.
+
+Eso crea:
+
+tensión
+rapidez
+adrenalina
+DECISIÓN IMPORTANTE
+¿Mostrar ranking mientras responde?
+
+Mi recomendación:
+
+NO.
+
+Distrae mucho.
+
+MOSTRAR SOLO:
+pregunta
+opciones
+timer
+Cuando responde
+
+La UI cambia.
+
+Ejemplo
+RESPUESTA ENVIADA ✓
+Esperando jugadores...
+MUY importante
+
+El usuario necesita:
+
+confirmación instantánea.
+PANTALLA 5 — ANSWER REVEAL
+
+Acá empieza la dopamina.
+
+Mostrar:
+respuesta correcta
+porcentaje global
+puntos ganados
+cambio posición
+Ejemplo
+Correcta: Notch
+
+72% acertó
+
++134 puntos
+
+Subiste al puesto #2
+ESTO ES FUNDAMENTAL
+
+El juego necesita:
+
+feedback emocional constante.
+PANTALLA 6 — SCOREBOARD
+Mostrar
+#1 Lucas - 1250
+#2 Pablo - 1210
+#3 Ana - 1180
+IMPORTANTE
+
+Necesitás:
+
+movimiento visual.
+subir puestos
+bajar puestos
+animaciones
+PANTALLA 7 — FINAL
+Mostrar:
+ganador
+top 3
+estadísticas
+Ejemplo
+GANADOR
+
+Lucas
+
+17/20 correctas
+Tiempo promedio: 2.4s
+BOTONES
+[ REVANCHA ]
+[ SALIR ]
+Ahora:
+decisiones IMPORTANTES de diseño
+1. ¿Oscuro o claro?
+
+Mi recomendación:
+
+oscuro.
+
+Porque:
+
+esports
+contraste
+tensión
+moderno
+2. Colores
+
+Yo haría:
+
+negro
+blanco
+rojo
+amarillo timer
+3. Fuente
+
+Grande.
+Muy legible.
+Impactante.
+
+4. Animaciones
+
+MUY importantes.
+
+Necesitás:
+
+números grandes
+transiciones rápidas
+vibración timer
+5. Sonido
+
+Subestimadísimo.
+
+Necesitás:
+tic tac final
+correcta
+incorrecta
+subida ranking
+countdown
+Ahora viene OTRA decisión gigante:
+¿Mobile first o desktop first?
+
+Mi recomendación:
+
+MOBILE FIRST.
+
+Porque:
+
+partidas rápidas
+streamers
+viralidad
+amigos
+QR
+Entonces:
+toda la UI debe diseñarse vertical.
+Próximo paso RECOMENDADO
+
+Ahora sí:
+
+diseñar la estructura técnica del frontend.
+
+Por ejemplo:
+
+componentes React
+manejo de estado
+websocket frontend
+navegación entre pantallas
+arquitectura UI
+
+Y después de eso:
+
+arrancar el código real.

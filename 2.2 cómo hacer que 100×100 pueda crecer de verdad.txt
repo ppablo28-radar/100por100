@@ -1,0 +1,499 @@
+Ahora vamos a entrar en:
+cómo hacer que 100×100 pueda crecer de verdad.
+Porque una cosa es:
+
+
+10 jugadores
+
+
+una partida
+
+
+local
+
+
+Y otra MUY distinta:
+
+
+miles de jugadores
+
+
+cientos de partidas
+
+
+streamers
+
+
+torneos masivos
+
+
+
+Lo MÁS importante
+NO sobreingenierizar temprano.
+MUCHOS proyectos mueren haciendo:
+
+
+microservicios
+
+
+Kubernetes
+
+
+sistemas gigantes
+
+
+antes de tener usuarios.
+
+Filosofía correcta
+construir por etapas.
+
+ETAPA 1 — MVP SIMPLE
+Soporta:
+
+
+1 partida
+
+
+10 jugadores
+
+
+
+Arquitectura
+Frontend   |FastAPI   |PostgreSQL
+
+Todo en un servidor.
+Y está PERFECTO.
+
+ETAPA 2 — Varias partidas
+Cuando tengas:
+
+
+testers reales
+
+
+varias salas
+
+
+
+Problema nuevo
+Necesitás:
+
+
+múltiples GameManagers
+
+
+múltiples lobbies
+
+
+
+Arquitectura
+GameManager[]
+
+Cada partida:
+
+
+tiene jugadores
+
+
+estado
+
+
+timer
+
+
+loop propio
+
+
+
+Ejemplo
+matches = {    "abc123": GameManager(),    "xyz999": GameManager()}
+
+MUY importante
+Cada partida aislada.
+Nunca compartir estado.
+
+ETAPA 3 — Redis
+Acá cambia TODO.
+
+¿Por qué Redis?
+Porque los juegos realtime AMAN Redis.
+
+Redis sirve para:
+
+
+estado rápido
+
+
+pub/sub
+
+
+timers
+
+
+leaderboards
+
+
+matchmaking
+
+
+
+Arquitectura
+Frontend   |Load Balancer   |Backend Servers   |Redis   |PostgreSQL
+
+Problema gigante
+WebSockets + múltiples servidores.
+
+Porque:
+un jugador puede estar:
+
+
+conectado al server A
+
+
+otro al B
+
+
+
+Entonces:
+necesitás sincronización global.
+
+Ahí entra Redis pub/sub.
+
+Ejemplo
+Servidor A:
+Pregunta nueva
+Redis:
+broadcast
+Todos reciben.
+
+ETAPA 4 — Matchmaking real
+Cuando tengas:
+
+
+muchos jugadores
+
+
+rating
+
+
+
+Necesitás:
+
+
+colas
+
+
+regiones
+
+
+ping
+
+
+skill brackets
+
+
+
+Ejemplo
+1200-1400 rating
+
+Si no:
+los nuevos sufren muchísimo.
+
+ETAPA 5 — Streamer mode
+Acá puede explotar el proyecto.
+
+Arquitectura streamer
+Streamer Match    |1000 espectadores
+
+Problema:
+escala MUY distinta.
+
+Porque:
+
+
+pocos responden
+
+
+MUCHOS miran
+
+
+
+Entonces:
+necesitás separar:
+players
+de
+spectators
+
+Espectadores
+NO necesitan:
+
+
+sincronización perfecta
+
+
+respuesta rápida
+
+
+
+Entonces:
+más barato.
+
+ETAPA 6 — CDN
+Cuando tengas:
+
+
+imágenes
+
+
+audio
+
+
+clips
+
+
+contenido visual
+
+
+
+Necesitás CDN.
+Ejemplo:
+Cloudflare
+
+ETAPA 7 — IA pipeline
+Acá entra tu idea original fuerte.
+
+Pipeline ideal
+IA genera↓moderación↓testing↓producción↓estadísticas refinan
+
+Porque:
+NO podés confiar ciegamente en IA.
+
+Problema futuro GIGANTE
+Preguntas repetidas.
+
+Necesitás:
+
+
+tags
+
+
+historial
+
+
+rotación
+
+
+frecuencia
+
+
+
+Problema MUY importante
+Latencia.
+
+En realtime:
+100ms importan.
+
+Entonces:
+
+
+minimizar payloads
+
+
+mensajes chicos
+
+
+pocas imágenes pesadas
+
+
+
+Payload ideal
+{  "type": "NEW_QUESTION"}
+Pequeño.
+Rápido.
+
+Otra decisión importante
+Autoridad del servidor.
+
+El cliente:
+nunca decide nada importante.
+
+Porque si no:
+
+
+cheats
+
+
+exploits
+
+
+hacks
+
+
+
+Anti-cheat futuro
+
+Problemas:
+
+
+bots
+
+
+OCR
+
+
+Google
+
+
+multicuentas
+
+
+
+Soluciones:
+
+
+tiempo corto
+
+
+preguntas dinámicas
+
+
+preguntas visuales
+
+
+detección patrones
+
+
+
+MONITOREO
+MUY importante.
+
+Necesitás logs.
+Ejemplo:
+
+
+disconnects
+
+
+tiempos respuesta
+
+
+crashes
+
+
+
+Herramientas futuras
+Logs
+Sentry
+
+Analytics
+PostHog
+
+Analytics IMPORTANTÍSIMAS
+Debés medir:
+
+
+cuántos juegan otra partida
+
+
+dónde abandonan
+
+
+tiempo promedio
+
+
+categorías favoritas
+
+
+
+La métrica MÁS importante
+NO:
+
+
+usuarios registrados
+
+
+Sino:
+porcentaje que juega otra partida.
+
+COSTOS REALES
+
+MVP
+0-20 USD/mes
+
+Crecimiento medio
+50-300 USD/mes
+
+Escala grande
+miles USD/mes
+Pero si llegás ahí:
+vas MUY bien.
+
+La ventaja GIGANTE de tu idea
+El contenido:
+puede ser infinito.
+Gracias a:
+
+
+IA
+
+
+streamers
+
+
+temporadas
+
+
+categorías
+
+
+comunidad
+
+
+
+La verdadera amenaza
+NO es técnica.
+Es:
+aburrimiento.
+
+Entonces:
+todo debe optimizarse para:
+
+
+sorpresa
+
+
+tensión
+
+
+velocidad
+
+
+clips
+
+
+revancha
+
+
+
+Próximo paso lógico
+Ahora sí tocaría:
+definir el roadmap REAL de desarrollo.
+O sea:
+
+
+qué construir primero
+
+
+en qué orden
+
+
+qué ignorar
+
+
+qué validar
+
+
+cuánto tiempo puede tomar cada etapa
+
+
+Y eso ya te deja listo para empezar a programar seriamente.

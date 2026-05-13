@@ -1,0 +1,9 @@
+# Terminal 1 — Backend
+cd c:/claude/100x100/backend
+uvicorn app.main:app --reload
+
+# Terminal 2 — Frontend  
+cd c:/claude/100x100/frontend
+npm run dev
+
+Abrí dos pestañas en http://localhost:3000, ponés nicknames distintos, y al llegar a 2 jugadores arranca automáticamente.

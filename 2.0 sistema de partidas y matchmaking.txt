@@ -1,0 +1,366 @@
+Ahora vamos a diseñar:
+el sistema de partidas y matchmaking.
+Y esto define muchísimo:
+
+
+ritmo
+
+
+retención
+
+
+escalabilidad
+
+
+sensación social
+
+
+Porque entrar rápido a jugar es CLAVE.
+
+Filosofía principal
+Tu juego debe sentirse:
+“apretás jugar y pasa algo”.
+NO:
+
+
+menús eternos
+
+
+colas aburridas
+
+
+demasiadas opciones
+
+
+
+MVP correcto
+SOLO un botón:
+JUGAR
+
+Qué pasa al tocarlo
+El backend:
+
+
+busca partida abierta
+
+
+si existe → entra
+
+
+si no → crea una
+
+
+
+MUY importante
+El usuario NO elige sala.
+Eso simplifica TODO.
+
+Arquitectura MVP
+
+Hay:
+UNA partida activa.
+Estado:
+WAITING
+
+Cuando se llena:
+o
+timer llega a 0:
+empieza.
+
+Sistema recomendado
+Partida comienza con:
+
+
+mínimo 2 jugadores
+
+
+máximo 10
+
+
+
+Timer lobby
+60 segundos máximo
+
+Ejemplo
+1/102/103/10...
+
+Si llega a:
+10/10
+empieza instantáneo.
+
+Si no:
+al terminar timer:
+empieza igual.
+
+Esto es IMPORTANTÍSIMO
+Porque:
+esperar mata juegos.
+
+Flujo completo jugador
+
+1. Home
+[ JUGAR ]
+
+2. Lobby
+7/10 jugadoresComienza en 00:21
+
+3. Countdown
+3...2...1...
+
+4. Partida
+
+5. Resultado
+
+6. Revancha
+MUY importante.
+
+Revancha
+Cuando termina:
+[ JUGAR OTRA ]
+
+Esto reduce muchísimo fricción.
+
+Problema importante
+¿Qué pasa si entran 30 jugadores?
+
+Solución MVP
+Crear múltiples partidas.
+
+Ejemplo
+match_1match_2match_3
+
+Cada partida tiene:
+
+
+su GameManager
+
+
+sus jugadores
+
+
+sus preguntas
+
+
+
+Pero:
+NO hagas esto todavía.
+
+MVP:
+UNA sola partida.
+
+IMPORTANTE
+El backend debe separar:
+Lobby
+de
+Match.
+
+Porque:
+
+
+gente entra mientras otros juegan
+
+
+futuras colas
+
+
+escalabilidad
+
+
+
+Estados jugador
+Necesitás algo así:
+IDLEQUEUEPLAYINGFINISHED
+
+Sistema social
+MUY importante para futuro.
+
+FUTURO:
+“jugar con amigos”
+
+Pero:
+NO ahora.
+
+Streamer mode
+Acá está una de las joyas del proyecto.
+
+Idea
+Streamer crea:
+Código: ABC123
+
+Jugadores entran:
+
+
+QR
+
+
+código
+
+
+link
+
+
+
+Y el streamer:
+
+
+comenta
+
+
+reacciona
+
+
+participa
+
+
+
+ESO puede explotar.
+
+Porque transforma:
+trivia
+en
+show.
+
+Otra idea MUY buena
+Spectators
+Gente mirando:
+
+
+leaderboard
+
+
+respuestas
+
+
+clips
+
+
+
+FUTURO MUY fuerte
+Twitch integration
+Ejemplo:
+
+
+entrar desde chat
+
+
+votar
+
+
+responder
+
+
+
+Matchmaking futuro
+
+Más adelante:
+
+
+por rating
+
+
+por regiones
+
+
+por ping
+
+
+
+Pero MVP:
+random global.
+
+Importante psicológicamente
+La partida debe:
+arrancar rápido.
+
+Ideal:
+menos de:
+30 segundos
+desde tocar jugar.
+
+IDEA MUY importante
+“Near miss”
+El jugador debe perder por POCO muchas veces.
+Eso genera:
+revancha inmediata.
+
+Entonces:
+ranking MUY dinámico.
+
+Ejemplo ideal
+Terminaste #2a 15 puntos del líder
+Eso da:
+“UNA MÁS”.
+
+PROBLEMA futuro importante
+Smurfs
+Gente creando cuentas nuevas.
+
+Solución futura:
+
+
+Google auth
+
+
+Discord auth
+
+
+phone verification
+
+
+
+Pero:
+NO todavía.
+
+MVP correcto
+guest accounts.
+
+Idea MUY poderosa
+Daily tournaments
+Ejemplo:
+Torneo 21:00
+con:
+
+
+ranking global
+
+
+streamer
+
+
+premios
+
+
+
+Eso puede ser ENORME.
+
+Próximo paso lógico
+Ahora tocaría:
+definir la economía psicológica del juego.
+O sea:
+
+
+progresión
+
+
+recompensas
+
+
+niveles
+
+
+skins
+
+
+monedas
+
+
+badges
+
+
+battle pass
+
+
+dopamina
+
+
+Porque ahí es donde los juegos se vuelven adictivos.

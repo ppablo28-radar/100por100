@@ -1,0 +1,267 @@
+El siguiente paso
+Diseñar:
+“el ciclo técnico completo de una partida”
+
+Eso después se convierte casi directamente en código.
+
+1. Estados del juego
+
+Tu juego va cambiando de estado.
+
+Estados recomendados
+WAITING
+COUNTDOWN
+QUESTION
+ANSWER_REVEAL
+SCOREBOARD
+FINISHED
+Qué significa cada uno
+WAITING
+
+Esperando jugadores.
+
+COUNTDOWN
+3...
+2...
+1...
+QUESTION
+
+Pregunta activa.
+Timer corriendo.
+
+ANSWER_REVEAL
+
+Mostrar:
+
+correcta
+quién acertó
+% global
+SCOREBOARD
+
+Ranking actualizado.
+
+FINISHED
+
+Resultado final.
+
+ESTO ES MUY IMPORTANTE
+
+Porque:
+
+el servidor SIEMPRE sabe el estado actual.
+
+Eso evita caos.
+
+2. Timing exacto
+
+Necesitás decidir tiempos reales.
+
+Mi recomendación MVP
+Lobby
+
+Máximo:
+
+60 segundos
+
+Si no se llena:
+
+empieza igual
+Cuenta regresiva
+3 segundos
+Pregunta
+10 segundos
+Reveal
+3 segundos
+Scoreboard
+3 segundos
+Duración total aproximada
+
+20 preguntas:
+≈ 8-10 minutos.
+
+PERFECTO.
+
+3. Datos que guarda el servidor
+
+Esto es clave.
+
+Jugador
+{
+  "id": 1,
+  "nickname": "Pablo",
+  "score": 1540,
+  "connected": true
+}
+Pregunta
+{
+  "id": 52,
+  "question": "¿Quién creó Minecraft?",
+  "options": [
+    "Notch",
+    "Valve",
+    "Mojang",
+    "Nintendo"
+  ],
+  "correct": 0
+}
+Respuesta
+{
+  "player_id": 1,
+  "question_id": 52,
+  "answer": 0,
+  "response_time": 2.4
+}
+4. Qué envía el servidor
+
+MUY importante definirlo desde ahora.
+
+Cuando empieza pregunta
+
+El backend manda:
+
+{
+  "type": "question",
+  "question_id": 52,
+  "question": "¿Quién creó Minecraft?",
+  "options": [
+    "Notch",
+    "Valve",
+    "Mojang",
+    "Nintendo"
+  ],
+  "time_limit": 10
+}
+Cuando termina
+{
+  "type": "answer_reveal",
+  "correct_answer": 0,
+  "correct_percentage": 42
+}
+Ranking
+{
+  "type": "scoreboard",
+  "players": [
+    {
+      "nickname": "Pablo",
+      "score": 1540
+    }
+  ]
+}
+5. Qué envía el jugador
+
+Cuando responde:
+
+{
+  "type": "answer",
+  "question_id": 52,
+  "answer": 0
+}
+IMPORTANTE
+
+El cliente:
+
+NO manda puntos.
+
+Nunca.
+
+6. Qué pasa si alguien se desconecta
+
+Mi recomendación:
+
+MVP:
+sigue en partida
+preguntas sin responder = incorrectas
+
+Simple.
+
+7. Anti-cheat inicial
+
+No te obsesiones todavía.
+
+Con:
+
+10 segundos
+ranking rápido
+
+ya reducís mucho Google.
+
+8. Sistema de matchmaking
+
+NO hagas todavía matchmaking complejo.
+
+Simplemente:
+
+“unirse a partida”.
+9. UI mínima necesaria
+Pantalla 1
+
+Home:
+
+[ JUGAR ]
+Pantalla 2
+
+Lobby:
+
+7/10 jugadores
+Pantalla 3
+
+Pregunta:
+
+pregunta grande
+4 botones
+timer gigante
+Pantalla 4
+
+Resultado:
+
+correcta
+puntos
+ranking
+Pantalla 5
+
+Final:
+
+top jugadores
+botón revancha
+10. El secreto REAL del juego
+
+La sensación debe ser:
+
+rápida.
+
+No:
+
+lenta
+burocrática
+llena de menús
+11. Música y sonido
+
+MUY importante.
+
+Incluso en MVP.
+
+Necesitás:
+
+tic tac timer
+sonido correcta
+sonido incorrecta
+subida ranking
+12. Próximo paso RECOMENDADO
+
+Ahora sí:
+
+definir el stack técnico exacto.
+
+Por ejemplo:
+
+backend FastAPI
+websocket manager
+estructura DB
+frontend React
+deploy
+
+o
+
+empezar directamente el código base del MVP.
+
+Yo haría eso ya.

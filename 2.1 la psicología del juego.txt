@@ -1,0 +1,414 @@
+Ahora entramos en algo MUY serio:
+la psicología del juego.
+Porque los juegos exitosos NO viven por:
+
+
+gráficos
+
+
+tecnología
+
+
+servidores
+
+
+Viven por:
+sistemas de recompensa.
+Y si hacés bien esta parte:
+100×100 puede volverse MUY adictivo.
+
+Lo primero importante
+Tu juego tiene:
+competitividad.
+Eso ya es una ventaja enorme.
+Porque la competencia genera:
+
+
+revancha
+
+
+progreso
+
+
+obsesión
+
+
+
+El secreto REAL
+El jugador debe sentir constantemente:
+“la próxima partida subo”
+
+Tipos de recompensa
+Necesitás varias capas.
+
+1. Recompensa inmediata
+La MÁS importante.
+
+Ejemplos:
+
+
+sonido correcta
+
+
+puntos explotando
+
+
+subir puesto
+
+
+animaciones
+
+
+“solo vos acertaste”
+
+
+
+Esto ocurre:
+cada pocos segundos.
+
+2. Recompensa de partida
+Ejemplo:
+#2 del lobby+24 rating
+
+3. Recompensa largo plazo
+Ejemplo:
+
+
+rangos
+
+
+badges
+
+
+skins
+
+
+estadísticas
+
+
+historial
+
+
+
+IMPORTANTÍSIMO
+Los juegos exitosos:
+siempre muestran progreso.
+
+Incluso perdiendo.
+
+Ejemplo
+Aunque salga:
+#8
+mostrar:
+Precisión mejoró
+o:
+Nueva racha personal
+
+Porque:
+perder sin progreso mata retención.
+
+Sistema de niveles
+SEPARADO del rating.
+MUY importante.
+
+Rating
+=
+habilidad.
+
+Nivel
+=
+tiempo jugado.
+
+Entonces:
+aunque pierda,
+el jugador siente progreso.
+
+Ejemplo
+Nivel 18
+
+XP
+Ejemplo:
+
+
+responder preguntas
+
+
+acertar
+
+
+jugar partidas
+
+
+ganar
+
+
+
+Y sube:
+Level Up
+
+ESO da muchísima dopamina.
+
+Sistema de rangos
+Ya lo hablamos:
+
+
+Bronce
+
+
+Plata
+
+
+Oro
+
+
+etc
+
+
+
+Pero:
+hacelos MUY visuales.
+
+Porque:
+status social.
+
+Badges
+MUY importantes.
+
+Ejemplos:
+100 victorias
+10 perfect games
+Solo vos acertaste 50 veces
+
+Eso genera:
+objetivos secundarios.
+
+Idea BRILLANTE
+Titles
+Ejemplo:
+“El Imparable”
+“Rey del Gaming”
+
+La gente AMA mostrar estatus.
+
+Skins y cosméticos
+MUY buena monetización futura.
+
+Ejemplos:
+
+
+marcos avatar
+
+
+efectos respuestas
+
+
+explosiones puntos
+
+
+sonidos
+
+
+banners
+
+
+
+Importante:
+NO pay to win.
+Nunca.
+
+Seasonal system
+MUY recomendado.
+
+Ejemplo:
+Season 1
+
+Cada temporada:
+
+
+ranking nuevo
+
+
+recompensas
+
+
+badges exclusivos
+
+
+
+Esto revive el juego constantemente.
+
+Daily rewards
+Simple pero efectivo.
+
+Ejemplo:
+Jugaste hoy:+ bonus XP
+
+Streaks
+PELIGROSAMENTE efectivos.
+
+Ejemplo:
+7 días seguidos
+
+Eso genera hábito.
+
+OJO IMPORTANTE
+NO abuses.
+Porque puede sentirse:
+
+
+manipulador
+
+
+cansador
+
+
+
+La mejor sensación
+No es:
+ganar fácil
+Sino:
+mejorar.
+
+Entonces:
+necesitás mostrar stats.
+
+Perfil futuro
+Ejemplo:
+Precisión: 72%Mejor categoría: GamingTiempo promedio: 2.1sPeak rating: 1540
+
+Eso convierte:
+partidas
+en
+identidad.
+
+Sistema MUY poderoso
+“Momento heroico”
+Ejemplo:
+Solo vos acertaste.
+
+ESO es oro puro.
+
+Porque:
+
+
+screenshots
+
+
+clips
+
+
+streamers
+
+
+orgullo
+
+
+
+Near misses
+MUY importantes.
+El jugador debe:
+casi ganar seguido.
+
+Porque eso genera:
+“una más”
+
+Música
+Subestimadísima.
+
+Necesitás:
+
+
+countdown tenso
+
+
+reveal impactante
+
+
+leaderboard épico
+
+
+
+Sonidos IMPORTANTES
+Correcta:
+satisfactorio
+Incorrecta:
+rápido pero no frustrante
+
+El objetivo psicológico REAL
+Que el jugador:
+piense en el juego cuando NO está jugando.
+
+Ejemplo:
+“cómo no supe esa”
+
+Economía futura
+
+Moneda virtual
+Ejemplo:
+Tokens
+
+Se gana:
+
+
+jugando
+
+
+misiones
+
+
+temporadas
+
+
+
+Se usa:
+
+
+cosméticos
+
+
+torneos
+
+
+efectos
+
+
+
+Battle Pass
+Tu juego es PERFECTO para eso.
+
+Porque:
+
+
+partidas cortas
+
+
+repetibles
+
+
+temporadas
+
+
+
+Próximo paso lógico
+Ahora toca algo MUY importante:
+escalabilidad y arquitectura futura.
+Porque ya tenés:
+
+
+gameplay
+
+
+UX
+
+
+realtime
+
+
+rating
+
+
+psicología
+
+
+Ahora falta:
+cómo evitar que explote cuando tengas muchos jugadores.

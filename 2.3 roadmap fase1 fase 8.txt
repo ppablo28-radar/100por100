@@ -1,0 +1,448 @@
+ROADMAP GENERAL
+
+FASE 1 — PROTOTIPO LOCAL
+Objetivo:
+hacer UNA partida funcionando.
+
+Qué debe existir
+Backend
+
+
+websocket
+
+
+estados
+
+
+loop partida
+
+
+preguntas
+
+
+
+Frontend
+
+
+lobby
+
+
+pregunta
+
+
+timer
+
+
+ranking
+
+
+
+NO hacer todavía
+
+
+login
+
+
+DB compleja
+
+
+Elo
+
+
+matchmaking
+
+
+deploy
+
+
+
+Tiempo estimado
+1-2 semanas
+
+Resultado esperado
+Abrís:
+2 pestañas navegador
+y juegan entre sí.
+
+FASE 2 — MVP ONLINE
+Objetivo:
+que amigos puedan jugar.
+
+Agregar
+
+
+deploy
+
+
+nickname
+
+
+múltiples conexiones reales
+
+
+estabilidad básica
+
+
+
+Hosting recomendado
+Frontend:
+Vercel
+Backend:
+Railway
+o:
+Render
+
+Tiempo estimado
+1 semana
+
+FASE 3 — TESTING REAL
+LA MÁS importante.
+
+Objetivo:
+ver si la gente:
+quiere jugar otra.
+
+Necesitás:
+
+
+amigos
+
+
+Discord
+
+
+testers
+
+
+observar TODO
+
+
+
+Métricas IMPORTANTES
+¿Abandonan?
+¿Se ríen?
+¿Quieren revancha?
+¿Se frustran?
+
+Lo MÁS importante
+NO defender ideas.
+Escuchar muchísimo.
+
+FASE 4 — SISTEMA PERSISTENTE
+Agregar:
+
+
+PostgreSQL
+
+
+historial
+
+
+rating
+
+
+stats
+
+
+
+Recién acá.
+Porque:
+primero validaste diversión.
+
+Tiempo estimado
+1-2 semanas
+
+FASE 5 — MEJORAR GAMEPLAY
+Acá empieza la magia.
+
+Agregar:
+
+
+mejores preguntas
+
+
+animaciones
+
+
+sonidos
+
+
+efectos
+
+
+velocidad
+
+
+UX
+
+
+
+IMPORTANTE
+El feeling importa muchísimo.
+
+FASE 6 — MOBILE REAL
+Aunque sea web.
+
+Objetivo:
+que se juegue perfecto en celular.
+
+Porque:
+
+
+streamers
+
+
+QR
+
+
+viralidad
+
+
+amigos
+
+
+
+FASE 7 — RATING REAL
+Agregar:
+
+
+rangos
+
+
+badges
+
+
+progresión
+
+
+
+Recién acá.
+
+FASE 8 — CONTENIDO
+La parte MÁS importante a largo plazo.
+
+Necesitás:
+
+
+MUCHAS preguntas
+
+
+categorías
+
+
+IA pipeline
+
+
+revisión
+
+
+
+Objetivo:
+evitar repetición.
+
+FASE 9 — STREAMER MODE
+Acá puede explotar.
+
+Agregar:
+
+
+códigos sala
+
+
+espectadores
+
+
+overlays
+
+
+torneos creador
+
+
+
+Esto puede cambiar TODO.
+
+Porque:
+100×100 es PERFECTO para:
+
+
+Twitch
+
+
+YouTube
+
+
+TikTok clips
+
+
+
+FASE 10 — ESCALABILIDAD
+RECIÉN acá:
+
+
+Redis
+
+
+múltiples servidores
+
+
+matchmaking
+
+
+colas
+
+
+
+Porque:
+solo tiene sentido:
+si ya hay usuarios.
+
+Orden REAL recomendado
+
+SEMANA 1
+Backend mínimo
+
+
+websocket
+
+
+loop
+
+
+preguntas
+
+
+
+SEMANA 2
+Frontend mínimo
+
+
+timer
+
+
+preguntas
+
+
+respuestas
+
+
+
+SEMANA 3
+Primera partida real
+
+SEMANA 4
+Deploy + testing amigos
+
+SEMANA 5+
+Iterar diversión
+
+CONSEJO MUY importante
+HACÉ builds feas.
+En serio.
+
+Porque:
+la diversión importa más que:
+
+
+diseño perfecto
+
+
+logo
+
+
+animaciones
+
+
+
+Otra recomendación importante
+Grabá las partidas.
+Miralas después.
+
+Porque ahí descubrís:
+
+
+aburrimiento
+
+
+confusión
+
+
+momentos épicos
+
+
+
+MÉTRICAS CLAVE
+
+La MÁS importante
+replay rate
+
+O sea:
+cuántos juegan otra partida.
+
+Si eso sube:
+vas MUY bien.
+
+Si eso baja:
+hay problema gameplay.
+
+MÉTRICAS FUTURAS
+
+
+tiempo sesión
+
+
+precisión
+
+
+preguntas favoritas
+
+
+abandono
+
+
+latency
+
+
+rage quit
+
+
+
+IDEA MUY importante
+El juego debe generar historias.
+Ejemplo:
+“solo yo acerté”
+Eso vale ORO.
+
+Consejo FINAL de roadmap
+Construí SIEMPRE:
+la versión más simple posible.
+
+Porque:
+la complejidad explota MUY rápido en realtime multiplayer.
+
+Y sinceramente:
+tu idea tiene algo MUY bueno:
+se entiende instantáneamente.
+Eso vale muchísimo.
+
+Próximo paso lógico
+Ya estamos prácticamente listos para:
+empezar el código REAL del MVP.
+Por ejemplo:
+
+
+estructura inicial FastAPI
+
+
+websocket server
+
+
+GameManager
+
+
+frontend Next.js
+
+
+primer loop funcional
+
+
+Y ahí ya entraríamos en implementación concreta.

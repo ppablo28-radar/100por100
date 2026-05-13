@@ -1,0 +1,283 @@
+Reglas Base de 100×100 (MVP)
+
+Voy a proponerte una versión MUY concreta y divertida para arrancar.
+
+Después la iremos refinando.
+
+OBJETIVO DEL JUEGO
+
+Responder correctamente la mayor cantidad de preguntas y sumar más puntos que los demás jugadores.
+
+FORMATO GENERAL
+Partida estándar
+10 jugadores (al principio)
+20 preguntas
+todos responden simultáneamente
+10 segundos por pregunta
+
+Más adelante:
+
+100 jugadores
+100 preguntas
+FLUJO DE PARTIDA
+1. Lobby
+
+Los jugadores:
+
+entran con nickname
+ven cuántos faltan
+esperan inicio
+2. Inicio
+
+Cuenta regresiva:
+
+3...
+2...
+1...
+3. Pregunta
+
+Se muestra:
+
+pregunta
+4 opciones
+timer
+REGLA IMPORTANTE
+Una sola respuesta
+
+Cuando responde:
+
+queda bloqueada
+no puede cambiarla
+
+Eso genera tensión.
+
+TIEMPO
+10 segundos por pregunta
+
+Si no responde:
+
+cuenta como incorrecta
+SISTEMA DE PUNTOS (VERSIÓN 1)
+Correcta
+
+Base:
+
+100 puntos
+Bonus velocidad
+
+Más rápido = más puntos.
+
+Ejemplo:
+
++50 si respondió instantáneo
++0 si respondió al final
+Fórmula SIMPLE
+
+Podría ser:
+
+Puntos=100+50(1−
+10
+t
+	​
+
+)
+
+donde:
+
+t = segundos que tardó
+EJEMPLOS
+Respondió en 1 segundo
+
+≈ 145 puntos
+
+Respondió en 5 segundos
+
+≈ 125 puntos
+
+Respondió en 9 segundos
+
+≈ 105 puntos
+
+Incorrecta
+0 puntos
+
+Nada negativo todavía.
+
+RANKING EN VIVO
+
+MUY importante.
+
+Después de cada pregunta:
+
+posición
+puntos
+diferencia con líder
+INFORMACIÓN QUE VE EL JUGADOR
+Después de responder
+
+Ve:
+
+si acertó
+respuesta correcta
+porcentaje de aciertos global
+puntos ganados
+ESO ES CLAVE
+
+Porque genera:
+
+sorpresa
+“cómo nadie sabía eso”
+sensación social
+EJEMPLO
+Pregunta:
+¿En qué año salió Minecraft?
+
+65% respondió bien.
+Ganaste 132 puntos.
+Puesto actual: #3
+FINAL DE PARTIDA
+
+Pantalla final:
+
+Muestra:
+top 10
+puntos
+aciertos
+velocidad promedio
+REGLAS IMPORTANTES
+1. No se puede pausar
+2. No se puede cambiar respuesta
+3. Todas las preguntas valen igual (por ahora)
+
+Más adelante cambiaremos esto.
+
+4. Todos reciben la pregunta EXACTAMENTE al mismo tiempo
+
+MUY importante técnicamente.
+
+TIPOS DE PREGUNTAS
+Categorías iniciales
+
+Yo haría:
+
+cultura general
+internet
+gaming
+fútbol
+cine/series
+memes
+TONO DEL JUEGO
+
+NO académico.
+
+Más:
+
+divertido + competitivo.
+Ejemplos BUENOS
+¿Qué Pokémon es eléctrico?
+
+¿Qué streamer rompió un récord en Twitch?
+
+¿Qué selección ganó el mundial 2014?
+Ejemplos MALOS
+¿Cuál es la capital de Kazajistán?
+
+Porque:
+
+parece examen
+no genera emoción
+IDEA MUY IMPORTANTE
+
+Las preguntas deberían:
+
+generar conversación.
+EJEMPLOS MUY buenos
+¿Qué porcentaje de jugadores acertará esta pregunta?
+
+o:
+
+¿Cuál de estos logos es falso?
+
+Eso da muchísimo juego.
+
+ELIMINACIÓN O NO
+Mi recomendación:
+
+NO eliminar.
+
+Porque:
+
+morir temprano aburre
+la gente abandona
+menos retención
+Mejor:
+sistema acumulativo.
+
+Todos juegan hasta el final.
+
+EMPATES
+Desempata:
+más respuestas correctas
+menor tiempo total
+SISTEMA DE RATING (después)
+
+Por ahora:
+simple.
+
+Ejemplo:
+top 3 sube
+últimos bajan
+PROBLEMAS IMPORTANTES
+1. Googlear respuestas
+
+Solución:
+
+tiempo corto
+preguntas dinámicas
+preguntas visuales
+cultura internet
+2. Preguntas ambiguas
+
+MUY peligroso.
+
+Necesitás:
+
+respuestas clarísimas
+sin doble interpretación
+IDEA BRILLANTE PARA FUTURO
+Preguntas “imposibles”
+
+Ejemplo:
+
+Solo 1% la responde bien.
+
+Y da:
+
+1000 puntos.
+
+Eso crea clips virales.
+
+REGLA SOCIAL IMPORTANTE
+
+Mostrar:
+
+“solo vos acertaste”
+
+ESO es dopamina pura.
+
+LOOP EMOCIONAL
+
+El juego debería alternar:
+
+tensión
+alivio
+sorpresa
+remontadas
+META DEL MVP
+
+NO:
+“hacer el mejor sistema”.
+
+Sí:
+
+“hacer que quieran jugar otra”.

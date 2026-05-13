@@ -1,0 +1,287 @@
+Documento Técnico Inicial — 100×100 MVP
+
+Esto ya sería prácticamente la “biblia” inicial del proyecto.
+
+1. Objetivo del MVP
+
+Crear una trivia online en tiempo real donde:
+
+múltiples jugadores responden simultáneamente
+hay ranking en vivo
+las partidas duran pocos minutos
+la experiencia se siente rápida y competitiva
+2. Reglas MVP
+Partida
+10 jugadores
+20 preguntas
+10 segundos por pregunta
+Puntuación
+
+Puntos=100+50(1−
+10
+t
+	​
+
+)
+
+Donde:
+
+t = segundos de respuesta
+Incorrecta
+0 puntos
+3. Estados del juego
+WAITING
+COUNTDOWN
+QUESTION
+ANSWER_REVEAL
+SCOREBOARD
+FINISHED
+4. Flujo completo
+WAITING
+
+Objetivo:
+esperar jugadores.
+
+Condiciones
+mínimo 2 jugadores
+máximo 10
+timer máximo 60s
+COUNTDOWN
+3...
+2...
+1...
+
+Duración:
+
+3 segundos
+QUESTION
+
+El servidor:
+
+selecciona pregunta
+envía pregunta
+inicia timer
+
+Duración:
+
+10 segundos
+ANSWER_REVEAL
+
+Se muestra:
+
+correcta
+% de aciertos
+puntos obtenidos
+
+Duración:
+
+3 segundos
+SCOREBOARD
+
+Se muestra:
+
+ranking actual
+diferencias
+
+Duración:
+
+3 segundos
+FINISHED
+
+Pantalla final:
+
+ganador
+top jugadores
+estadísticas
+5. Arquitectura general
+Frontend (Next.js)
+        |
+   WebSocket
+        |
+Backend (FastAPI)
+6. Estructura Backend
+backend/
+
+app/
+    main.py
+    game_manager.py
+    websocket_manager.py
+    question_manager.py
+    scoring.py
+7. Responsabilidades
+main.py
+
+Levanta:
+
+FastAPI
+WebSocket endpoint
+websocket_manager.py
+
+Maneja:
+
+conexiones
+desconexiones
+broadcasts
+game_manager.py
+
+Controla:
+
+estados
+timers
+loop principal
+puntuaciones
+question_manager.py
+
+Carga:
+
+questions.json
+
+Y devuelve preguntas aleatorias.
+
+scoring.py
+
+Calcula:
+
+puntos
+rankings
+8. Modelo de jugador
+{
+  "id": "uuid",
+  "nickname": "Pablo",
+  "score": 0,
+  "connected": true
+}
+9. Modelo de pregunta
+{
+  "id": 1,
+  "question": "¿Quién creó Minecraft?",
+  "options": [
+    "Notch",
+    "Valve",
+    "EA",
+    "Nintendo"
+  ],
+  "correct": 0,
+  "difficulty": 1,
+  "category": "gaming"
+}
+10. Modelo de respuesta
+{
+  "player_id": "uuid",
+  "question_id": 1,
+  "answer": 0,
+  "response_time": 2.3
+}
+11. Eventos WebSocket
+Cliente → Servidor
+JOIN_GAME
+{
+  "type": "JOIN_GAME",
+  "nickname": "Pablo"
+}
+SUBMIT_ANSWER
+{
+  "type": "SUBMIT_ANSWER",
+  "question_id": 1,
+  "answer": 0
+}
+Servidor → Cliente
+GAME_STATE
+{
+  "type": "GAME_STATE",
+  "state": "QUESTION"
+}
+NEW_QUESTION
+{
+  "type": "NEW_QUESTION",
+  "question_id": 1,
+  "question": "¿Quién creó Minecraft?",
+  "options": [
+    "Notch",
+    "Valve",
+    "EA",
+    "Nintendo"
+  ],
+  "duration": 10
+}
+ANSWER_REVEAL
+{
+  "type": "ANSWER_REVEAL",
+  "correct_answer": 0,
+  "correct_percentage": 72
+}
+SCOREBOARD
+{
+  "type": "SCOREBOARD",
+  "players": [
+    {
+      "nickname": "Pablo",
+      "score": 850
+    }
+  ]
+}
+GAME_FINISHED
+{
+  "type": "GAME_FINISHED",
+  "winner": "Pablo"
+}
+12. Loop principal del juego
+while game_running:
+
+    start_question()
+
+    wait(10)
+
+    reveal_answer()
+
+    wait(3)
+
+    send_scoreboard()
+
+    wait(3)
+13. Prioridades del MVP
+MUY importantes
+sincronización
+velocidad
+estabilidad
+sensación fluida
+NO importantes todavía
+diseño perfecto
+login
+skins
+tienda
+IA avanzada
+14. Riesgos técnicos
+Sincronización
+
+Problema:
+latencia entre jugadores.
+
+Solución MVP
+
+El servidor:
+
+define hora inicio
+define hora final
+
+El cliente solo muestra.
+
+Spam respuestas
+
+Solución:
+
+una sola respuesta válida
+Desconexiones
+
+MVP:
+
+jugador sigue
+respuestas faltantes = incorrectas
+15. Objetivo real de la primera versión
+
+NO:
+“hacer un sistema gigante”.
+
+SÍ:
+
+lograr una partida divertida y rápida.

@@ -1,0 +1,307 @@
+Ahora entramos en:
+
+probablemente la parte MÁS importante de todo 100×100
+LAS PREGUNTAS.
+
+Porque:
+
+las preguntas SON el contenido
+el contenido define diversión
+diversión define retención
+
+Podés tener:
+
+backend perfecto
+gráficos increíbles
+escalabilidad brutal
+
+pero si las preguntas son malas:
+
+el juego muere.
+Objetivo real de una pregunta
+
+NO:
+
+evaluar conocimiento
+
+Sino:
+
+generar emoción.
+Una buena pregunta genera:
+tensión
+sorpresa
+“NOOOO”
+orgullo
+bronca
+conversación
+ERROR FATAL
+
+NO hacer:
+
+“examen escolar”.
+MAL ejemplo
+¿Cuál es la capital de Kazajistán?
+
+Problema:
+
+aburrida
+fría
+cero emoción
+BUEN ejemplo
+¿Qué juego vendió más copias?
+
+Porque:
+
+genera debate
+intuición
+tensión
+Regla MÁS importante
+Las preguntas deben sentirse SOCIALES.
+Tipos de preguntas
+
+Necesitás variedad.
+
+MUCHA.
+
+Tipo 1 — Trivia clásica
+
+La base.
+
+Ejemplo:
+
+¿Quién creó Minecraft?
+Tipo 2 — Intuición colectiva
+
+MUY potentes.
+
+Ejemplo:
+
+¿Qué porcentaje acertará esta pregunta?
+Tipo 3 — Internet/memes
+
+Importantísimo para viralidad.
+
+Tipo 4 — Visuales
+
+MUY importantes.
+
+Ejemplo:
+
+logos
+imágenes
+banderas
+personajes
+Tipo 5 — Audio
+
+Futuro muy fuerte.
+
+Ejemplo:
+
+canciones
+memes
+voces
+Tipo 6 — “Imposibles”
+
+Las mejores para clips.
+
+Ejemplo:
+
+Solo 1% la responde bien
+ESTRUCTURA ideal pregunta
+Necesitás:
+{
+  "question": "",
+  "options": [],
+  "correct": 0,
+  "difficulty": 2,
+  "category": "gaming"
+}
+Campos IMPORTANTES futuros
+accuracy_rate
+% global de acierto
+average_response_time
+times_played
+ai_generated
+verified
+
+MUY importante.
+
+Tu idea de IA
+
+Es MUY buena.
+
+Cómo usar IA BIEN
+
+La IA NO debe:
+
+publicar automáticamente.
+La IA debería:
+proponer preguntas
+generar opciones
+sugerir dificultad
+categorizar
+Y vos:
+revisar.
+Porque el peligro gigante es:
+IA inventando datos.
+Problema MUY importante
+respuestas ambiguas.
+EJEMPLO peligroso
+¿Cuál es el juego más vendido?
+
+¿Minecraft?
+¿Tetris?
+¿depende fuente?
+
+Regla CRÍTICA
+Toda pregunta debe tener:
+UNA respuesta claramente correcta.
+Dificultad
+
+MUY importante.
+
+Mi recomendación
+3 niveles solamente.
+1 = fácil
+2 = media
+3 = difícil
+FUTURO
+
+La dificultad real debería ser:
+
+estadística.
+Ejemplo
+
+Si:
+
+90% falla
+
+entonces:
+
+difícil
+Categorías recomendadas MVP
+gaming
+fútbol
+internet
+cine/series
+música
+memes
+cultura general
+IMPORTANTE
+
+NO hagas:
+
+demasiadas categorías.
+Porque:
+divide playerbase
+complica matchmaking
+baja calidad
+Mezcla ideal partida
+
+Ejemplo:
+
+5 gaming
+4 memes
+4 internet
+3 fútbol
+4 random
+LONGITUD ideal
+
+MUY importante.
+
+Preguntas:
+CORTAS.
+Opciones:
+MUY cortas.
+Porque:
+timer corto
+mobile first
+streaming
+EJEMPLO perfecto
+¿Qué color es Pikachu?
+EJEMPLO malo
+¿Cuál de las siguientes afirmaciones...
+
+Mucho texto mata ritmo.
+
+OPCIONES IMPORTANTES
+
+Las incorrectas deben:
+
+parecer posibles.
+MAL ejemplo
+¿Quién creó Minecraft?
+
+A) Notch
+B) Messi
+C) Coca Cola
+D) Japón
+Mejor:
+A) Notch
+B) Gabe Newell
+C) Miyamoto
+D) Tim Sweeney
+Idea MUY buena
+Preguntas estadísticas.
+
+Ejemplo:
+
+¿Qué respuesta eligió la mayoría?
+
+Eso puede ser INCREÍBLE.
+
+Anti-cheat natural
+
+Las mejores preguntas:
+
+NO se googlean rápido.
+Ejemplos buenos
+intuición
+imágenes
+velocidad
+cultura internet
+LOOP ideal de contenido
+IA genera
+↓
+humano revisa
+↓
+jugadores responden
+↓
+estadísticas refinan calidad
+Oro puro para futuro
+
+Con suficientes datos podés detectar:
+
+preguntas aburridas
+demasiado fáciles
+demasiado difíciles
+ambiguas
+
+automáticamente.
+
+Idea BRILLANTE futura
+Preguntas personalizadas por streamer.
+
+Ejemplo:
+
+comunidad Messi
+comunidad anime
+comunidad Minecraft
+
+Eso puede explotar muchísimo.
+
+La regla MÁS importante de todas
+La pregunta debe ser divertida incluso si NO sabés la respuesta.
+Próximo paso lógico
+
+Ahora tocaría:
+
+diseñar el sistema de partidas y matchmaking.
+
+Porque ahí definís:
+
+cómo entra la gente
+cómo empiezan partidas
+experiencia social
+escalabilidad futura
+streamer mode.

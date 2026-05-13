@@ -1,0 +1,271 @@
+Ahora vamos a diseñar:
+
+el sistema de rating de 100×100.
+
+Y esto es MUY importante porque:
+
+define competitividad
+define progresión
+hace que la gente vuelva
+genera obsesión
+
+Un buen rating puede literalmente hacer despegar el juego.
+
+Objetivo del rating
+
+El jugador debe sentir:
+
+progreso
+riesgo
+orgullo
+ganas de subir
+ERROR MUY común
+
+NO hagas:
+
++10 ganar
+-10 perder
+
+Eso se siente vacío.
+
+Inspiración correcta
+
+Tu idea original es muy buena:
+
+estilo Elo de ajedrez.
+
+Pero:
+
+Elo puro NO sirve perfecto para 100 jugadores.
+Porque Elo fue creado para:
+1 vs 1
+Entonces:
+vamos a crear una versión inspirada en Elo.
+MVP recomendado
+Cada jugador tiene:
+rating = 1000
+
+inicial.
+
+Al terminar partida
+
+Según posición final:
+
+sube
+baja
+IDEA IMPORTANTE
+No importa solo acertar.
+
+Importa:
+
+quedar arriba de otros.
+Sistema simple MVP
+Top jugadores suben
+
+Ejemplo:
+
+#1 +30
+#2 +20
+#3 +10
+Mitad
+0
+Últimos
+-10
+-20
+-30
+ESTO YA funciona.
+
+Y es MUCHO mejor que:
+
+solo puntos internos
+IMPORTANTE
+Separar:
+score de partida
+
+de
+
+rating global
+Ejemplo
+Score partida
+1540 puntos
+
+solo dura esa partida.
+
+Rating global
+1230 rating
+
+persistente.
+
+IDEA MUY buena
+Rangos visuales
+
+MUY importante psicológicamente.
+
+Ejemplo
+Bronce
+Plata
+Oro
+Diamante
+Master
+Eso aumenta MUCHÍSIMO la retención.
+EJEMPLO
+Rating: 1420
+Rango: Oro II
+Cómo dividir rangos
+
+Ejemplo:
+
+0-999 → Bronce
+1000-1199 → Plata
+1200-1399 → Oro
+1400-1599 → Platino
+1600+ → Diamante
+Lo IMPORTANTE
+El jugador debe sentir:
+“estoy mejorando”.
+IDEA MUY fuerte
+Mostrar cambio después de cada partida.
+
+Ejemplo:
+
++24 rating
+
+o:
+
+-17 rating
+Eso genera MUCHÍSIMA tensión.
+FUTURO MUY interesante
+Rating oculto + visible
+
+Como hacen muchos juegos.
+
+Pero MVP:
+visible simple.
+Matchmaking futuro
+
+Más adelante:
+
+juntar similares
+evitar stomps
+Pero NO todavía.
+IDEA IMPORTANTÍSIMA
+Performance inesperada
+
+Ganarle a gente mejor:
+
+debe dar MÁS rating.
+FUTURO
+
+Podrías usar:
+
+Glicko
+TrueSkill
+TrueSkill es MUY interesante
+
+Porque:
+
+funciona excelente multiplayer
+lo usa Xbox
+Pero:
+demasiado complejo para MVP.
+IDEA MUY poderosa
+Seasonal reset
+
+Cada temporada:
+
+soft reset
+recompensas
+badges
+Eso mantiene vivo el juego.
+RECOMPENSAS IMPORTANTES
+
+Aunque no haya dinero:
+
+badges
+títulos
+marcos
+efectos
+Porque:
+status = retención.
+SISTEMA FUTURO BRILLANTE
+Dificultad estadística
+
+Acá tu idea original era MUY buena.
+
+Ejemplo
+
+Si:
+
+solo 3% acertó
+
+entonces:
+
+MUCHOS más puntos
+Y eso puede afectar:
+score
+rating
+clips virales
+Ejemplo ÉPICO
+Solo vos acertaste.
++700 puntos.
+
+Eso es oro puro para streaming.
+
+Cuidado IMPORTANTE
+No castigar demasiado.
+
+Si perder duele mucho:
+la gente abandona.
+
+Regla psicológica
+El progreso debe sentirse:
+lento
+constante
+posible
+IDEA MUY importante
+“Peak rating”
+
+Guardar:
+
+máximo rating histórico
+
+La gente AMA eso.
+
+Perfil futuro jugador
+
+Ejemplo:
+
+Rating actual: 1320
+Peak: 1455
+Precisión: 71%
+Victorias: 24
+La obsesión real
+
+El juego NO es:
+
+responder preguntas.
+
+El juego es:
+
+subir ranking.
+Próximo paso lógico
+
+Ahora toca:
+
+el diseño de preguntas.
+
+Y eso es CRÍTICO.
+
+Porque:
+
+las preguntas son literalmente el contenido del juego
+si son malas, el juego muere
+si son buenas, la gente vuelve constantemente
+
+Y ahí entra muchísimo:
+
+IA
+dificultad
+viralidad
+psicología
+anti aburrimiento.

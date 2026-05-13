@@ -1,0 +1,328 @@
+Perfecto.
+Ahora vamos a definir:
+
+cómo se construye técnicamente el frontend.
+
+Esto es MUY importante porque un juego realtime puede volverse un caos si no organizás bien el estado.
+
+Objetivo del frontend
+
+El frontend debe:
+
+mostrar estados del juego
+escuchar WebSocket
+renderizar UI rápido
+reaccionar instantáneamente
+
+Y NADA MÁS.
+
+Filosofía importante
+El frontend NO piensa.
+
+El backend decide:
+
+estado
+tiempo
+puntuación
+correcta
+
+El frontend solo:
+
+muestra.
+Stack frontend
+Recomendación
+
+Next.js
+
+Con:
+
+TypeScript
+Tailwind
+WebSocket nativo
+Estructura recomendada
+frontend/
+
+app/
+components/
+hooks/
+services/
+stores/
+types/
+Qué hace cada carpeta
+app/
+
+Pantallas principales.
+
+components/
+
+UI reutilizable.
+
+Ejemplo:
+
+QuestionCard
+Timer
+Leaderboard
+AnswerButton
+hooks/
+
+Lógica React reutilizable.
+
+Ejemplo:
+
+useWebSocket
+useGameState
+services/
+
+Conexiones externas.
+
+Ejemplo:
+
+websocket.ts
+api.ts
+stores/
+
+Estado global.
+
+types/
+
+Tipos TypeScript.
+
+MUY importante.
+
+La decisión MÁS importante
+¿Cómo manejar estado?
+
+Mi recomendación:
+
+Zustand.
+
+NO Redux.
+
+Por qué Zustand
+
+Porque:
+
+simple
+rápido
+perfecto realtime
+poco boilerplate
+Estado global del juego
+
+Ejemplo:
+
+{
+  gameState: "QUESTION",
+  currentQuestion: {},
+  players: [],
+  timer: 10,
+  myScore: 0
+}
+Componentes principales
+1. HomeScreen
+
+Muestra:
+
+nickname
+botón jugar
+2. LobbyScreen
+
+Muestra:
+
+jugadores conectados
+countdown
+3. QuestionScreen
+
+LA MÁS importante.
+
+Muestra:
+
+pregunta
+opciones
+timer
+4. RevealScreen
+
+Muestra:
+
+correcta
+puntos
+% global
+5. ScoreboardScreen
+
+Muestra ranking.
+
+6. FinalScreen
+
+Resultado final.
+
+MUY importante
+Solo UNA pantalla visible a la vez.
+Entonces:
+switch(gameState)
+
+y renderizás:
+
+QUESTION
+SCOREBOARD
+etc
+WebSocket frontend
+Conexión
+const ws = new WebSocket("ws://localhost:8000/ws");
+Cuando llega mensaje
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+}
+Según el tipo:
+switch(data.type)
+
+actualizás estado global.
+
+IMPORTANTE
+
+Nunca hagas:
+
+setState en 400 lugares
+
+Porque explota.
+
+Mejor:
+store centralizado.
+Flujo realtime correcto
+Backend manda:
+{
+  "type": "NEW_QUESTION"
+}
+Frontend:
+recibe
+actualiza store
+React rerenderiza
+
+Y listo.
+
+TIMER
+
+MUY importante.
+
+NO usar timer independiente.
+
+El backend manda:
+
+questionStartTime
+Frontend calcula:
+timeRemaining
+
+visual solamente.
+
+PROBLEMA típico
+Lag visual.
+Solución:
+
+actualizar timer:
+
+cada 100ms
+
+No cada segundo.
+
+COMPONENTES IMPORTANTES
+Timer
+
+Debe:
+
+agrandarse al final
+cambiar color
+meter presión
+AnswerButton
+
+Debe:
+
+responder instantáneo
+bloquear doble click
+Leaderboard
+
+Debe:
+
+animar posiciones
+mostrar subida/bajada
+UX IMPORTANTÍSIMA
+
+Cuando respondés:
+
+feedback instantáneo.
+Ejemplo
+
+Botón:
+
+cambia color
+aparece check
+vibración
+sonido
+Mobile first
+
+Todo:
+
+vertical
+botones gigantes
+fácil tocar rápido
+Medidas importantes
+
+Botones:
+
+mínimo 60px altura
+Tipografía
+
+Grandísima.
+
+Animaciones
+
+Usaría:
+
+Framer Motion
+
+Muy recomendable.
+
+Flujo visual REAL
+Usuario entra
+
+→ HomeScreen
+
+Juega
+
+→ LobbyScreen
+
+Countdown
+
+→ CountdownScreen
+
+Preguntas
+
+→ QuestionScreen
+
+Reveal
+
+→ RevealScreen
+
+Ranking
+
+→ ScoreboardScreen
+
+Final
+
+→ FinalScreen
+
+Lo MÁS importante del frontend
+
+NO el diseño.
+
+Sino:
+
+sensación de fluidez.
+Ahora viene la siguiente decisión gigante:
+¿Cómo estructurar el backend realtime?
+
+Porque ahí está:
+
+la sincronización
+el loop
+el estado global
+WebSockets reales
+
+Y eso es el corazón del juego.

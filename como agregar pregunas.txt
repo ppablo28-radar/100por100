@@ -1,0 +1,25 @@
+Lo que tenés ahora funcionando end-to-end:
+
+✅ Juego en vivo en 100por100.vercel.app
+✅ Backend en Railway
+✅ 193 preguntas en Supabase
+✅ Cada partida refresca las preguntas desde la DB
+✅ Si agregás preguntas desde el Table Editor de Supabase, aparecen en el juego sin tocar código
+Para agregar preguntas nuevas sin código:
+
+En Supabase → SQL Editor, podés pegar algo así:
+
+
+-- Ejemplo: agregar una pregunta nueva
+WITH q AS (
+  INSERT INTO questions (id, slug, status, enabled, answer_mode, created_by_type, default_duration_seconds, metadata)
+  VALUES (gen_random_uuid(), 'quien-gano-copa-america-2024', 'approved', true, 'multiple_choice', 'human', 10, '{}')
+  RETURNING id
+),
+t AS (
+  INSERT INTO question_translations (id, question_id, language, title, keywords)
+  SELECT gen_random_uuid(), id, 'es', '¿Quién ganó la Copa América 2024?', '[]' FROM q
+)
+INSERT INTO answer_options (id, question_id, display_order, text, is_correct, enabled, weight, metadata)
+SELECT gen_random_uuid(), q.id, n.ord, n.text, n.correct, true, 1.0, '{}'
+FROM q, (VALUES (0,'Brasil',false),(1,'Argentina',true),(2,'Colombia',false),(3,'Uruguay',false)) AS n

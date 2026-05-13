@@ -1,0 +1,294 @@
+el corazón REAL de 100×100
+el backend realtime.
+
+Acá es donde vive:
+
+la partida
+el timer
+los estados
+las respuestas
+los puntos
+
+Si esto está bien pensado:
+el resto del proyecto fluye.
+
+Filosofía del backend
+El servidor controla TODO.
+
+El cliente:
+
+NO decide tiempos
+NO decide puntos
+NO decide respuestas correctas
+
+Eso evita:
+
+cheats
+desincronización
+caos
+Arquitectura backend MVP
+FastAPI
+   |
+WebSockets
+   |
+GameManager
+   |
+Game State
+COMPONENTE MÁS IMPORTANTE
+GameManager
+
+Es:
+
+EL CEREBRO.
+Qué controla
+estado actual
+jugadores
+pregunta actual
+timer
+respuestas
+puntuaciones
+transición entre estados
+Idea CLAVE
+Hay UNA sola partida global.
+
+NO múltiples salas todavía.
+
+Estado global
+
+Ejemplo:
+
+game = {
+    "state": "WAITING",
+    "players": [],
+    "current_question": None,
+    "question_index": 0,
+    "scores": {},
+    "answers": {}
+}
+MUY importante
+
+El backend siempre sabe:
+
+exactamente qué está pasando.
+Estados
+WAITING
+COUNTDOWN
+QUESTION
+ANSWER_REVEAL
+SCOREBOARD
+FINISHED
+LOOP PRINCIPAL
+
+Esta es la clave de TODO.
+
+El servidor hace:
+while game_running:
+
+    start_question()
+
+    await sleep(10)
+
+    reveal_answers()
+
+    await sleep(3)
+
+    show_scoreboard()
+
+    await sleep(3)
+IMPORTANTE
+El backend marca el ritmo.
+
+No los jugadores.
+
+WebSocket endpoint
+
+Ejemplo conceptual:
+
+@app.websocket("/ws")
+Cuando alguien conecta
+
+El backend:
+
+guarda conexión
+agrega jugador
+manda estado actual
+WebSocketManager
+
+Necesitás una clase:
+
+class WebSocketManager:
+Responsabilidades
+conectar jugadores
+desconectar
+enviar mensajes
+broadcast
+Broadcast
+
+MUY importante.
+
+Ejemplo:
+
+broadcast({
+    "type": "NEW_QUESTION"
+})
+TODOS reciben el mismo evento.
+Modelo interno jugador
+player = {
+    "id": uuid,
+    "nickname": "Pablo",
+    "score": 0,
+    "connected": True
+}
+Respuestas
+
+Cuando alguien responde:
+
+{
+  "type": "SUBMIT_ANSWER",
+  "answer": 2
+}
+El servidor guarda:
+answers[player_id] = {
+    "answer": 2,
+    "response_time": 2.3
+}
+IMPORTANTÍSIMO
+Solo la PRIMER respuesta cuenta.
+Entonces:
+if player_already_answered:
+    ignore()
+Timer correcto
+
+NO usar:
+
+sleep(1)
+
+para sincronizar frontend.
+
+Mejor:
+
+Guardar:
+
+question_start_time
+
+y calcular diferencias.
+
+Preguntas
+
+QuestionManager:
+
+get_random_question()
+MVP SIMPLE
+questions.json
+Ejemplo
+[
+  {
+    "question": "¿Quién creó Minecraft?",
+    "options": ["Notch", "Valve", "EA", "Nintendo"],
+    "correct": 0
+  }
+]
+Puntuación
+
+Cuando termina pregunta:
+
+El servidor:
+
+revisa respuestas
+calcula puntos
+actualiza ranking
+Fórmula
+
+Puntos=100+50(1−
+10
+t
+	​
+
+)
+
+Reveal
+
+El backend calcula:
+
+correcta
+porcentaje aciertos
+puntos individuales
+Scoreboard
+
+Ordenar:
+
+sorted(players, key=score)
+Problema IMPORTANTE
+¿Qué pasa si nadie responde?
+Solución:
+
+simplemente:
+
+0 puntos para todos
+Desconexiones
+
+MVP:
+
+connected = False
+
+y listo.
+
+Qué NO hacer todavía
+
+NO:
+
+múltiples salas
+redis
+microservicios
+colas
+docker complejo
+Porque:
+primero necesitás diversión.
+Lo más difícil técnicamente
+sincronización realtime.
+Problema:
+
+cada jugador tiene distinto ping.
+
+Solución MVP razonable
+
+El servidor manda:
+
+{
+  "question_start_time": 123456789
+}
+
+y todos calculan localmente.
+
+Backend recomendado
+Asyncio
+
+MUY importante.
+
+FastAPI funciona excelente con async.
+
+Entonces:
+async def game_loop():
+Estructura recomendada
+backend/
+
+app/
+    main.py
+    game_manager.py
+    websocket_manager.py
+    scoring.py
+    question_manager.py
+    game_state.py
+Próximo paso lógico
+
+Ahora ya estamos listos para:
+
+diseñar la base de datos REAL.
+
+Porque ya sabemos:
+
+qué entidades existen
+qué guardar
+qué NO guardar todavía
+
+Y ahí el proyecto empieza a verse completamente profesional.

@@ -1,0 +1,295 @@
+Ahora vamos a diseñar:
+
+la base de datos REAL de 100×100.
+
+Y esto es importante porque:
+
+una mala DB te limita muchísimo después
+pero una demasiado compleja te frena
+
+Entonces:
+
+vamos a hacer una estructura simple pero escalable.
+Filosofía MVP
+Guardar SOLO lo importante.
+
+NO guardar:
+
+cada frame
+timers
+estados temporales
+
+Eso vive en memoria.
+
+Qué SÍ guardar
+Necesario
+usuarios
+preguntas
+historial partidas
+resultados
+ratings
+Base recomendada
+
+PostgreSQL
+
+TABLA 1 — users
+
+La más importante.
+
+Objetivo
+
+Guardar identidad y progreso.
+
+Estructura
+users
+
+Campos:
+
+id
+nickname
+rating
+games_played
+wins
+correct_answers
+created_at
+Explicación
+rating
+
+Tipo Elo.
+
+wins
+
+Victorias totales.
+
+correct_answers
+
+Stats futuras.
+
+IMPORTANTE
+nickname debe ser único.
+TABLA 2 — questions
+Objetivo
+
+Guardar banco de preguntas.
+
+Campos
+id
+question
+option_a
+option_b
+option_c
+option_d
+correct_option
+difficulty
+category
+created_at
+IMPORTANTE
+difficulty
+
+MUY importante para futuro.
+
+Ejemplo
+1 = fácil
+2 = media
+3 = difícil
+category
+
+Ejemplo:
+
+gaming
+football
+memes
+movies
+internet
+TABLA 3 — matches
+
+Representa:
+
+una partida.
+Campos
+id
+started_at
+finished_at
+winner_user_id
+total_questions
+IMPORTANTE
+
+Esto permite:
+
+historial
+estadísticas
+replay futuro
+TABLA 4 — match_players
+
+MUY importante.
+
+Porque:
+
+una partida tiene muchos jugadores
+un jugador juega muchas partidas
+Campos
+id
+match_id
+user_id
+final_position
+final_score
+correct_answers
+average_response_time
+rating_change
+Esto permite:
+Ejemplos
+historial jugador
+leaderboard
+mejores partidas
+análisis
+TABLA 5 — answers
+
+Esta tabla puede crecer ENORME.
+
+Pero vale muchísimo.
+
+Campos
+id
+match_id
+question_id
+user_id
+selected_option
+correct
+response_time
+points_earned
+¿Por qué es tan valiosa?
+
+Porque después podés:
+
+calcular dificultad REAL
+detectar preguntas malas
+ver cuáles fallan todos
+balancear ranking
+Ejemplo BRILLANTE futuro
+
+Podés calcular:
+
+% de acierto global
+
+y usar eso para:
+
+puntuación dinámica
+preguntas épicas
+Relaciones
+users
+
+↔
+match_players
+
+matches
+
+↔
+match_players
+
+matches
+
+↔
+answers
+
+questions
+
+↔
+answers
+
+MVP importante
+NO hagas auth complejo todavía.
+Mi recomendación
+
+Al principio:
+
+nickname + guest account
+Luego:
+Google login
+Discord login
+Twitch login
+MUY importante
+Guardar estadísticas históricas.
+
+Porque:
+
+el progreso engancha muchísimo.
+Rankings futuros
+
+Con esta DB después podés tener:
+
+leaderboard global
+Top 100 Argentina
+ranking semanal
+ranking amigos
+estadísticas personales
+Precisión: 74%
+Algo IMPORTANTÍSIMO
+Preguntas generadas por IA
+
+Necesitás campos extra después:
+
+Ejemplo futuro
+source
+verified
+times_used
+global_accuracy
+Eso te permite:
+filtrar basura IA
+mejorar calidad
+auto balancear
+Lo MÁS importante de la DB
+
+NO es guardar datos.
+
+Es:
+
+generar retención.
+Porque después podés mostrar:
+Subiste al top 500
+
+o:
+
+Tu precisión mejoró 8%
+
+Y eso engancha muchísimo.
+
+Índices IMPORTANTES
+
+Más adelante:
+
+users.nickname
+users.rating
+answers.question_id
+match_players.user_id
+Problema futuro IMPORTANTE
+Escalabilidad de answers
+
+Puede crecer monstruosamente.
+
+Pero:
+
+no importa todavía.
+Costos iniciales
+
+Con:
+
+1000 usuarios
+miles de partidas
+
+Postgres aguanta perfecto.
+
+Próximo paso lógico
+
+Ahora sí viene:
+
+el sistema de rating.
+
+Porque eso define:
+
+competitividad
+progresión
+matchmaking
+retención
+obsesión del jugador
+
+Y probablemente sea una de las mecánicas más importantes de todo el proyecto.

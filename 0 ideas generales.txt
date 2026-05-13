@@ -1,0 +1,305 @@
+app 100*100
+quiero hacer una app de preguntas y respuestas on line, donde se hagan torneos de 100 preguntas y haya 100 jugadores, de ahi el nombre 100*100 , quiero que ademas en el futuro un youtuber sea el animador del torneo, los usuarios van a tener un ranking tipo elo en ajedrez, donde suman puntos por pregunta respondida y mas si la pregunta fue fallada por la maoria(igual eso lo dejamos para mas adelante) las preguntas en principio las va a generar una ia y estar en un archivo de texto hasta escalar, podrias darme una hoja de ruta , consejos, ideas, estructura, arquitectura, problemas, mejoras etc
+
+Concepto Base
+Formato principal
+100 jugadores
+100 preguntas
+todos responden al mismo tiempo
+ranking en vivo
+sistema de puntos/Elo
+eliminación opcional o acumulación de puntos
+animador (streamer/youtuber)
+
+Es una mezcla entre:
+
+trivia competitiva
+ajedrez online (rating)
+battle royale
+concursos tipo TV
+
+HACER EL MVP MÁS SIMPLE POSIBLE
+
+Porque el verdadero desafío es:
+
+“¿La gente realmente quiere jugar esto varias veces?”
+
+
+
+Frontend (React)
+        |
+        |
+WebSocket + API
+        |
+Backend (FastAPI)
+        |
+PostgreSQL
+
+Objetivo
+
+Tener algo jugable en 2-6 semanas.
+
+Tecnología recomendada
+
+Como ya te gusta Python:
+
+Backend
+Python
+FastAPI
+Frontend
+React
+o
+Next.js
+Base de datos
+PostgreSQL
+Tiempo real
+WebSockets
+Hosting
+
+Al principio:
+
+Railway
+o
+Render
+
+Flujo del juego
+1. Usuario entra
+nickname
+avatar
+rating inicial
+2. Espera lobby
+100 jugadores
+o
+empieza con menos si pasa X tiempo
+3. Comienza partida
+
+Cada pregunta:
+
+aparece pregunta
+cronómetro 10 segundos
+respuestas simultáneas
+4. Resultado
+quién acertó
+porcentaje de aciertos
+puntos ganados
+5. Ranking en vivo
+
+Muy importante para la dopamina.
+
+Sistema de puntos (MUY importante)
+
+No hagas solo:
+
++10 correcto
+0 incorrecto
+
+Eso se vuelve aburrido.
+
+Mejor idea
+Dificultad dinámica
+
+Si:
+
+90% acertó → pocos puntos
+5% acertó → MUCHOS puntos
+
+Ejemplo:
+
+Puntos = base * rareza
+
+o algo tipo:
+
++3 si todos acertaron
++50 si solo 2 acertaron
+
+ESO genera momentos épicos.
+
+“Skill Rating inspirado en Elo”
+
+Porque hay:
+
+100 jugadores
+múltiples preguntas
+partidas cortas
+
+Podrías usar:
+
+Glicko
+TrueSkill
+o inventar algo simple primero.
+Mi recomendación REAL
+V1:
+
+Solo:
+
+rating simple
++X por posición final
+-X si quedás abajo
+
+Y después evolucionás.
+
+Tipos de preguntas
+NO hagas solo trivia general
+
+Se vuelve genérico.
+
+Mezclá:
+cultura general
+memes
+internet
+fútbol
+streamers
+gaming
+películas
+preguntas absurdas/divertidas
+“¿qué porcentaje respondió esto?”
+
+IDEAS MUY buenas
+1. Pregunta “ultra rara”
+
+Vale muchísimos puntos.
+
+2. Multiplicadores
+
+Racha de respuestas correctas.
+
+3. “Todo o nada”
+
+El jugador apuesta puntos.
+
+4. Poderes
+
+Muy futuro, pero interesante:
+
+congelar tiempo
+eliminar opciones
+duplicar puntos
+
+Cómo podría funcionar
+Modo streamer
+
+El creador:
+
+arma torneo
+comenta
+reacciona
+participa el chat
+
+Y la gente entra desde:
+
+QR
+código
+link
+
+Eso tiene muchísimo potencial viral.
+
+
+Problemas reales que vas a tener
+1. Cheats
+
+La gente googlea respuestas.
+
+Soluciones:
+
+tiempo corto
+preguntas raras
+preguntas de lógica
+preguntas visuales
+velocidad influye
+
+2. IA generando basura
+
+Las IA inventan datos.
+
+Necesitás:
+
+validación
+revisión
+tags
+dificultad
+
+3. Tiempo real
+
+100 jugadores simultáneos no es trivial.
+
+Pero es totalmente posible.
+
+4. Balance
+
+Las partidas pueden sentirse:
+
+injustas
+aleatorias
+frustrantes
+
+Necesitás mucho testing.
+
+Frontend (Next.js)
+
+API Gateway
+
+Game Server (WebSockets)
+
+Question Service
+
+Ranking Service
+
+AI Question Generator
+
+PostgreSQL
+
+Redis
+
+Stack que te recomiendo de verdad
+Backend
+
+FastAPI
+
+Frontend
+
+Next.js
+
+Base de datos
+
+PostgreSQL
+
+Tiempo real
+
+WebSockets + Redis
+
+Hosting
+
+Railway
+
+o
+Render
+
+Consejo FUNDAMENTAL
+
+La dificultad NO es técnica.
+
+La dificultad es:
+
+lograr que la partida sea divertida.
+
+Eso requiere:
+
+ritmo
+tensión
+interfaz
+sonidos
+ranking
+sorpresa
+recompensas psicológicas
+
+Idea final MUY importante
+
+No pienses esto como:
+
+“una app de preguntas”
+
+Pensalo como:
+
+“un esport casual de trivia”.
+
+Ese enfoque cambia totalmente las decisiones de diseño.
