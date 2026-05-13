@@ -51,6 +51,27 @@ async def question_counts():
     return count_per_mode(game_manager.questions)
 
 
+@app.get("/modes")
+async def available_modes():
+    """Todos los modos secundarios que tienen al menos 1 pregunta."""
+    from app.game_manager import infer_tags
+
+    PRESET_KEYS = {"general", "gaming", "futbol", "anime", "ciencia", "musica"}
+
+    tag_counts: dict[str, int] = {}
+    for q in game_manager.questions:
+        db_tags = set(q.get("tags") or [])
+        inferred = set(infer_tags(q.get("question", "")))
+        for tag in db_tags | inferred:
+            if tag not in PRESET_KEYS:
+                tag_counts[tag] = tag_counts.get(tag, 0) + 1
+
+    return sorted(
+        [{"mode": k, "count": v} for k, v in tag_counts.items() if v >= 1],
+        key=lambda x: -x["count"],
+    )
+
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     player_id = str(uuid.uuid4())

@@ -87,6 +87,7 @@ export default function Home() {
   const [scoreboard, setScoreboard] = useState<Player[]>([]);
   const [connected, setConnected] = useState(false);
   const [modeCounts, setModeCounts] = useState<Record<string, number>>({});
+  const [secondaryModes, setSecondaryModes] = useState<{mode: string; count: number}[]>([]);
   const [funMessage, setFunMessage] = useState<string | null>(null);
   const [streakCount, setStreakCount] = useState(0);
   const [answerAnim, setAnswerAnim] = useState<"correct" | "wrong" | null>(null);
@@ -114,17 +115,27 @@ export default function Home() {
     }, 500);
   };
 
+  const apiBase = (process.env.NEXT_PUBLIC_WS_URL ?? "ws://127.0.0.1:8000/ws")
+    .replace("wss://", "https://")
+    .replace("ws://", "http://")
+    .replace("/ws", "");
+
   // Fetch question counts per mode
   useEffect(() => {
-    const base = (process.env.NEXT_PUBLIC_WS_URL ?? "ws://127.0.0.1:8000/ws")
-      .replace("wss://", "https://")
-      .replace("ws://", "http://")
-      .replace("/ws", "");
-    fetch(`${base}/counts`)
+    fetch(`${apiBase}/counts`)
       .then((r) => r.json())
       .then(setModeCounts)
       .catch(() => {});
   }, []);
+
+  // Fetch secondary modes when "Personalizado" is selected
+  useEffect(() => {
+    if (selectedMode !== "custom") return;
+    fetch(`${apiBase}/modes`)
+      .then((r) => r.json())
+      .then(setSecondaryModes)
+      .catch(() => {});
+  }, [selectedMode]);
 
   // Preseleccionar modo desde URL (?mode=gaming)
   useEffect(() => {
@@ -467,15 +478,51 @@ export default function Home() {
           </div>
 
           {selectedMode === "custom" && (
-            <input
-              autoFocus
-              className="bg-zinc-800 border border-zinc-600 text-white px-4 py-2 rounded-lg w-full text-center placeholder-zinc-500 focus:border-red-500 focus:outline-none"
-              placeholder="Ej: bahia-blanca, 4to-ing-industrial..."
-              value={customMode}
-              onChange={(e) => setCustomMode(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && setPhase("JOIN")}
-              maxLength={40}
-            />
+            <div className="w-full space-y-3 animate-zoom-in-fast">
+              {secondaryModes.length > 0 && (
+                <div>
+                  <p className="text-zinc-500 text-xs mb-2 text-center">
+                    Modos disponibles — hacé click para elegir:
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {secondaryModes.map((m) => {
+                      const label = m.mode.replace(/_/g, " ");
+                      const isSelected = customMode === m.mode;
+                      return (
+                        <button
+                          key={m.mode}
+                          onClick={() => setCustomMode(m.mode)}
+                          className={`px-3 py-1.5 rounded-full text-sm border transition-all ${
+                            isSelected
+                              ? "border-red-500 bg-red-500/20 text-white font-bold"
+                              : "border-zinc-600 text-zinc-300 hover:border-zinc-400 hover:text-white"
+                          }`}
+                        >
+                          {label}
+                          <span className="ml-1.5 text-zinc-500 text-xs">
+                            {m.count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col gap-1">
+                <p className="text-zinc-600 text-xs text-center">
+                  O escribí uno nuevo:
+                </p>
+                <input
+                  autoFocus={secondaryModes.length === 0}
+                  className="bg-zinc-800 border border-zinc-600 text-white px-4 py-2 rounded-lg w-full text-center placeholder-zinc-500 focus:border-red-500 focus:outline-none"
+                  placeholder="ej: bahia-blanca, 4to-ing-industrial..."
+                  value={customMode}
+                  onChange={(e) => setCustomMode(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && setPhase("JOIN")}
+                  maxLength={40}
+                />
+              </div>
+            </div>
           )}
 
           <button
