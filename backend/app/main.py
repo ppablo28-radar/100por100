@@ -35,6 +35,43 @@ async def root():
     return {"message": "100x100 backend running"}
 
 
+@app.get("/test-db")
+async def test_db():
+    """Diagnóstico completo de conexión a Supabase."""
+    import os
+    db_url = os.getenv("DATABASE_URL", "")
+    env_keys = [k for k in os.environ if "DATA" in k or "DB" in k or "SQL" in k or "SUPA" in k]
+
+    if not db_url:
+        return {
+            "status": "ERROR",
+            "problem": "DATABASE_URL no está seteada",
+            "env_keys_relacionadas": env_keys,
+            "fix": "Railway → tu servicio backend → Variables → agregar DATABASE_URL",
+        }
+
+    try:
+        import asyncpg
+        url = db_url.replace("postgresql+asyncpg://", "postgresql://")
+        conn = await asyncpg.connect(url, timeout=10)
+        q_count = await conn.fetchval("SELECT COUNT(*) FROM questions")
+        t_count = await conn.fetchval("SELECT COUNT(*) FROM tags")
+        await conn.close()
+        return {
+            "status": "OK",
+            "db_url_preview": db_url[:50] + "...",
+            "preguntas_en_supabase": q_count,
+            "tags_en_supabase": t_count,
+            "preguntas_en_memoria": len(game_manager.questions),
+        }
+    except Exception as e:
+        return {
+            "status": "ERROR",
+            "db_url_preview": db_url[:50] + "...",
+            "error": str(e),
+        }
+
+
 @app.get("/rooms")
 async def rooms():
     """Lista de salas activas (para debug)."""
