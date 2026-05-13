@@ -20,7 +20,11 @@ const PRESET_MODES = [
 
 type QuestionData = {
   question: string;
-  options: string[];
+  question_type: string;
+  options: (string | {id: string; name: string})[];
+  events?: {id: string; title: string; hint?: string}[];
+  attribute_name?: string;
+  unit?: string;
   duration: number;
   question_number: number;
   total_questions: number;
@@ -34,8 +38,22 @@ type QuestionResult = {
 };
 
 type RevealData = {
-  correct: string;
-  correct_index: number;
+  question_type?: string;
+  // multiple_choice
+  correct?: string;
+  correct_index?: number;
+  // higher_lower
+  correct_id?: string;
+  correct_name?: string;
+  values?: Record<string, number>;
+  attribute_name?: string;
+  unit?: string;
+  options?: {id: string; name: string}[];
+  // timeline_order
+  correct_order?: string[];
+  correct_order_titles?: string[];
+  events?: {id: string; title: string}[];
+  // common
   correct_pct: number;
   question_results: QuestionResult[];
 };
@@ -92,6 +110,11 @@ export default function Home() {
   const [streakCount, setStreakCount] = useState(0);
   const [answerAnim, setAnswerAnim] = useState<"correct" | "wrong" | null>(null);
   const [floatingPts, setFloatingPts] = useState<number | null>(null);
+  // Pregunta procedural — timeline_order
+  const [timelineOrder, setTimelineOrder] = useState<string[]>([]);
+  const timelineSubmittedRef = useRef(false);
+  // Pregunta procedural — higher_lower
+  const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null);
 
   // Beep en los últimos 3 segundos de cada pregunta
   useEffect(() => {
@@ -204,6 +227,9 @@ export default function Home() {
         setPhase("QUESTION");
         setQuestion(data as QuestionData);
         setSelectedAnswer(null);
+        setSelectedAnswerId(null);
+        setTimelineOrder([]);
+        timelineSubmittedRef.current = false;
         setRevealData(null);
         setFunMessage(null);
         setAnswerAnim(null);
@@ -338,6 +364,26 @@ export default function Home() {
     if (selectedAnswer !== null || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
     setSelectedAnswer(index);
     socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: index }));
+  };
+
+  const submitHigherLower = (id: string) => {
+    const socket = ws.current;
+    if (selectedAnswerId !== null || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
+    setSelectedAnswerId(id);
+    socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: id }));
+  };
+
+  const clickTimelineEvent = (id: string) => {
+    const socket = ws.current;
+    if (timelineSubmittedRef.current || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
+    if (timelineOrder.includes(id)) return;
+    const newOrder = [...timelineOrder, id];
+    setTimelineOrder(newOrder);
+    const totalEvents = (question?.events ?? []).length;
+    if (newOrder.length === totalEvents) {
+      timelineSubmittedRef.current = true;
+      socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: newOrder }));
+    }
   };
 
   const resetGame = () => {
@@ -606,56 +652,117 @@ export default function Home() {
       {phase === "QUESTION" && question && (
         <div className="flex flex-col gap-4 w-full max-w-xl">
           <div className="flex justify-between items-center text-sm text-zinc-400">
-            <span>
-              Pregunta {question.question_number}/{question.total_questions}
-            </span>
-            <span className={`font-bold text-lg ${
-              timeLeft <= 3
-                ? "text-red-500 animate-pulse-urgent"
-                : "text-white"
-            }`}>
+            <span>Pregunta {question.question_number}/{question.total_questions}</span>
+            <span className={`font-bold text-lg ${timeLeft <= 3 ? "text-red-500 animate-pulse-urgent" : "text-white"}`}>
               {timeLeft}s
             </span>
           </div>
-
           <div className="w-full bg-zinc-800 rounded-full h-1.5">
             <div
               className={`h-1.5 rounded-full transition-all duration-200 ${timeLeft <= 3 ? "bg-red-500" : "bg-red-400"}`}
               style={{ width: `${(timeLeft / (question.duration || 10)) * 100}%` }}
             />
           </div>
+          <h2 className="text-2xl text-center font-semibold mt-1 leading-snug">{question.question}</h2>
 
-          <h2 className="text-2xl text-center font-semibold mt-1 leading-snug">
-            {question.question}
-          </h2>
+          {/* ── Multiple choice (existente) ── */}
+          {(!question.question_type || question.question_type === "multiple_choice") && (
+            <>
+              <div className="grid grid-cols-2 gap-3 mt-1">
+                {(question.options as string[]).map((option, index) => {
+                  const isSelected = selectedAnswer === index;
+                  const isLocked = selectedAnswer !== null;
+                  return (
+                    <button
+                      key={index}
+                      className={`${OPTION_COLORS[index]} ${isSelected ? "ring-4 ring-white scale-95" : ""} ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"} p-4 rounded-lg text-base font-medium transition-all duration-150 text-left`}
+                      onClick={() => submitAnswer(index)}
+                      disabled={isLocked}
+                    >
+                      <span className="font-bold mr-2">{["A","B","C","D"][index]}.</span>
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedAnswer !== null && (
+                <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
+              )}
+            </>
+          )}
 
-          <div className="grid grid-cols-2 gap-3 mt-1">
-            {question.options.map((option, index) => {
-              const isSelected = selectedAnswer === index;
-              const isLocked = selectedAnswer !== null;
-              return (
-                <button
-                  key={index}
-                  className={`
-                    ${OPTION_COLORS[index]}
-                    ${isSelected ? "ring-4 ring-white scale-95" : ""}
-                    ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"}
-                    p-4 rounded-lg text-base font-medium transition-all duration-150 text-left
-                  `}
-                  onClick={() => submitAnswer(index)}
-                  disabled={isLocked}
-                >
-                  <span className="font-bold mr-2">{["A", "B", "C", "D"][index]}.</span>
-                  {option}
-                </button>
-              );
-            })}
-          </div>
+          {/* ── Higher / Lower ── */}
+          {question.question_type === "higher_lower" && (
+            <>
+              {question.attribute_name && (
+                <p className="text-center text-zinc-500 text-sm -mt-2">
+                  {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-4 mt-1">
+                {(question.options as {id: string; name: string}[]).map((opt, i) => {
+                  const isSelected = selectedAnswerId === opt.id;
+                  const isLocked = selectedAnswerId !== null;
+                  return (
+                    <button
+                      key={opt.id}
+                      onClick={() => submitHigherLower(opt.id)}
+                      disabled={isLocked}
+                      className={`
+                        ${i === 0 ? "bg-blue-700 hover:bg-blue-600" : "bg-red-700 hover:bg-red-600"}
+                        ${isSelected ? "ring-4 ring-white scale-95" : ""}
+                        ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"}
+                        p-6 rounded-xl text-center font-bold text-xl transition-all duration-150
+                      `}
+                    >
+                      {opt.name}
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedAnswerId !== null && (
+                <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
+              )}
+            </>
+          )}
 
-          {selectedAnswer !== null && (
-            <p className="text-center text-zinc-400 text-sm animate-pulse">
-              Respuesta enviada — esperando a los demás...
-            </p>
+          {/* ── Timeline order ── */}
+          {question.question_type === "timeline_order" && (
+            <>
+              <p className="text-center text-zinc-500 text-sm -mt-2">
+                Hacé click en el orden correcto (1 = más antiguo)
+              </p>
+              <div className="flex flex-col gap-2 mt-1">
+                {(question.events ?? []).map((ev) => {
+                  const pos = timelineOrder.indexOf(ev.id);
+                  const selected = pos !== -1;
+                  const isLocked = timelineSubmittedRef.current;
+                  return (
+                    <button
+                      key={ev.id}
+                      onClick={() => clickTimelineEvent(ev.id)}
+                      disabled={selected || isLocked}
+                      className={`
+                        flex items-center gap-3 p-3 rounded-lg text-left font-medium transition-all duration-150
+                        ${selected ? "bg-green-700 opacity-80 cursor-default" : "bg-zinc-700 hover:bg-zinc-600 active:scale-95"}
+                        ${isLocked && !selected ? "opacity-40 cursor-default" : ""}
+                      `}
+                    >
+                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${selected ? "bg-green-500 text-white" : "bg-zinc-600 text-zinc-400"}`}>
+                        {selected ? pos + 1 : "?"}
+                      </span>
+                      {ev.title}
+                    </button>
+                  );
+                })}
+              </div>
+              {timelineSubmittedRef.current && (
+                <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
+              )}
+              {!timelineSubmittedRef.current && timelineOrder.length > 0 && timelineOrder.length < (question.events ?? []).length && (
+                <p className="text-center text-zinc-500 text-xs">{timelineOrder.length} de {(question.events ?? []).length} seleccionados</p>
+              )}
+            </>
           )}
         </div>
       )}
@@ -663,55 +770,78 @@ export default function Home() {
       {/* REVEAL */}
       {phase === "REVEAL" && revealData && question && (
         <div className="flex flex-col gap-4 w-full max-w-xl items-center">
-          {/* Opciones con correcto/incorrecto */}
-          <div className="grid grid-cols-2 gap-2 w-full">
-            {question.options.map((option, index) => {
-              const isCorrect = index === revealData.correct_index;
-              const wasSelected = selectedAnswer === index;
-              const isWrong = wasSelected && !isCorrect;
-              return (
-                <div
-                  key={index}
-                  className={`
-                    p-3 rounded-lg text-sm font-medium text-left transition-all animate-zoom-in-fast
-                    ${isCorrect ? "bg-green-600 ring-2 ring-green-400 animate-glow-green" : OPTION_COLORS_BASE[index]}
-                    ${isWrong ? "opacity-40 line-through animate-shake" : ""}
-                    ${isCorrect && wasSelected ? "scale-105" : ""}
-                  `}
-                  style={{ animationDelay: `${index * 80}ms` }}
-                >
-                  <span className="font-bold mr-1">{["A", "B", "C", "D"][index]}.</span>
-                  {option}
+
+          {/* ── Reveal: multiple choice ── */}
+          {(!revealData.question_type || revealData.question_type === "multiple_choice") && (
+            <div className="grid grid-cols-2 gap-2 w-full">
+              {(question.options as string[]).map((option, index) => {
+                const isCorrect = index === revealData.correct_index;
+                const wasSelected = selectedAnswer === index;
+                return (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-lg text-sm font-medium text-left transition-all animate-zoom-in-fast ${isCorrect ? "bg-green-600 ring-2 ring-green-400 animate-glow-green" : OPTION_COLORS_BASE[index]} ${wasSelected && !isCorrect ? "opacity-40 line-through animate-shake" : ""} ${isCorrect && wasSelected ? "scale-105" : ""}`}
+                    style={{ animationDelay: `${index * 80}ms` }}
+                  >
+                    <span className="font-bold mr-1">{["A","B","C","D"][index]}.</span>{option}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ── Reveal: higher_lower ── */}
+          {revealData.question_type === "higher_lower" && (
+            <div className="w-full flex flex-col gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                {(revealData.options ?? []).map((opt, i) => {
+                  const isCorrect = opt.id === revealData.correct_id;
+                  const wasSelected = selectedAnswerId === opt.id;
+                  const val = revealData.values?.[opt.id];
+                  return (
+                    <div key={opt.id} className={`p-4 rounded-xl text-center font-bold transition-all animate-zoom-in-fast ${isCorrect ? "bg-green-600 ring-2 ring-green-400 animate-glow-green" : (i === 0 ? "bg-blue-800" : "bg-red-800")} ${wasSelected && !isCorrect ? "opacity-40 animate-shake" : ""}`}>
+                      <div className="text-lg">{opt.name}</div>
+                      {val != null && (
+                        <div className="text-sm font-normal text-white/80 mt-1">
+                          {val.toLocaleString()} {revealData.unit ?? ""}
+                        </div>
+                      )}
+                      {isCorrect && <div className="text-xs mt-1 text-green-200">✓ Correcto</div>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* ── Reveal: timeline_order ── */}
+          {revealData.question_type === "timeline_order" && (
+            <div className="w-full flex flex-col gap-2">
+              <p className="text-center text-zinc-400 text-sm font-semibold mb-1">Orden correcto:</p>
+              {(revealData.correct_order_titles ?? []).map((title, i) => (
+                <div key={i} className="flex items-center gap-3 bg-green-800/60 border border-green-600/40 p-3 rounded-lg animate-zoom-in-fast" style={{ animationDelay: `${i * 100}ms` }}>
+                  <span className="w-7 h-7 rounded-full bg-green-500 text-white text-sm font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                  <span className="text-sm font-medium">{title}</span>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Resultado personal */}
           <div className="flex flex-col items-center gap-1">
             <div className="flex items-center gap-3">
-              {selectedAnswer !== null ? (
-                <span className={`text-2xl font-bold ${
-                  answerAnim === "correct"
-                    ? "text-green-400 animate-bounce-correct"
-                    : answerAnim === "wrong"
-                    ? "text-red-400 animate-shake"
-                    : selectedAnswer === revealData.correct_index ? "text-green-400" : "text-red-400"
-                }`}>
-                  {selectedAnswer === revealData.correct_index ? "✓ ¡Correcto!" : "✗ Incorrecto"}
+              {(selectedAnswer !== null || selectedAnswerId !== null || timelineSubmittedRef.current) ? (
+                <span className={`text-2xl font-bold ${answerAnim === "correct" ? "text-green-400 animate-bounce-correct" : answerAnim === "wrong" ? "text-red-400 animate-shake" : "text-zinc-300"}`}>
+                  {answerAnim === "correct" ? "✓ ¡Correcto!" : answerAnim === "wrong" ? "✗ Incorrecto" : "—"}
                 </span>
               ) : (
                 <span className="text-2xl font-bold text-zinc-500">Sin respuesta</span>
               )}
               {floatingPts != null && floatingPts > 0 && (
-                <span className="text-green-300 font-bold text-lg animate-float-score">
-                  +{floatingPts}
-                </span>
+                <span className="text-green-300 font-bold text-lg animate-float-score">+{floatingPts}</span>
               )}
             </div>
-            <span className="text-zinc-500 text-sm">
-              {revealData.correct_pct}% de jugadores acertó
-            </span>
+            <span className="text-zinc-500 text-sm">{revealData.correct_pct}% de jugadores acertó</span>
           </div>
 
           {/* Mensaje épico / racha */}

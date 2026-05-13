@@ -22,8 +22,8 @@ app.add_middleware(
 )
 
 manager = WebSocketManager()
-game_manager = GameManager(manager)
 runtime_engine = RuntimeEngine()
+game_manager = GameManager(manager, runtime_engine)
 
 # player_id → modo actual (para saber a qué sala pertenece al responder)
 player_modes: dict[str, str] = {}

@@ -8,6 +8,8 @@ import time
 MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
+PROCEDURAL_RATIO = 0.30        # 30 % de preguntas procedurales
+PROCEDURAL_TYPES = ["higher_lower", "timeline_order"]
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {
@@ -142,9 +144,10 @@ def count_per_mode(all_questions: list[dict]) -> dict[str, int]:
 class GameRoom:
     """Una sala de juego independiente para un modo específico."""
 
-    def __init__(self, mode: str, ws_manager):
+    def __init__(self, mode: str, ws_manager, runtime_engine=None):
         self.mode = mode
         self.ws = ws_manager
+        self.runtime_engine = runtime_engine
         self.player_ids: set[str] = set()
         self.players: dict[str, dict] = {}
         self.state = "WAITING"
@@ -225,18 +228,114 @@ class GameRoom:
                 "count": len(self.players),
             })
 
-    async def submit_answer(self, player_id: str, answer: int):
+    async def submit_answer(self, player_id: str, answer):
         if (
             self.state == "QUESTION"
             and player_id in self.players
             and player_id not in self.answers
             and self.question_start_time is not None
         ):
-            response_time = min(time.time() - self.question_start_time, 10.0)
+            duration = self.current_question.get("_duration", 10) if self.current_question else 10
+            response_time = min(time.time() - self.question_start_time, float(duration))
             self.answers[player_id] = {
                 "answer": answer,
                 "response_time": response_time,
             }
+
+    # ─── Helpers procedurales ─────────────────────────────────────────────────
+
+    def _pick_next_question(self, pool: list[dict]) -> dict:
+        """Selecciona handcrafted o procedural según PROCEDURAL_RATIO."""
+        if (
+            self.runtime_engine
+            and self.runtime_engine.loaded
+            and random.random() < PROCEDURAL_RATIO
+        ):
+            gtype = random.choice(PROCEDURAL_TYPES)
+            payload = self.runtime_engine.generate_question(generator_type=gtype)
+            if payload:
+                return {"_type": payload["question_type"], **payload}
+        q = random.choice(pool)
+        return {"_type": "multiple_choice", **q}
+
+    def _check_answer(self, question: dict, answer) -> bool:
+        qtype = question.get("_type", "multiple_choice")
+        if qtype == "multiple_choice":
+            return answer == question.get("correct")
+        if qtype == "higher_lower":
+            return str(answer) == str(question.get("correct_id", ""))
+        if qtype in ("timeline_order", "ranking_order"):
+            return list(answer) == list(question.get("correct_order", []))
+        return False
+
+    async def _broadcast_question(self, question: dict, num: int, total: int, duration: int):
+        qtype = question.get("_type", "multiple_choice")
+        base = {
+            "type": "NEW_QUESTION",
+            "question_type": qtype,
+            "question_number": num,
+            "total_questions": total,
+            "duration": duration,
+        }
+        if qtype == "multiple_choice":
+            await self._broadcast({
+                **base,
+                "question": question["question"],
+                "options": question["options"],
+            })
+        elif qtype == "higher_lower":
+            await self._broadcast({
+                **base,
+                "question": question.get("question_text", "¿Cuál tiene más?"),
+                "options": question.get("options", []),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
+            })
+        elif qtype == "timeline_order":
+            await self._broadcast({
+                **base,
+                "question": question.get("question_text", "Ordená de más antiguo a más reciente"),
+                "events": question.get("events", []),
+            })
+
+    async def _broadcast_reveal(self, question: dict, correct_pct: int, question_results: list):
+        qtype = question.get("_type", "multiple_choice")
+        base = {
+            "type": "ANSWER_REVEAL",
+            "question_type": qtype,
+            "correct_pct": correct_pct,
+            "question_results": question_results,
+        }
+        if qtype == "multiple_choice":
+            correct_index = question.get("correct", 0)
+            await self._broadcast({
+                **base,
+                "correct": question["options"][correct_index],
+                "correct_index": correct_index,
+            })
+        elif qtype == "higher_lower":
+            correct_id = question.get("correct_id", "")
+            correct_name = next(
+                (o["name"] for o in question.get("options", []) if o["id"] == correct_id), "?"
+            )
+            await self._broadcast({
+                **base,
+                "correct_id": correct_id,
+                "correct_name": correct_name,
+                "values": question.get("values", {}),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
+                "options": question.get("options", []),
+            })
+        elif qtype == "timeline_order":
+            correct_order = question.get("correct_order", [])
+            events_by_id = {e["id"]: e["title"] for e in question.get("events", [])}
+            await self._broadcast({
+                **base,
+                "correct_order": correct_order,
+                "correct_order_titles": [events_by_id.get(eid, eid) for eid in correct_order],
+                "events": question.get("events", []),
+            })
 
     async def wait_and_start(self, all_questions: list[dict]):
         try:
@@ -258,35 +357,30 @@ class GameRoom:
     async def game_loop(self, all_questions: list[dict]):
         self.state = "QUESTION"
         pool = self._get_questions(all_questions)
-        selected = random.sample(pool, min(QUESTIONS_PER_GAME, len(pool)))
-        total = len(selected)
+        total = QUESTIONS_PER_GAME
 
-        for i, question in enumerate(selected):
+        for i in range(total):
+            question = self._pick_next_question(pool)
+            qtype = question.get("_type", "multiple_choice")
+            duration = 15 if qtype == "timeline_order" else 10
+            question["_duration"] = duration
+
             self.current_question = question
             self.answers = {}
             self.question_start_time = time.time()
 
-            await self._broadcast({
-                "type": "NEW_QUESTION",
-                "question": question["question"],
-                "options": question["options"],
-                "duration": 10,
-                "question_number": i + 1,
-                "total_questions": total,
-            })
-            await asyncio.sleep(10)
+            await self._broadcast_question(question, i + 1, total, duration)
+            await asyncio.sleep(duration)
 
-            correct_index = question["correct"]
-            correct_text = question["options"][correct_index]
             correct_count = 0
             question_results = []
 
             for pid, answer_data in self.answers.items():
                 if pid not in self.players:
                     continue
-                is_correct = answer_data["answer"] == correct_index
+                is_correct = self._check_answer(question, answer_data["answer"])
                 t = answer_data["response_time"]
-                pts = int(100 + 50 * (1 - t / 10)) if is_correct else 0
+                pts = int(100 + 50 * (1 - t / duration)) if is_correct else 0
                 if is_correct:
                     correct_count += 1
                     self.players[pid]["score"] += pts
@@ -317,14 +411,7 @@ class GameRoom:
             total_players = len(self.players)
             correct_pct = int(correct_count * 100 / total_players) if total_players else 0
 
-            await self._broadcast({
-                "type": "ANSWER_REVEAL",
-                "correct": correct_text,
-                "correct_index": correct_index,
-                "correct_pct": correct_pct,
-                "question_results": question_results,
-            })
-
+            await self._broadcast_reveal(question, correct_pct, question_results)
             scoreboard = self._build_scoreboard()
             await self._broadcast({"type": "SCOREBOARD", "players": scoreboard})
             await asyncio.sleep(5)
@@ -370,8 +457,9 @@ class GameRoom:
 class GameManager:
     """Administra múltiples salas simultáneas (una por modo)."""
 
-    def __init__(self, ws_manager):
+    def __init__(self, ws_manager, runtime_engine=None):
         self.ws = ws_manager
+        self.runtime_engine = runtime_engine
         self.rooms: dict[str, GameRoom] = {}
         self.questions: list[dict] = []
         self._load_from_json()
@@ -385,7 +473,7 @@ class GameManager:
 
     def get_room(self, mode: str) -> GameRoom:
         if mode not in self.rooms:
-            self.rooms[mode] = GameRoom(mode, self.ws)
+            self.rooms[mode] = GameRoom(mode, self.ws, self.runtime_engine)
         return self.rooms[mode]
 
     async def load_questions(self) -> None:
