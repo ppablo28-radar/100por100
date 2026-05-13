@@ -47,10 +47,28 @@ async def rooms():
 @app.get("/reload")
 async def reload_questions():
     """Recarga las preguntas desde Supabase sin reiniciar el servidor."""
+    import os
+    db_url = os.getenv("DATABASE_URL", "")
     before = len(game_manager.questions)
-    await game_manager.load_questions()
+
+    error = None
+    if not db_url:
+        error = "DATABASE_URL no está configurada en Railway"
+    else:
+        try:
+            await game_manager.load_questions()
+        except Exception as e:
+            error = str(e)
+
     after = len(game_manager.questions)
-    return {"before": before, "after": after, "new": after - before}
+    return {
+        "before": before,
+        "after": after,
+        "new": after - before,
+        "db_url_set": bool(db_url),
+        "db_url_preview": db_url[:40] + "..." if len(db_url) > 40 else db_url,
+        "error": error,
+    }
 
 
 @app.get("/counts")
