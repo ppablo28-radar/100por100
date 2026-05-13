@@ -323,6 +323,12 @@ export default function Home() {
         streakRef.current = 0;
         setStreakCount(0);
       }
+
+      if (data.type === "ERROR") {
+        // El servidor crasheó durante el juego — volver al lobby
+        alert(`Error del servidor: ${data.message ?? "error desconocido"}`);
+        resetGame();
+      }
     };
 
     return () => {

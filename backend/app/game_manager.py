@@ -249,17 +249,23 @@ class GameRoom:
 
     def _pick_next_question(self, pool: list[dict]) -> dict:
         """Selecciona handcrafted o procedural según PROCEDURAL_RATIO."""
-        if (
-            self.runtime_engine
-            and self.runtime_engine.loaded
-            and random.random() < PROCEDURAL_RATIO
-        ):
+        engine = self.runtime_engine
+        if engine and engine.loaded and random.random() < PROCEDURAL_RATIO:
             slug = random.choice(PROCEDURAL_SLUGS)
-            payload = self.runtime_engine.generate_question(generator_slug=slug)
+            payload = engine.generate_question(generator_slug=slug)
+            if payload:
+                print(f"[procedural] {payload['question_type']} via {slug}")
+                return {"_type": payload["question_type"], **payload}
+            print(f"[procedural] generator '{slug}' returned None, fallback to handcrafted")
+        if pool:
+            q = random.choice(pool)
+            return {"_type": "multiple_choice", **q}
+        # Último recurso: cualquier generador disponible
+        if engine and engine.loaded:
+            payload = engine.generate_random()
             if payload:
                 return {"_type": payload["question_type"], **payload}
-        q = random.choice(pool)
-        return {"_type": "multiple_choice", **q}
+        raise RuntimeError("Sin preguntas: pool vacío y motor procedural sin datos")
 
     def _check_answer(self, question: dict, answer) -> bool:
         qtype = question.get("_type", "multiple_choice")
