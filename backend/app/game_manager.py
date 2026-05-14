@@ -7,7 +7,7 @@ import time
 
 MAX_PLAYERS = 10
 START_DELAY = 30
-QUESTIONS_PER_GAME = 6
+QUESTIONS_PER_GAME = 10
 PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
 PROCEDURAL_SLUGS = [           # 6 preguntas de países: 3 población + 3 superficie
     "higher-lower-paises-poblacion",   # PAIS-1
@@ -251,12 +251,23 @@ class GameRoom:
 
     # ─── Helpers procedurales ─────────────────────────────────────────────────
 
+    def _build_slug_queue(self):
+        """
+        Construye la cola para una partida completa:
+        - Todos los slugs aparecen al menos 1 vez
+        - Los slots restantes se rellenan al azar entre los mismos slugs
+        - Todo mezclado para que el orden sea impredecible
+        """
+        base = PROCEDURAL_SLUGS[:]          # 1 de cada tipo garantizado
+        extra_n = max(0, QUESTIONS_PER_GAME - len(base))
+        extra = [random.choice(PROCEDURAL_SLUGS) for _ in range(extra_n)]
+        queue = base + extra
+        random.shuffle(queue)
+        self._slug_queue = queue
+
     def _next_slug(self) -> str:
-        """Cicla por PROCEDURAL_SLUGS en orden aleatorio para garantizar variedad."""
         if not getattr(self, "_slug_queue", None):
-            shuffled = PROCEDURAL_SLUGS[:]
-            random.shuffle(shuffled)
-            self._slug_queue = shuffled * (QUESTIONS_PER_GAME // len(shuffled) + 2)
+            self._build_slug_queue()
         return self._slug_queue.pop(0)
 
     def _pick_next_question(self, pool: list[dict]) -> dict:
@@ -472,6 +483,7 @@ class GameRoom:
 
     async def _game_loop(self, all_questions: list[dict]):
         self.state = "QUESTION"
+        self._build_slug_queue()   # siempre fresca al inicio de cada partida
         pool = self._get_questions(all_questions)
         if not pool and not (self.runtime_engine and self.runtime_engine.loaded):
             raise RuntimeError("Sin preguntas disponibles y motor procedural no cargado")
