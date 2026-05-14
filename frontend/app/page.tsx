@@ -115,9 +115,12 @@ export default function Home() {
   const timelineSubmittedRef = useRef(false);
   // Pregunta procedural — higher_lower
   const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null);
-  // Pregunta procedural — closest_number
-  const [closestInput, setClosestInput] = useState("");
+  // Pregunta procedural — closest_number (ahora multiple choice)
   const [closestSubmitted, setClosestSubmitted] = useState(false);
+  // Pregunta procedural — ranking_order (drag-and-drop)
+  const [rankingItems, setRankingItems] = useState<{id: string; name: string}[]>([]);
+  const [rankingSubmitted, setRankingSubmitted] = useState(false);
+  const rankingDragIdx = useRef<number | null>(null);
 
   // Beep en los últimos 3 segundos de cada pregunta
   useEffect(() => {
@@ -233,8 +236,14 @@ export default function Home() {
         setSelectedAnswerId(null);
         setTimelineOrder([]);
         timelineSubmittedRef.current = false;
-        setClosestInput("");
         setClosestSubmitted(false);
+        setRankingSubmitted(false);
+        if (data.question_type === "ranking_order" && Array.isArray(data.options)) {
+          const shuffled = [...(data.options as {id:string;name:string}[])].sort(() => Math.random() - 0.5);
+          setRankingItems(shuffled);
+        } else {
+          setRankingItems([]);
+        }
         setRevealData(null);
         setFunMessage(null);
         setAnswerAnim(null);
@@ -377,11 +386,19 @@ export default function Home() {
     socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: index }));
   };
 
-  const submitClosestNumber = () => {
+  const submitClosestNumber = (id: string) => {
     const socket = ws.current;
-    if (closestSubmitted || !closestInput.trim() || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
+    if (closestSubmitted || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
     setClosestSubmitted(true);
-    socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: parseFloat(closestInput) }));
+    setSelectedAnswerId(id);
+    socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: id }));
+  };
+
+  const submitRanking = () => {
+    const socket = ws.current;
+    if (rankingSubmitted || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
+    setRankingSubmitted(true);
+    socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: rankingItems.map(i => i.id) }));
   };
 
   const submitHigherLower = (id: string) => {
@@ -746,83 +763,82 @@ export default function Home() {
             );
           })()}
 
-          {/* ── Closest number ── */}
-          {question.question_type === "closest_number" && (
-            <>
-              {(question as any).entity_name && (
-                <p className="text-center text-zinc-400 text-sm -mt-2 font-semibold">
-                  {(question as any).entity_name}
-                </p>
-              )}
-              {(question as any).unit && (
-                <p className="text-center text-zinc-500 text-xs">
-                  Respuesta en {(question as any).unit}
-                </p>
-              )}
-              <div className="flex gap-2 mt-2">
-                <input
-                  type="number"
-                  className="flex-1 bg-zinc-800 border border-zinc-600 text-white px-4 py-3 rounded-lg text-center text-xl font-bold placeholder-zinc-600 focus:border-red-500 focus:outline-none disabled:opacity-50"
-                  placeholder="Tu respuesta..."
-                  value={closestInput}
-                  onChange={e => setClosestInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && submitClosestNumber()}
-                  disabled={closestSubmitted}
-                  autoFocus
-                  min={(question as any).min_value ?? 0}
-                  max={(question as any).max_value ?? 999999}
-                />
-                <button
-                  onClick={submitClosestNumber}
-                  disabled={closestSubmitted || !closestInput.trim()}
-                  className="bg-red-600 hover:bg-red-500 disabled:opacity-40 px-6 py-3 rounded-lg font-bold transition-colors"
-                >
-                  ✓
-                </button>
-              </div>
-              {closestSubmitted && (
-                <p className="text-center text-zinc-400 text-sm animate-pulse">
-                  Respuesta enviada ({closestInput}) — esperando a los demás...
-                </p>
-              )}
-            </>
-          )}
+          {/* ── Closest number (opción múltiple con números) ── */}
+          {question.question_type === "closest_number" && (() => {
+            const opts = (question as any).options as {id: string; label: string}[] ?? [];
+            const unit = (question as any).unit ?? "";
+            const BG = ["bg-blue-700 hover:bg-blue-600","bg-red-700 hover:bg-red-600","bg-yellow-600 hover:bg-yellow-500","bg-green-700 hover:bg-green-600","bg-purple-700 hover:bg-purple-600","bg-pink-700 hover:bg-pink-600","bg-orange-600 hover:bg-orange-500","bg-teal-700 hover:bg-teal-600","bg-indigo-700 hover:bg-indigo-600","bg-cyan-700 hover:bg-cyan-600"];
+            return (
+              <>
+                {unit && <p className="text-center text-zinc-500 text-sm -mt-2">en {unit}</p>}
+                <div className={`grid gap-3 mt-1 ${opts.length <= 4 ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"}`}>
+                  {opts.map((opt, i) => {
+                    const isSelected = selectedAnswerId === opt.id;
+                    const isLocked = closestSubmitted;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => submitClosestNumber(opt.id)}
+                        disabled={isLocked}
+                        className={`${BG[i % BG.length]} ${isSelected ? "ring-4 ring-white scale-95" : ""} ${isLocked && !isSelected ? "opacity-40 cursor-default" : "active:scale-95"} p-5 rounded-xl text-center font-bold text-2xl transition-all duration-150`}
+                      >
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {closestSubmitted && <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>}
+              </>
+            );
+          })()}
 
-          {/* ── Ranking order ── */}
+          {/* ── Ranking order (drag-and-drop) ── */}
           {question.question_type === "ranking_order" && (
             <>
               {question.attribute_name && (
                 <p className="text-center text-zinc-500 text-sm -mt-2">
-                  Ordenar por {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
+                  Arrastrá para ordenar · {question.attribute_name}{question.unit ? ` (${question.unit})` : ""}
                 </p>
               )}
-              <div className="flex flex-col gap-2 mt-1">
-                {(question.events ?? (question.options as {id:string;name:string}[])).map((item) => {
-                  const id = (item as any).id;
-                  const name = (item as any).name ?? (item as any).title;
-                  const pos = timelineOrder.indexOf(id);
-                  const selected = pos !== -1;
-                  const isLocked = timelineSubmittedRef.current;
+              <div className="flex flex-col gap-2 mt-1 select-none">
+                {rankingItems.map((item, idx) => {
+                  const medalColors = ["border-yellow-400 bg-yellow-400/10","border-zinc-400 bg-zinc-400/10","border-orange-600 bg-orange-600/10"];
+                  const borderCls = medalColors[idx] ?? "border-zinc-700 bg-zinc-800/50";
                   return (
-                    <button
-                      key={id}
-                      onClick={() => clickTimelineEvent(id)}
-                      disabled={selected || isLocked}
-                      className={`flex items-center gap-3 p-3 rounded-lg text-left font-medium transition-all duration-150 ${selected ? "bg-blue-700 opacity-80 cursor-default" : "bg-zinc-700 hover:bg-zinc-600 active:scale-95"} ${isLocked && !selected ? "opacity-40 cursor-default" : ""}`}
+                    <div
+                      key={item.id}
+                      draggable={!rankingSubmitted}
+                      onDragStart={() => { rankingDragIdx.current = idx; }}
+                      onDragOver={e => {
+                        e.preventDefault();
+                        if (rankingDragIdx.current === null || rankingDragIdx.current === idx) return;
+                        const next = [...rankingItems];
+                        const [moved] = next.splice(rankingDragIdx.current, 1);
+                        next.splice(idx, 0, moved);
+                        rankingDragIdx.current = idx;
+                        setRankingItems(next);
+                      }}
+                      onDragEnd={() => { rankingDragIdx.current = null; }}
+                      className={`flex items-center gap-3 px-3 py-3 rounded-xl border-2 font-medium cursor-grab active:cursor-grabbing transition-all ${borderCls} ${rankingSubmitted ? "opacity-60 cursor-default" : ""}`}
                     >
-                      <span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${selected ? "bg-blue-400 text-white" : "bg-zinc-600 text-zinc-400"}`}>
-                        {selected ? pos + 1 : "?"}
+                      <span className="w-7 h-7 rounded-full bg-zinc-700 text-zinc-300 text-sm font-bold flex items-center justify-center shrink-0">
+                        {idx + 1}
                       </span>
-                      {name}
-                    </button>
+                      <span className="flex-1 text-sm">{item.name}</span>
+                      {!rankingSubmitted && <span className="text-zinc-600 text-lg">⠿</span>}
+                    </div>
                   );
                 })}
               </div>
-              {timelineSubmittedRef.current && (
-                <p className="text-center text-zinc-400 text-sm animate-pulse">Respuesta enviada — esperando a los demás...</p>
-              )}
-              {!timelineSubmittedRef.current && timelineOrder.length > 0 && (
-                <p className="text-center text-zinc-500 text-xs">{timelineOrder.length} de {(question.events ?? question.options).length} seleccionados</p>
+              {!rankingSubmitted ? (
+                <button
+                  onClick={submitRanking}
+                  className="mt-1 bg-green-600 hover:bg-green-500 px-6 py-2 rounded-lg font-bold transition-colors w-full"
+                >
+                  Confirmar orden ✓
+                </button>
+              ) : (
+                <p className="text-center text-zinc-400 text-sm animate-pulse">Orden enviado — esperando a los demás...</p>
               )}
             </>
           )}
@@ -916,23 +932,25 @@ export default function Home() {
           )}
 
           {/* ── Reveal: closest_number ── */}
-          {revealData.question_type === "closest_number" && (
-            <div className="w-full flex flex-col items-center gap-3">
-              <div className="bg-zinc-800 border border-zinc-700 rounded-xl px-8 py-4 text-center">
-                <p className="text-zinc-400 text-sm">Respuesta correcta</p>
-                <p className="text-4xl font-bold text-green-400 mt-1">
-                  {(revealData as any).real_value?.toLocaleString()}
-                </p>
-                <p className="text-zinc-500 text-sm mt-1">{(revealData as any).unit ?? ""}</p>
+          {revealData.question_type === "closest_number" && (() => {
+            const opts = (revealData as any).options as {id:string; label:string}[] ?? [];
+            const correctId = (revealData as any).correct_id ?? "";
+            const BG_BASE = ["bg-blue-800","bg-red-800","bg-yellow-700","bg-green-800","bg-purple-800","bg-pink-800","bg-orange-700","bg-teal-800","bg-indigo-800","bg-cyan-800"];
+            return (
+              <div className={`grid gap-2 w-full ${opts.length <= 4 ? "grid-cols-2" : "grid-cols-2 sm:grid-cols-3"}`}>
+                {opts.map((opt, i) => {
+                  const isCorrect = opt.id === correctId;
+                  const wasSelected = selectedAnswerId === opt.id;
+                  return (
+                    <div key={opt.id} className={`p-4 rounded-xl text-center font-bold text-2xl transition-all animate-zoom-in-fast ${isCorrect ? "bg-green-600 ring-2 ring-green-400 animate-glow-green" : BG_BASE[i % BG_BASE.length]} ${wasSelected && !isCorrect ? "opacity-40 animate-shake" : ""}`} style={{ animationDelay: `${i * 60}ms` }}>
+                      {opt.label}
+                      {isCorrect && <div className="text-xs font-normal text-green-200 mt-1">✓ correcto</div>}
+                    </div>
+                  );
+                })}
               </div>
-              {closestInput && (
-                <p className="text-zinc-400 text-sm">
-                  Tu respuesta: <span className="text-white font-bold">{parseFloat(closestInput).toLocaleString()}</span>
-                  {" "}({Math.abs(parseFloat(closestInput) - (revealData as any).real_value).toLocaleString()} de diferencia)
-                </p>
-              )}
-            </div>
-          )}
+            );
+          })()}
 
           {/* ── Reveal: ranking_order ── */}
           {revealData.question_type === "ranking_order" && (

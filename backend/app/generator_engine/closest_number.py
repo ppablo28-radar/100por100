@@ -1,26 +1,34 @@
 """
-Generator: closest_number
+Generator: closest_number (multiple choice)
 
-4 players guess a real numeric value (e.g. world population, year, subscriber count).
-The player who guesses closest wins. No pre-determined correct answer to reveal —
-the system scores based on proximity to the real value.
+Picks 1 target entity and N-1 distractors (same type, real values).
+The player picks which value belongs to the target entity.
 
 Payload:
 {
   "question_type": "closest_number",
-  "question_text": "¿Cuántos suscriptores tiene MrBeast? (en millones)",
-  "entity_name": "MrBeast",
-  "attribute_name": "Suscriptores",
-  "unit": "millones",
-  "hint": "Es el canal más grande de YouTube",
-  "real_value": 400,              # revealed after all answers
-  "input_type": "number",
-  "min_value": 0,
-  "max_value": 1000
+  "question_text": "¿Cuántos millones de habitantes tiene Argentina?",
+  "entity_name": "Argentina",
+  "attribute_name": "Población",
+  "unit": "millones de personas",
+  "correct_id": "uuid-argentina",
+  "options": [
+    {"id": "uuid-argentina", "label": "46"},
+    {"id": "uuid-brasil",    "label": "215"},
+    {"id": "uuid-mexico",    "label": "128"},
+    {"id": "uuid-uruguay",   "label": "3"}
+  ],
+  "real_value": 46
 }
 """
 import random
 from app.generator_engine.base import BaseGenerator
+
+
+def _fmt(v: float) -> str:
+    if v == int(v):
+        return f"{int(v):,}".replace(",", ".")
+    return f"{v:.1f}"
 
 
 class ClosestNumberGenerator(BaseGenerator):
@@ -30,35 +38,33 @@ class ClosestNumberGenerator(BaseGenerator):
         entities: list[dict] = pool.get("entities_with_attribute", [])
         rng = random.SystemRandom()
 
-        candidates = self._pick(entities, 1, rng)
+        n = rng.randint(
+            self.config.get("min_options", 4),
+            self.config.get("max_options", 4),
+        )
+        candidates = self._pick(entities, n, rng)
         if not candidates:
             return None
 
-        entity = candidates[0]
+        target = candidates[0]
         attr_name = self.config.get("attribute_name", "valor")
         unit = self.config.get("unit", "")
-        real_value = entity["value"]
 
         question_text = self.config.get(
             "question_text",
-            f"¿Cuánto {attr_name.lower()} tiene {entity['name']}?"
+            f"¿Cuánto {attr_name.lower()} tiene {target['name']}?",
         )
-        if unit:
-            question_text += f" (en {unit})"
 
-        # Suggest a sane input range based on the real value magnitude
-        magnitude = max(1, int(real_value))
-        max_value = magnitude * 3
+        shuffled = candidates[:]
+        rng.shuffle(shuffled)
 
         return {
             "question_type": "closest_number",
             "question_text": question_text,
-            "entity_name": entity["name"],
+            "entity_name": target["name"],
             "attribute_name": attr_name,
             "unit": unit,
-            "hint": entity.get("description", ""),
-            "real_value": real_value,
-            "input_type": "number",
-            "min_value": 0,
-            "max_value": max_value,
+            "correct_id": target["id"],
+            "options": [{"id": e["id"], "label": _fmt(e["value"])} for e in shuffled],
+            "real_value": target["value"],
         }

@@ -280,13 +280,10 @@ class GameRoom:
         qtype = question.get("_type", "multiple_choice")
         if qtype == "multiple_choice":
             return answer == question.get("correct")
-        if qtype == "higher_lower":
+        if qtype in ("higher_lower", "closest_number"):
             return str(answer) == str(question.get("correct_id", ""))
         if qtype in ("timeline_order", "ranking_order"):
             return list(answer) == list(question.get("correct_order", []))
-        if qtype == "closest_number":
-            # Se evalúa después con todos los puntajes — acá siempre False
-            return False
         return False
 
     def _score_closest_number(self, question: dict, answers: dict, players: dict) -> list[dict]:
@@ -368,9 +365,7 @@ class GameRoom:
                 "entity_name": question.get("entity_name", ""),
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),
-                "hint": question.get("hint", ""),
-                "min_value": question.get("min_value", 0),
-                "max_value": question.get("max_value", 1000),
+                "options": question.get("options", []),
             })
         elif qtype == "timeline_order":
             await self._broadcast({
@@ -423,10 +418,12 @@ class GameRoom:
         elif qtype == "closest_number":
             await self._broadcast({
                 **base,
+                "correct_id": question.get("correct_id", ""),
                 "real_value": question.get("real_value"),
                 "entity_name": question.get("entity_name", ""),
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),
+                "options": question.get("options", []),
             })
         elif qtype == "timeline_order":
             correct_order = question.get("correct_order", [])
@@ -479,7 +476,13 @@ class GameRoom:
         for i in range(total):
             question = self._pick_next_question(pool)
             qtype = question.get("_type", "multiple_choice")
-            duration = 15 if qtype == "timeline_order" else 10
+            if qtype == "ranking_order":
+                n_opts = len(question.get("options", []))
+                duration = max(8, n_opts * 4)   # 2→8s  3→12s  4→16s  5→20s  6→24s
+            elif qtype == "timeline_order":
+                duration = 15
+            else:
+                duration = 10
             question["_duration"] = duration
 
             self.current_question = question
@@ -492,11 +495,7 @@ class GameRoom:
             correct_count = 0
             question_results = []
 
-            if qtype == "closest_number":
-                question_results = self._score_closest_number(question, self.answers, self.players)
-                correct_count = sum(1 for r in question_results if r.get("correct"))
-            else:
-                for pid, answer_data in self.answers.items():
+            for pid, answer_data in self.answers.items():
                     if pid not in self.players:
                         continue
                     is_correct = self._check_answer(question, answer_data["answer"])
