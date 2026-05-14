@@ -277,10 +277,11 @@ class GameRoom:
             slug = self._next_slug()
             tried = {slug}
             payload = engine.generate_question(generator_slug=slug)
-            while payload is None and len(tried) < len(PROCEDURAL_SLUGS):
-                alt = next((s for s in PROCEDURAL_SLUGS if s not in tried), None)
-                if not alt:
+            while payload is None:
+                remaining = [s for s in PROCEDURAL_SLUGS if s not in tried]
+                if not remaining:
                     break
+                alt = random.choice(remaining)
                 tried.add(alt)
                 payload = engine.generate_question(generator_slug=alt)
             if payload:
