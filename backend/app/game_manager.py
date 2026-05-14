@@ -262,14 +262,23 @@ class GameRoom:
     def _pick_next_question(self, pool: list[dict]) -> dict:
         """Selecciona handcrafted o procedural según PROCEDURAL_RATIO."""
         engine = self.runtime_engine
-        if engine and engine.loaded and random.random() < PROCEDURAL_RATIO:
+        if engine and engine.loaded:
             slug = self._next_slug()
+            tried = {slug}
             payload = engine.generate_question(generator_slug=slug)
+            while payload is None and len(tried) < len(PROCEDURAL_SLUGS):
+                alt = next((s for s in PROCEDURAL_SLUGS if s not in tried), None)
+                if not alt:
+                    break
+                tried.add(alt)
+                payload = engine.generate_question(generator_slug=alt)
             if payload:
                 print(f"[procedural] {payload['question_type']} via {slug}")
                 return {"_type": payload["question_type"], **payload}
-            print(f"[procedural] generator '{slug}' returned None, fallback to handcrafted")
-        raise RuntimeError(f"El generador '{slug}' no pudo generar una pregunta")
+        raise RuntimeError(
+            "Ningún generador pudo producir una pregunta. "
+            "Verificá que el SQL fue ejecutado y llamá a /procedural/reload"
+        )
 
     def _check_answer(self, question: dict, answer) -> bool:
         qtype = question.get("_type", "multiple_choice")

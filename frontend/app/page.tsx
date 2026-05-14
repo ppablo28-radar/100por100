@@ -132,6 +132,19 @@ export default function Home() {
     }
   }, [timeLeft, phase]);
 
+  // Auto-submit ranking_order cuando se acaba el tiempo
+  useEffect(() => {
+    if (
+      phase === "QUESTION" &&
+      question?.question_type === "ranking_order" &&
+      timeLeft <= 1 &&
+      !rankingSubmitted &&
+      rankingItems.length > 0
+    ) {
+      submitRanking();
+    }
+  }, [timeLeft]);
+
   const beginStartCountdown = (seconds: number) => {
     if (startTimerRef.current) clearInterval(startTimerRef.current);
     countdownStartedRef.current = true;
