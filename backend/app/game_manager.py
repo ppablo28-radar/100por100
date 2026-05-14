@@ -9,9 +9,10 @@ MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
 PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
-PROCEDURAL_SLUGS = [           # TEST: solo estos dos generadores
+PROCEDURAL_SLUGS = [           # TEST: solo generadores de países
     "higher-lower-paises-poblacion",
     "ranking-paises-area",
+    "closest-number-paises-poblacion",
 ]
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
@@ -247,11 +248,19 @@ class GameRoom:
 
     # ─── Helpers procedurales ─────────────────────────────────────────────────
 
+    def _next_slug(self) -> str:
+        """Cicla por PROCEDURAL_SLUGS en orden aleatorio para garantizar variedad."""
+        if not getattr(self, "_slug_queue", None):
+            shuffled = PROCEDURAL_SLUGS[:]
+            random.shuffle(shuffled)
+            self._slug_queue = shuffled * (QUESTIONS_PER_GAME // len(shuffled) + 2)
+        return self._slug_queue.pop(0)
+
     def _pick_next_question(self, pool: list[dict]) -> dict:
         """Selecciona handcrafted o procedural según PROCEDURAL_RATIO."""
         engine = self.runtime_engine
         if engine and engine.loaded and random.random() < PROCEDURAL_RATIO:
-            slug = random.choice(PROCEDURAL_SLUGS)
+            slug = self._next_slug()
             payload = engine.generate_question(generator_slug=slug)
             if payload:
                 print(f"[procedural] {payload['question_type']} via {slug}")
@@ -275,7 +284,51 @@ class GameRoom:
             return str(answer) == str(question.get("correct_id", ""))
         if qtype in ("timeline_order", "ranking_order"):
             return list(answer) == list(question.get("correct_order", []))
+        if qtype == "closest_number":
+            # Se evalúa después con todos los puntajes — acá siempre False
+            return False
         return False
+
+    def _score_closest_number(self, question: dict, answers: dict, players: dict) -> list[dict]:
+        """Puntaje por proximidad al valor real. El más cercano gana."""
+        real = float(question.get("real_value", 0))
+        if real == 0:
+            return []
+        results = []
+        distances: list[tuple[str, float, float]] = []  # (pid, answer, dist)
+        for pid, ad in answers.items():
+            if pid not in players:
+                continue
+            try:
+                val = float(ad["answer"])
+            except (TypeError, ValueError):
+                continue
+            dist = abs(val - real)
+            distances.append((pid, val, dist))
+        if not distances:
+            return []
+        min_dist = min(d for _, _, d in distances)
+        duration = question.get("_duration", 10)
+        for pid, val, dist in distances:
+            t = answers[pid]["response_time"]
+            # Puntos: 100 base si es el más cercano, proporcional si no
+            is_closest = dist == min_dist
+            proximity = max(0.0, 1.0 - dist / max(real, 1))
+            pts = int((100 * proximity + 30 * (1 - t / duration)) * (1.5 if is_closest else 1))
+            players[pid]["score"] += pts
+            players[pid]["answered_count"] += 1
+            players[pid]["total_time_ms"] += int(t * 1000)
+            if is_closest:
+                players[pid]["correct_count"] += 1
+            results.append({
+                "nickname": players[pid]["nickname"],
+                "correct": is_closest,
+                "response_time_ms": int(t * 1000),
+                "points_earned": pts,
+                "answer_value": val,
+            })
+        results.sort(key=lambda x: -x["points_earned"])
+        return results
 
     async def _broadcast_question(self, question: dict, num: int, total: int, duration: int):
         qtype = question.get("_type", "multiple_choice")
@@ -307,6 +360,17 @@ class GameRoom:
                 "options": question.get("options", []),
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),
+            })
+        elif qtype == "closest_number":
+            await self._broadcast({
+                **base,
+                "question": question.get("question_text", "¿Cuánto vale?"),
+                "entity_name": question.get("entity_name", ""),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
+                "hint": question.get("hint", ""),
+                "min_value": question.get("min_value", 0),
+                "max_value": question.get("max_value", 1000),
             })
         elif qtype == "timeline_order":
             await self._broadcast({
@@ -355,6 +419,14 @@ class GameRoom:
                 "attribute_name": question.get("attribute_name", ""),
                 "unit": question.get("unit", ""),
                 "options": question.get("options", []),
+            })
+        elif qtype == "closest_number":
+            await self._broadcast({
+                **base,
+                "real_value": question.get("real_value"),
+                "entity_name": question.get("entity_name", ""),
+                "attribute_name": question.get("attribute_name", ""),
+                "unit": question.get("unit", ""),
             })
         elif qtype == "timeline_order":
             correct_order = question.get("correct_order", [])
@@ -420,24 +492,28 @@ class GameRoom:
             correct_count = 0
             question_results = []
 
-            for pid, answer_data in self.answers.items():
-                if pid not in self.players:
-                    continue
-                is_correct = self._check_answer(question, answer_data["answer"])
-                t = answer_data["response_time"]
-                pts = int(100 + 50 * (1 - t / duration)) if is_correct else 0
-                if is_correct:
-                    correct_count += 1
-                    self.players[pid]["score"] += pts
-                    self.players[pid]["correct_count"] += 1
-                self.players[pid]["answered_count"] += 1
-                self.players[pid]["total_time_ms"] += int(t * 1000)
-                question_results.append({
-                    "nickname": self.players[pid]["nickname"],
-                    "correct": is_correct,
-                    "response_time_ms": int(t * 1000),
-                    "points_earned": pts,
-                })
+            if qtype == "closest_number":
+                question_results = self._score_closest_number(question, self.answers, self.players)
+                correct_count = sum(1 for r in question_results if r.get("correct"))
+            else:
+                for pid, answer_data in self.answers.items():
+                    if pid not in self.players:
+                        continue
+                    is_correct = self._check_answer(question, answer_data["answer"])
+                    t = answer_data["response_time"]
+                    pts = int(100 + 50 * (1 - t / duration)) if is_correct else 0
+                    if is_correct:
+                        correct_count += 1
+                        self.players[pid]["score"] += pts
+                        self.players[pid]["correct_count"] += 1
+                    self.players[pid]["answered_count"] += 1
+                    self.players[pid]["total_time_ms"] += int(t * 1000)
+                    question_results.append({
+                        "nickname": self.players[pid]["nickname"],
+                        "correct": is_correct,
+                        "response_time_ms": int(t * 1000),
+                        "points_earned": pts,
+                    })
 
             for pid, player_data in self.players.items():
                 if pid not in self.answers:

@@ -115,6 +115,9 @@ export default function Home() {
   const timelineSubmittedRef = useRef(false);
   // Pregunta procedural — higher_lower
   const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null);
+  // Pregunta procedural — closest_number
+  const [closestInput, setClosestInput] = useState("");
+  const [closestSubmitted, setClosestSubmitted] = useState(false);
 
   // Beep en los últimos 3 segundos de cada pregunta
   useEffect(() => {
@@ -230,6 +233,8 @@ export default function Home() {
         setSelectedAnswerId(null);
         setTimelineOrder([]);
         timelineSubmittedRef.current = false;
+        setClosestInput("");
+        setClosestSubmitted(false);
         setRevealData(null);
         setFunMessage(null);
         setAnswerAnim(null);
@@ -370,6 +375,13 @@ export default function Home() {
     if (selectedAnswer !== null || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
     setSelectedAnswer(index);
     socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: index }));
+  };
+
+  const submitClosestNumber = () => {
+    const socket = ws.current;
+    if (closestSubmitted || !closestInput.trim() || phase !== "QUESTION" || !socket || socket.readyState !== WebSocket.OPEN) return;
+    setClosestSubmitted(true);
+    socket.send(JSON.stringify({ type: "SUBMIT_ANSWER", answer: parseFloat(closestInput) }));
   };
 
   const submitHigherLower = (id: string) => {
@@ -734,6 +746,48 @@ export default function Home() {
             );
           })()}
 
+          {/* ── Closest number ── */}
+          {question.question_type === "closest_number" && (
+            <>
+              {(question as any).entity_name && (
+                <p className="text-center text-zinc-400 text-sm -mt-2 font-semibold">
+                  {(question as any).entity_name}
+                </p>
+              )}
+              {(question as any).unit && (
+                <p className="text-center text-zinc-500 text-xs">
+                  Respuesta en {(question as any).unit}
+                </p>
+              )}
+              <div className="flex gap-2 mt-2">
+                <input
+                  type="number"
+                  className="flex-1 bg-zinc-800 border border-zinc-600 text-white px-4 py-3 rounded-lg text-center text-xl font-bold placeholder-zinc-600 focus:border-red-500 focus:outline-none disabled:opacity-50"
+                  placeholder="Tu respuesta..."
+                  value={closestInput}
+                  onChange={e => setClosestInput(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && submitClosestNumber()}
+                  disabled={closestSubmitted}
+                  autoFocus
+                  min={(question as any).min_value ?? 0}
+                  max={(question as any).max_value ?? 999999}
+                />
+                <button
+                  onClick={submitClosestNumber}
+                  disabled={closestSubmitted || !closestInput.trim()}
+                  className="bg-red-600 hover:bg-red-500 disabled:opacity-40 px-6 py-3 rounded-lg font-bold transition-colors"
+                >
+                  ✓
+                </button>
+              </div>
+              {closestSubmitted && (
+                <p className="text-center text-zinc-400 text-sm animate-pulse">
+                  Respuesta enviada ({closestInput}) — esperando a los demás...
+                </p>
+              )}
+            </>
+          )}
+
           {/* ── Ranking order ── */}
           {question.question_type === "ranking_order" && (
             <>
@@ -858,6 +912,25 @@ export default function Home() {
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* ── Reveal: closest_number ── */}
+          {revealData.question_type === "closest_number" && (
+            <div className="w-full flex flex-col items-center gap-3">
+              <div className="bg-zinc-800 border border-zinc-700 rounded-xl px-8 py-4 text-center">
+                <p className="text-zinc-400 text-sm">Respuesta correcta</p>
+                <p className="text-4xl font-bold text-green-400 mt-1">
+                  {(revealData as any).real_value?.toLocaleString()}
+                </p>
+                <p className="text-zinc-500 text-sm mt-1">{(revealData as any).unit ?? ""}</p>
+              </div>
+              {closestInput && (
+                <p className="text-zinc-400 text-sm">
+                  Tu respuesta: <span className="text-white font-bold">{parseFloat(closestInput).toLocaleString()}</span>
+                  {" "}({Math.abs(parseFloat(closestInput) - (revealData as any).real_value).toLocaleString()} de diferencia)
+                </p>
+              )}
             </div>
           )}
 
