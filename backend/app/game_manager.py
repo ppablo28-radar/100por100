@@ -8,15 +8,13 @@ import time
 MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
-PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
-PROCEDURAL_SLUGS = [           # 6 preguntas de países: 3 población + 3 superficie
-    "higher-lower-paises-poblacion",   # PAIS-1
-    "ranking-paises-poblacion",        # PAIS-2
-    "closest-number-paises-poblacion", # PAIS-3
-    "higher-lower-paises-area",        # PAIS-4
-    "ranking-paises-area",             # PAIS-5
-    "closest-number-paises-area",      # PAIS-6
-]
+PROCEDURAL_RATIO = 1.0
+
+# ─── Filtro de entidades activas ─────────────────────────────────────────────
+# Controlá qué tablas participan en el juego.
+# Para agregar YouTubers: ["country", "youtuber"]
+# Para juego general:    []  (sin filtro — todos los generadores)
+ACTIVE_ENTITY_TYPES = ["country"]  # TEST MODE: solo países
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {
@@ -251,19 +249,48 @@ class GameRoom:
 
     # ─── Helpers procedurales ─────────────────────────────────────────────────
 
+    def _available_slugs(self) -> list[str]:
+        """
+        Devuelve todos los slugs del engine que coincidan con ACTIVE_ENTITY_TYPES.
+        Si ACTIVE_ENTITY_TYPES está vacío, devuelve todos los generadores.
+        """
+        engine = self.runtime_engine
+        if not engine or not engine.loaded:
+            return []
+        result = []
+        for g in engine._generators:
+            if g["instance"] is None:
+                continue
+            if not ACTIVE_ENTITY_TYPES:
+                result.append(g["slug"])
+                continue
+            entity_types = g["config"].get("allowed_entity_types", [])
+            if any(t in entity_types for t in ACTIVE_ENTITY_TYPES):
+                result.append(g["slug"])
+        return result
+
     def _build_slug_queue(self):
         """
-        Construye la cola para una partida completa:
-        - Todos los slugs aparecen al menos 1 vez
-        - Los slots restantes se rellenan al azar entre los mismos slugs
-        - Todo mezclado para que el orden sea impredecible
+        Cola para una partida completa:
+        - Cada generador disponible aparece al menos 1 vez
+        - Los slots restantes se rellenan al azar entre los disponibles
+        - Todo mezclado — orden impredecible cada partida
+
+        Escala automáticamente: agregar generadores al DB + reload
+        los incorpora sin tocar código.
         """
-        base = PROCEDURAL_SLUGS[:]          # 1 de cada tipo garantizado
+        available = self._available_slugs()
+        if not available:
+            self._slug_queue = []
+            return
+        base = available[:]
+        random.shuffle(base)
         extra_n = max(0, QUESTIONS_PER_GAME - len(base))
-        extra = [random.choice(PROCEDURAL_SLUGS) for _ in range(extra_n)]
+        extra = [random.choice(available) for _ in range(extra_n)]
         queue = base + extra
         random.shuffle(queue)
         self._slug_queue = queue
+        print(f"[queue] {len(queue)} preguntas de {len(available)} generadores: {available}")
 
     def _next_slug(self) -> str:
         if not getattr(self, "_slug_queue", None):
@@ -274,11 +301,12 @@ class GameRoom:
         """Selecciona handcrafted o procedural según PROCEDURAL_RATIO."""
         engine = self.runtime_engine
         if engine and engine.loaded:
+            available = self._available_slugs()
             slug = self._next_slug()
             tried = {slug}
             payload = engine.generate_question(generator_slug=slug)
             while payload is None:
-                remaining = [s for s in PROCEDURAL_SLUGS if s not in tried]
+                remaining = [s for s in available if s not in tried]
                 if not remaining:
                     break
                 alt = random.choice(remaining)
