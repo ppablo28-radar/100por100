@@ -82,6 +82,31 @@ PAIS-3 · Adivinar Población (opción múltiple numérica)
     └─────────────────────────────────────────────────────────┘
 
 
+PAIS-2 · Ordenar por Población
+  Tipo:       ranking_order
+  Slug DB:    ranking-paises-poblacion
+  Pregunta:   "Ordená estos países de mayor a menor población"
+  Opciones:   2 a 6 países elegidos al azar
+  Respuesta:  lista de IDs en orden descendente por population
+  UI:         lista arrastrable numerada (drag-and-drop)
+  Puntaje:    binario — orden exacto correcto = 100 + bonus / incorrecto = 0
+  Tiempo:     proporcional — n_opciones × 4 segundos
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ Ordená estos países de mayor a menor población          │
+    │ Población (millones de personas) · 16 segundos          │
+    │                                                         │
+    │  1 ░ [India      ] ⠿                                   │
+    │  2 ░ [Brasil     ] ⠿  ← arrastrás para reordenar       │
+    │  3 ░ [Argentina  ] ⠿                                   │
+    │  4 ░ [Uruguay    ] ⠿                                   │
+    │                                                         │
+    │  [Confirmar orden ✓]                                    │
+    │                                                         │
+    │  Reveal: India 1.428M · Brasil 215M · Argentina 46M    │
+    │          Uruguay 3M                                     │
+    └─────────────────────────────────────────────────────────┘
+
 PAIS-4 · Más Superficie
   Tipo:       higher_lower
   Slug DB:    higher-lower-paises-area
@@ -124,14 +149,15 @@ PAIS-6 · Adivinar Superficie (opción múltiple numérica)
 
 
 ================================================================================
-  RESUMEN — TABLA PAÍSES (5 generadores activos)
+  RESUMEN — TABLA PAÍSES (6 generadores activos, 1 partida = 6 preguntas)
 ================================================================================
 
-  PAIS-1  Más Población       higher_lower    population   2-10 opciones
-  PAIS-2  Ordenar Superficie  ranking_order   area_km2     2-6 países, drag
-  PAIS-3  Adivinar Población  closest_number  population   4-10 opciones MC
-  PAIS-4  Más Superficie      higher_lower    area_km2     2-10 opciones
-  PAIS-6  Adivinar Superficie closest_number  area_km2     4-10 opciones MC
+  PAIS-1  Más Población        higher_lower    population   2-10 opciones
+  PAIS-2  Ordenar Población    ranking_order   population   2-6 países, drag
+  PAIS-3  Adivinar Población   closest_number  population   4-10 opciones MC
+  PAIS-4  Más Superficie       higher_lower    area_km2     2-10 opciones
+  PAIS-5  Ordenar Superficie   ranking_order   area_km2     2-6 países, drag
+  PAIS-6  Adivinar Superficie  closest_number  area_km2     4-10 opciones MC
 
 
 ================================================================================
