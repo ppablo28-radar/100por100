@@ -269,15 +269,7 @@ class GameRoom:
                 print(f"[procedural] {payload['question_type']} via {slug}")
                 return {"_type": payload["question_type"], **payload}
             print(f"[procedural] generator '{slug}' returned None, fallback to handcrafted")
-        if pool:
-            q = random.choice(pool)
-            return {"_type": "multiple_choice", **q}
-        # Último recurso: cualquier generador disponible
-        if engine and engine.loaded:
-            payload = engine.generate_random()
-            if payload:
-                return {"_type": payload["question_type"], **payload}
-        raise RuntimeError("Sin preguntas: pool vacío y motor procedural sin datos")
+        raise RuntimeError(f"El generador '{slug}' no pudo generar una pregunta")
 
     def _check_answer(self, question: dict, answer) -> bool:
         qtype = question.get("_type", "multiple_choice")
