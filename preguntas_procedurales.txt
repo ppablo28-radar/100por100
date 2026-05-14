@@ -1,0 +1,192 @@
+================================================================================
+  100×100 — CATÁLOGO DE PREGUNTAS PROCEDURALES
+  Motor de conocimiento competitivo
+  Última actualización: 2026-05-14
+================================================================================
+
+Cada pregunta tiene:
+  · Número y nombre corto
+  · Tabla de origen y atributo usado
+  · Cómo se genera (algoritmo)
+  · Ejemplo concreto
+  · Parámetros configurables
+
+--------------------------------------------------------------------------------
+  TABLA: PAÍSES  (knowledge_entities donde entity_type = 'country')
+  Atributos disponibles: population (millones), area_km2 (km²)
+  Entidades cargadas: 15 países (Argentina, Brasil, China, India, etc.)
+--------------------------------------------------------------------------------
+
+PAIS-1 · Más Población
+  Tipo:       higher_lower
+  Slug DB:    higher-lower-paises-poblacion
+  Pregunta:   "¿Cuál de estos países tiene más población?"
+  Opciones:   2 a 10 países elegidos al azar (sin repetición)
+  Respuesta:  el que tiene mayor valor en el atributo "population"
+  Puntaje:    binario — correcto = 100 + bonus velocidad / incorrecto = 0
+  Tiempo:     10 segundos
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ ¿Cuál de estos países tiene más población?              │
+    │ (en millones de personas)                               │
+    │                                                         │
+    │  [Brasil]    [Uruguay]   [Japón]    [Colombia]          │
+    │  [Alemania]  [India]     [México]   [Chile]             │
+    │                                                         │
+    │  ✓ India (1.428 millones)                               │
+    └─────────────────────────────────────────────────────────┘
+
+PAIS-2 · Ordenar por Superficie
+  Tipo:       ranking_order
+  Slug DB:    ranking-paises-area
+  Pregunta:   "Ordená estos países de mayor a menor superficie"
+  Opciones:   2 a 6 países elegidos al azar
+  Respuesta:  lista de IDs en orden descendente por area_km2
+  UI:         lista arrastrable numerada (drag-and-drop)
+  Puntaje:    binario — orden exacto correcto = 100 + bonus / incorrecto = 0
+  Tiempo:     proporcional — n_opciones × 4 segundos
+              (2 países=8s, 3=12s, 4=16s, 5=20s, 6=24s)
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ Ordená estos países de mayor a menor superficie         │
+    │ Superficie (km²) · 16 segundos                         │
+    │                                                         │
+    │  1 ░ [Brasil      ] ⠿                                  │
+    │  2 ░ [Argentina   ] ⠿  ← arrastrás para reordenar      │
+    │  3 ░ [España      ] ⠿                                  │
+    │  4 ░ [Uruguay     ] ⠿                                  │
+    │                                                         │
+    │  [Confirmar orden ✓]                                    │
+    │                                                         │
+    │  Reveal: Brasil 8.5M · Argentina 2.7M · España 505K    │
+    │          Uruguay 176K                                   │
+    └─────────────────────────────────────────────────────────┘
+
+PAIS-3 · Adivinar Población (opción múltiple numérica)
+  Tipo:       closest_number
+  Slug DB:    closest-number-paises-poblacion
+  Pregunta:   "¿Cuántos millones de habitantes tiene [país]?"
+  Opciones:   4 a 10 números reales (1 correcto + distractores de otros países)
+  Respuesta:  el botón con el valor exacto del país preguntado
+  Puntaje:    binario — número correcto = 100 + bonus velocidad / incorrecto = 0
+  Tiempo:     10 segundos
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ ¿Cuánto Población tiene Argentina?                      │
+    │ en millones de personas                                 │
+    │                                                         │
+    │   [215]    [46]    [128]    [84]                        │
+    │   [335]    [19]    [144]    [52]                        │
+    │                                                         │
+    │  Reveal: ✓ 46 (correcto — Argentina tiene 46M hab.)    │
+    └─────────────────────────────────────────────────────────┘
+
+
+PAIS-4 · Más Superficie
+  Tipo:       higher_lower
+  Slug DB:    higher-lower-paises-area
+  Pregunta:   "¿Cuál de estos países tiene más superficie?"
+  Opciones:   2 a 10 países elegidos al azar
+  Respuesta:  el que tiene mayor valor en el atributo "area_km2"
+  Puntaje:    binario — correcto = 100 + bonus velocidad / incorrecto = 0
+  Tiempo:     10 segundos
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ ¿Cuál de estos países tiene más superficie?             │
+    │ (km²)                                                   │
+    │                                                         │
+    │  [Rusia]   [Uruguay]   [España]   [Australia]           │
+    │                                                         │
+    │  ✓ Rusia (17.098.242 km²)                              │
+    └─────────────────────────────────────────────────────────┘
+
+PAIS-5 · Ordenar por Superficie  ← YA EXISTE como PAIS-2 (ranking-paises-area)
+  (el ranking_order de área ya está cubierto)
+
+PAIS-6 · Adivinar Superficie (opción múltiple numérica)
+  Tipo:       closest_number
+  Slug DB:    closest-number-paises-area
+  Pregunta:   "¿Cuántos km² tiene [país]?"
+  Opciones:   4 a 10 valores reales de otros países como distractores
+  Respuesta:  el botón con el valor exacto del país preguntado
+  Puntaje:    binario — correcto = 100 + bonus velocidad / incorrecto = 0
+  Tiempo:     10 segundos
+  Ejemplo:
+    ┌─────────────────────────────────────────────────────────┐
+    │ ¿Cuántos km² tiene Chile?                               │
+    │ en km²                                                  │
+    │                                                         │
+    │  [2.780.400]  [756.102]  [9.596.960]  [176.215]        │
+    │  [505.990]    [357.114]  [377.915]    [1.141.748]       │
+    │                                                         │
+    │  Reveal: ✓ 756.102 (correcto — Chile tiene 756.102 km²)│
+    └─────────────────────────────────────────────────────────┘
+
+
+================================================================================
+  RESUMEN — TABLA PAÍSES (5 generadores activos)
+================================================================================
+
+  PAIS-1  Más Población       higher_lower    population   2-10 opciones
+  PAIS-2  Ordenar Superficie  ranking_order   area_km2     2-6 países, drag
+  PAIS-3  Adivinar Población  closest_number  population   4-10 opciones MC
+  PAIS-4  Más Superficie      higher_lower    area_km2     2-10 opciones
+  PAIS-6  Adivinar Superficie closest_number  area_km2     4-10 opciones MC
+
+
+================================================================================
+  PENDIENTE — próximas tablas a agregar al catálogo
+================================================================================
+
+YOUTUBERS (15 entidades, atributo: subscribers)
+  · YT-1  Más Suscriptores       → higher_lower  (ya existe en DB)
+  · YT-2  Adivinar Suscriptores  → closest_number MC (ya existe en DB)
+
+FUTBOLISTAS (10 entidades, atributos: goals_career, height_cm)
+  · FUT-1 Más Goles en Carrera   → higher_lower  (ya existe en DB)
+
+ANIMALES (10 entidades, atributo: speed_kmh)
+  · ANIM-1 Más Rápido            → higher_lower  (ya existe en DB)
+
+VIDEOJUEGOS (12 entidades, atributos: release_year, units_sold_m, metacritic)
+  · GAME-1 Más Copias Vendidas   → ranking_order (ya existe en DB)
+
+TIMELINE (28 eventos)
+  · TIME-1 Orden Cronológico     → timeline_order (ya existe en DB)
+
+
+================================================================================
+  CÓMO AGREGAR UNA PREGUNTA NUEVA
+================================================================================
+
+1. Agregar la entidad en knowledge_entities (si no existe)
+   INSERT INTO knowledge_entities (entity_type, name, slug, ...) VALUES (...)
+
+2. Agregar el atributo en knowledge_attributes (si no existe)
+   INSERT INTO knowledge_attributes (slug, name, data_type, unit) VALUES (...)
+
+3. Agregar el valor en knowledge_entity_attributes
+   INSERT INTO knowledge_entity_attributes (entity_id, attribute_id, value_number) VALUES (...)
+
+4. Crear el generador en procedural_generators
+   INSERT INTO procedural_generators (slug, generator_type, enabled, config) VALUES (
+     'higher-lower-nuevo',
+     'higher_lower',
+     true,
+     '{"allowed_entity_types": ["country"], "attribute_slug": "gdp", ...}'
+   )
+
+5. Agregar el slug a PROCEDURAL_SLUGS en backend/app/game_manager.py
+
+6. Llamar a /procedural/reload en el backend para cargar sin reiniciar
+
+
+================================================================================
+  TIPOS DE GENERADOR DISPONIBLES
+================================================================================
+
+  higher_lower    → ¿Cuál tiene más/menos? (2-10 opciones, binario)
+  ranking_order   → Ordenar N entidades por atributo (drag-and-drop)
+  closest_number  → Adivinar valor numérico entre opciones reales (MC)
+  timeline_order  → Ordenar eventos cronológicamente (click en orden)
+  odd_one_out     → ¿Cuál no pertenece? (pendiente de integrar al juego)

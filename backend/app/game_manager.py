@@ -9,10 +9,12 @@ MAX_PLAYERS = 10
 START_DELAY = 30
 QUESTIONS_PER_GAME = 10
 PROCEDURAL_RATIO = 1.0         # TEST MODE: 100 % procedurales
-PROCEDURAL_SLUGS = [           # TEST: solo generadores de países
+PROCEDURAL_SLUGS = [           # TEST: generadores de países (población + superficie)
     "higher-lower-paises-poblacion",
+    "higher-lower-paises-area",
     "ranking-paises-area",
     "closest-number-paises-poblacion",
+    "closest-number-paises-area",
 ]
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
