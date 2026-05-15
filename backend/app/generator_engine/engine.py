@@ -191,6 +191,9 @@ class RuntimeEngine:
         result = gen_config["instance"].generate(pool)
         if result:
             result["generator_id"] = gen_config["id"]
+            result["generator_slug"] = gen_config["slug"]
+            result["generator_type"] = gen_config["type"]
+            result["entity_types"] = gen_config["config"].get("allowed_entity_types", [])
         return result
 
     def generate_random(self) -> dict | None:

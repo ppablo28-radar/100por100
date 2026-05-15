@@ -110,6 +110,9 @@ export default function Home() {
   const [streakCount, setStreakCount] = useState(0);
   const [answerAnim, setAnswerAnim] = useState<"correct" | "wrong" | null>(null);
   const [floatingPts, setFloatingPts] = useState<number | null>(null);
+  const [generatorSlug, setGeneratorSlug] = useState<string | null>(null);
+  const [showDebug, setShowDebug] = useState(false);
+  const debugLogRef = useRef<string[]>([]);
   // Pregunta procedural — timeline_order
   const [timelineOrder, setTimelineOrder] = useState<string[]>([]);
   const timelineSubmittedRef = useRef(false);
@@ -144,6 +147,11 @@ export default function Home() {
       submitRanking();
     }
   }, [timeLeft]);
+
+  const dbg = (msg: string) => {
+    const ts = new Date().toISOString().slice(11, 23);
+    debugLogRef.current = [...debugLogRef.current.slice(-60), `[${ts}] ${msg}`];
+  };
 
   const beginStartCountdown = (seconds: number) => {
     if (startTimerRef.current) clearInterval(startTimerRef.current);
@@ -198,9 +206,10 @@ export default function Home() {
     const socket = new WebSocket(WS_URL);
     ws.current = socket;
 
-    socket.onopen = () => setConnected(true);
+    socket.onopen = () => { setConnected(true); dbg(`WS conectado → ${WS_URL}`); };
     socket.onclose = () => {
       setConnected(ws.current?.readyState === WebSocket.OPEN);
+      dbg("WS desconectado");
     };
 
     socket.onmessage = (event) => {
@@ -243,6 +252,9 @@ export default function Home() {
       }
 
       if (data.type === "NEW_QUESTION") {
+        const slug = data.debug?.generator_slug ?? "handcrafted";
+        setGeneratorSlug(slug);
+        dbg(`PREGUNTA ${data.question_number}/${data.total_questions} · ${slug} · ${data.question_type} · ${data.duration}s`);
         setPhase("QUESTION");
         setQuestion(data as QuestionData);
         setSelectedAnswer(null);
@@ -352,7 +364,7 @@ export default function Home() {
       }
 
       if (data.type === "ERROR") {
-        // El servidor crasheó durante el juego — volver al lobby
+        dbg(`ERROR servidor: ${data.message}`);
         alert(`Error del servidor: ${data.message ?? "error desconocido"}`);
         resetGame();
       }
@@ -378,6 +390,7 @@ export default function Home() {
     if (!nickname.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
     initAudio();
     nicknameRef.current = nickname.trim();
+    dbg(`JOIN_GAME nick=${nickname.trim()} mode=${activeMode}`);
     socket.send(JSON.stringify({
       type: "JOIN_GAME",
       nickname: nickname.trim(),
@@ -541,7 +554,66 @@ export default function Home() {
         </aside>
       )}
 
+      {/* Generator label — visible durante QUESTION y REVEAL */}
+      {generatorSlug && (phase === "QUESTION" || phase === "REVEAL") && (
+        <div className="text-xs text-zinc-600 font-mono tracking-wide -mb-4">
+          {generatorSlug}
+        </div>
+      )}
+
       <h1 className="text-5xl font-bold tracking-tight">100×100</h1>
+
+      {/* Botón debug — siempre visible en esquina */}
+      <button
+        onClick={() => setShowDebug(d => !d)}
+        className="fixed bottom-4 left-4 z-50 bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-zinc-400 text-xs px-2 py-1 rounded font-mono"
+      >
+        {showDebug ? "✕ debug" : "🐛 debug"}
+      </button>
+
+      {/* Panel de debug */}
+      {showDebug && (
+        <div className="fixed bottom-12 left-4 z-50 w-80 max-h-96 bg-zinc-950 border border-zinc-700 rounded-xl shadow-2xl flex flex-col text-xs font-mono">
+          <div className="flex justify-between items-center px-3 py-2 border-b border-zinc-800">
+            <span className="text-zinc-400 font-bold">Debug Panel</span>
+            <button
+              onClick={() => {
+                const info = [
+                  `=== 100x100 Debug ===`,
+                  `Fecha: ${new Date().toISOString()}`,
+                  `WS: ${process.env.NEXT_PUBLIC_WS_URL ?? "ws://127.0.0.1:8000/ws"}`,
+                  `Backend: ${apiBase}`,
+                  `Conectado: ${connected}`,
+                  `Phase: ${phase}`,
+                  `Modo: ${activeMode}`,
+                  `Nickname: ${nicknameRef.current}`,
+                  `Generator: ${generatorSlug ?? "ninguno"}`,
+                  `Jugadores: ${scoreboard.length}`,
+                  ``,
+                  `=== Log ===`,
+                  ...debugLogRef.current,
+                ].join("\n");
+                navigator.clipboard.writeText(info);
+              }}
+              className="text-blue-400 hover:text-blue-300"
+            >
+              📋 copiar
+            </button>
+          </div>
+          <div className="px-3 py-2 border-b border-zinc-800 space-y-1 text-zinc-500">
+            <div><span className="text-zinc-400">WS:</span> {connected ? "✅ conectado" : "❌ desconectado"}</div>
+            <div><span className="text-zinc-400">Phase:</span> {phase}</div>
+            <div><span className="text-zinc-400">Modo:</span> {activeMode}</div>
+            <div><span className="text-zinc-400">Generator:</span> <span className="text-green-400">{generatorSlug ?? "—"}</span></div>
+            <div><span className="text-zinc-400">Backend:</span> {apiBase}</div>
+          </div>
+          <div className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
+            {[...debugLogRef.current].reverse().map((line, i) => (
+              <div key={i} className="text-zinc-500 leading-4">{line}</div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* SELECT — elegir modo */}
       {phase === "SELECT" && (

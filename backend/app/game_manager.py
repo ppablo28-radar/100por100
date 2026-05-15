@@ -379,6 +379,11 @@ class GameRoom:
             "question_number": num,
             "total_questions": total,
             "duration": duration,
+            "debug": {
+                "generator_slug": question.get("generator_slug", "handcrafted"),
+                "generator_type": question.get("generator_type", qtype),
+                "entity_types": question.get("entity_types", []),
+            },
         }
         if qtype == "multiple_choice":
             await self._broadcast({
