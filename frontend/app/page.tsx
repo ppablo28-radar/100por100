@@ -145,7 +145,7 @@ export default function Home() {
   const [showDebug, setShowDebug] = useState(false);
   const debugLogRef = useRef<string[]>([]);
   const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set(ALL_SLUGS));
-  const [engineSlugs, setEngineSlugs] = useState<Set<string>>(new Set());
+  const [engineSlugs, setEngineSlugs] = useState<Set<string> | null>(null);
   // Pregunta procedural — timeline_order
   const [timelineOrder, setTimelineOrder] = useState<string[]>([]);
   const timelineSubmittedRef = useRef(false);
@@ -502,6 +502,7 @@ export default function Home() {
   const resetGame = () => {
     if (startTimerRef.current) clearInterval(startTimerRef.current);
     countdownStartedRef.current = false;
+    setEngineSlugs(null);
     setPhase("SELECT");
     setScoreboard([]);
     setPlayerCount(0);
@@ -785,8 +786,11 @@ export default function Home() {
               </div>
             </div>
 
-            {GENERATOR_GROUPS.map((group) => {
-              const available = group.slugs.filter(s => engineSlugs.size === 0 || engineSlugs.has(s));
+            {engineSlugs === null ? (
+              <div className="text-center text-zinc-600 text-xs py-2">Cargando generadores...</div>
+            ) : null}
+            {engineSlugs !== null && GENERATOR_GROUPS.map((group) => {
+              const available = group.slugs.filter(s => engineSlugs.has(s));
               if (available.length === 0) return null;
               const allIn = available.every(s => selectedSlugs.has(s));
               return (
@@ -806,7 +810,7 @@ export default function Home() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {group.slugs.map((slug, i) => {
-                      if (engineSlugs.size > 0 && !engineSlugs.has(slug)) return null;
+                      if (!engineSlugs?.has(slug)) return null;
                       const on = selectedSlugs.has(slug);
                       return (
                         <button
@@ -831,7 +835,7 @@ export default function Home() {
             })}
 
             {(() => {
-              const active = [...selectedSlugs].filter(s => engineSlugs.size === 0 || engineSlugs.has(s)).length;
+              const active = engineSlugs ? [...selectedSlugs].filter(s => engineSlugs.has(s)).length : 0;
               return (
                 <div className="text-center text-zinc-500 text-xs pt-1 border-t border-zinc-800">
                   {active === 0
@@ -843,7 +847,7 @@ export default function Home() {
           </div>
 
           {(() => {
-            const activeCount = [...selectedSlugs].filter(s => engineSlugs.size === 0 || engineSlugs.has(s)).length;
+            const activeCount = engineSlugs ? [...selectedSlugs].filter(s => engineSlugs.has(s)).length : 0;
             return (
               <button
                 className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-xl font-bold transition-colors w-full"
