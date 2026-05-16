@@ -252,16 +252,21 @@ class GameRoom:
     # ─── Helpers procedurales ─────────────────────────────────────────────────
 
     def _available_slugs(self) -> list[str]:
-        """
-        Si el primer jugador eligió slugs, usa esos.
-        Si no, filtra el engine por ACTIVE_ENTITY_TYPES.
-        """
-        if self.selected_slugs is not None:
-            return self.selected_slugs
-
         engine = self.runtime_engine
         if not engine or not engine.loaded:
             return []
+
+        engine_slugs = {g["slug"] for g in engine._generators if g["instance"] is not None}
+
+        if self.selected_slugs is not None:
+            # Solo los que el jugador eligió Y existen en el engine
+            valid = [s for s in self.selected_slugs if s in engine_slugs]
+            if valid:
+                return valid
+            # Si ninguno está en el engine, usar todos los disponibles
+            print(f"[warn] ningún slug seleccionado existe en el engine, usando todos")
+
+        # Fallback: filtrar por ACTIVE_ENTITY_TYPES
         result = []
         for g in engine._generators:
             if g["instance"] is None:

@@ -145,6 +145,7 @@ export default function Home() {
   const [showDebug, setShowDebug] = useState(false);
   const debugLogRef = useRef<string[]>([]);
   const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set(ALL_SLUGS));
+  const [engineSlugs, setEngineSlugs] = useState<Set<string>>(new Set());
   // Pregunta procedural — timeline_order
   const [timelineOrder, setTimelineOrder] = useState<string[]>([]);
   const timelineSubmittedRef = useRef(false);
@@ -209,6 +210,20 @@ export default function Home() {
       .then(setModeCounts)
       .catch(() => {});
   }, []);
+
+  // Al entrar en JOIN, cargar los slugs reales del engine
+  useEffect(() => {
+    if (phase !== "JOIN") return;
+    fetch(`${apiBase}/procedural/stats`)
+      .then(r => r.json())
+      .then(data => {
+        const slugs = new Set<string>((data.generators ?? []).map((g: {slug: string}) => g.slug));
+        setEngineSlugs(slugs);
+        // Preseleccionar solo los que existen en el engine
+        setSelectedSlugs(prev => new Set([...prev].filter(s => slugs.has(s))));
+      })
+      .catch(() => {});
+  }, [phase]);
 
   // Fetch secondary modes when "Personalizado" is selected
   useEffect(() => {
@@ -770,46 +785,50 @@ export default function Home() {
               </div>
             </div>
 
-            {GENERATOR_GROUPS.map((group) => (
-              <div key={group.label} className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-500 font-medium">{group.label}</span>
-                  <button
-                    onClick={() => {
-                      const allIn = group.slugs.every(s => selectedSlugs.has(s));
-                      const next = new Set(selectedSlugs);
-                      group.slugs.forEach(s => allIn ? next.delete(s) : next.add(s));
-                      setSelectedSlugs(next);
-                    }}
-                    className="text-xs text-zinc-600 hover:text-zinc-400"
-                  >
-                    {group.slugs.every(s => selectedSlugs.has(s)) ? "quitar grupo" : "agregar grupo"}
-                  </button>
+            {GENERATOR_GROUPS.map((group) => {
+              const available = group.slugs.filter(s => engineSlugs.size === 0 || engineSlugs.has(s));
+              if (available.length === 0) return null;
+              const allIn = available.every(s => selectedSlugs.has(s));
+              return (
+                <div key={group.label} className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-zinc-500 font-medium">{group.label}</span>
+                    <button
+                      onClick={() => {
+                        const next = new Set(selectedSlugs);
+                        available.forEach(s => allIn ? next.delete(s) : next.add(s));
+                        setSelectedSlugs(next);
+                      }}
+                      className="text-xs text-zinc-600 hover:text-zinc-400"
+                    >
+                      {allIn ? "quitar" : "agregar"}
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {group.slugs.map((slug, i) => {
+                      if (engineSlugs.size > 0 && !engineSlugs.has(slug)) return null;
+                      const on = selectedSlugs.has(slug);
+                      return (
+                        <button
+                          key={slug}
+                          onClick={() => {
+                            const next = new Set(selectedSlugs);
+                            on ? next.delete(slug) : next.add(slug);
+                            setSelectedSlugs(next);
+                          }}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                            on ? "bg-red-600/20 border-red-500/60 text-red-300"
+                               : "bg-zinc-800 border-zinc-700 text-zinc-600"
+                          }`}
+                        >
+                          {group.short[i]}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {group.slugs.map((slug, i) => {
-                    const on = selectedSlugs.has(slug);
-                    return (
-                      <button
-                        key={slug}
-                        onClick={() => {
-                          const next = new Set(selectedSlugs);
-                          on ? next.delete(slug) : next.add(slug);
-                          setSelectedSlugs(next);
-                        }}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                          on
-                            ? "bg-red-600/20 border-red-500/60 text-red-300"
-                            : "bg-zinc-800 border-zinc-700 text-zinc-600"
-                        }`}
-                      >
-                        {group.short[i]}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+              );
+            })}
 
             <div className="text-center text-zinc-500 text-xs pt-1 border-t border-zinc-800">
               {selectedSlugs.size === 0
