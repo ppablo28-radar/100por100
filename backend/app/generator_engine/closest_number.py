@@ -50,10 +50,12 @@ class ClosestNumberGenerator(BaseGenerator):
         attr_name = self.config.get("attribute_name", "valor")
         unit = self.config.get("unit", "")
 
-        question_text = self.config.get(
+        base = self.config.get(
             "question_text",
-            f"¿Cuánto {attr_name.lower()} tiene {target['name']}?",
+            f"¿Cuánto {attr_name.lower()} tiene",
         )
+        # Siempre inyectar el nombre de la entidad al final
+        question_text = f"{base.rstrip('?').rstrip()} {target['name']}?"
 
         shuffled = candidates[:]
         rng.shuffle(shuffled)
