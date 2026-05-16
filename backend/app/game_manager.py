@@ -7,14 +7,13 @@ import time
 
 MAX_PLAYERS = 10
 START_DELAY = 30
-QUESTIONS_PER_GAME = 10
+QUESTIONS_PER_GAME = 9
 PROCEDURAL_RATIO = 1.0
 
 # ─── Filtro de entidades activas ─────────────────────────────────────────────
 # Controlá qué tablas participan en el juego.
-# Para agregar YouTubers: ["country", "youtuber"]
 # Para juego general:    []  (sin filtro — todos los generadores)
-ACTIVE_ENTITY_TYPES = ["country"]  # TEST MODE: solo países
+ACTIVE_ENTITY_TYPES = ["country", "youtuber"]  # TEST: países + youtubers
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {

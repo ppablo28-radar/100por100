@@ -555,9 +555,9 @@ export default function Home() {
       )}
 
       {/* Generator label — visible durante QUESTION y REVEAL */}
-      {generatorSlug && (phase === "QUESTION" || phase === "REVEAL") && (
-        <div className="text-xs text-zinc-600 font-mono tracking-wide -mb-4">
-          {generatorSlug}
+      {(phase === "QUESTION" || phase === "REVEAL") && (
+        <div className="text-xs text-zinc-400 font-mono tracking-wide -mb-4 px-3 py-1 bg-zinc-800/60 rounded-full border border-zinc-700">
+          {generatorSlug ?? "cargando..."}
         </div>
       )}
 
