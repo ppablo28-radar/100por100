@@ -155,6 +155,25 @@ async def available_modes():
     )
 
 
+@app.get("/admin/seed")
+async def admin_seed():
+    """Corre el seeder completo desde Railway. Idempotente — se puede correr múltiples veces."""
+    import os
+    db_url = os.getenv("DATABASE_URL", "").replace("postgresql+asyncpg://", "postgresql://")
+    if not db_url:
+        return {"error": "DATABASE_URL no configurada"}
+    try:
+        from app.seeder import seed_all
+        result = await seed_all(db_url)
+        # Recargar el engine automáticamente
+        await runtime_engine.load_from_asyncpg(db_url)
+        result["engine"] = runtime_engine.stats()
+        return result
+    except Exception as e:
+        import traceback
+        return {"error": str(e), "detail": traceback.format_exc()}
+
+
 @app.get("/procedural/stats")
 async def procedural_stats():
     """Estado del motor procedural en memoria."""
