@@ -66,6 +66,37 @@ type Player = {
   avg_time_ms?: number;
 };
 
+// ─── Configuración de generadores ────────────────────────────────────────────
+const GENERATOR_GROUPS = [
+  {
+    label: "🌍 Países · Población",
+    slugs: ["higher-lower-paises-poblacion","ranking-paises-poblacion","closest-number-paises-poblacion"],
+    short: ["Más Población","Ordenar Pob.","Adivinar Pob."],
+  },
+  {
+    label: "🌍 Países · Superficie",
+    slugs: ["higher-lower-paises-area","ranking-paises-area","closest-number-paises-area"],
+    short: ["Más Superficie","Ordenar Sup.","Adivinar Sup."],
+  },
+  {
+    label: "📺 YouTubers · Suscriptores",
+    slugs: ["higher-lower-youtubers-subs","ranking-youtubers-subs","closest-number-youtubers-subs"],
+    short: ["Más Subs","Ordenar Subs","Adivinar Subs"],
+  },
+  {
+    label: "🎮 Juegos · Año",
+    slugs: ["higher-lower-games-year","ranking-games-year","closest-number-games-year"],
+    short: ["Más Reciente","Ordenar Año","Adivinar Año"],
+  },
+  {
+    label: "🎮 Juegos · Ventas",
+    slugs: ["higher-lower-games-sales","ranking-games-sales","closest-number-games-sales"],
+    short: ["Más Ventas","Ordenar Ventas","Adivinar Ventas"],
+  },
+] as const;
+
+const ALL_SLUGS = GENERATOR_GROUPS.flatMap(g => [...g.slugs]);
+
 const OPTION_COLORS = [
   "bg-blue-700 hover:bg-blue-600",
   "bg-red-700 hover:bg-red-600",
@@ -113,6 +144,7 @@ export default function Home() {
   const [generatorSlug, setGeneratorSlug] = useState<string | null>(null);
   const [showDebug, setShowDebug] = useState(false);
   const debugLogRef = useRef<string[]>([]);
+  const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set(ALL_SLUGS));
   // Pregunta procedural — timeline_order
   const [timelineOrder, setTimelineOrder] = useState<string[]>([]);
   const timelineSubmittedRef = useRef(false);
@@ -390,11 +422,13 @@ export default function Home() {
     if (!nickname.trim() || !socket || socket.readyState !== WebSocket.OPEN) return;
     initAudio();
     nicknameRef.current = nickname.trim();
-    dbg(`JOIN_GAME nick=${nickname.trim()} mode=${activeMode}`);
+    const slugs = [...selectedSlugs];
+    dbg(`JOIN_GAME nick=${nickname.trim()} mode=${activeMode} slugs=${slugs.length}`);
     socket.send(JSON.stringify({
       type: "JOIN_GAME",
       nickname: nickname.trim(),
       mode: activeMode,
+      selected_slugs: slugs,
     }));
     setPhase("LOBBY");
     // Sincronizar URL para poder compartir el link del modo
@@ -708,17 +742,12 @@ export default function Home() {
         </div>
       )}
 
-      {/* JOIN — ingresar nickname */}
+      {/* JOIN — ingresar nickname + selector de generadores */}
       {phase === "JOIN" && (
-        <div className="flex flex-col items-center gap-4 animate-zoom-in-fast">
+        <div className="flex flex-col items-center gap-4 animate-zoom-in-fast w-full max-w-lg">
           <div className="text-zinc-400 text-sm">
             Modo: <span className="text-white font-bold">{activeModeLabel}</span>
-            <button
-              onClick={() => setPhase("SELECT")}
-              className="ml-3 text-zinc-600 hover:text-zinc-400 text-xs underline"
-            >
-              cambiar
-            </button>
+            <button onClick={() => setPhase("SELECT")} className="ml-3 text-zinc-600 hover:text-zinc-400 text-xs underline">cambiar</button>
           </div>
           <input
             autoFocus
@@ -726,15 +755,75 @@ export default function Home() {
             placeholder="Tu nickname"
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && joinGame()}
+            onKeyDown={(e) => e.key === "Enter" && nickname.trim() && joinGame()}
             maxLength={20}
           />
+
+          {/* Selector de generadores */}
+          <div className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col gap-3">
+            <div className="flex justify-between items-center">
+              <span className="text-zinc-400 text-sm font-semibold">Preguntas a jugar</span>
+              <div className="flex gap-2">
+                <button onClick={() => setSelectedSlugs(new Set(ALL_SLUGS))} className="text-xs text-blue-400 hover:text-blue-300">Todas</button>
+                <span className="text-zinc-700">·</span>
+                <button onClick={() => setSelectedSlugs(new Set())} className="text-xs text-zinc-500 hover:text-zinc-400">Ninguna</button>
+              </div>
+            </div>
+
+            {GENERATOR_GROUPS.map((group) => (
+              <div key={group.label} className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-zinc-500 font-medium">{group.label}</span>
+                  <button
+                    onClick={() => {
+                      const allIn = group.slugs.every(s => selectedSlugs.has(s));
+                      const next = new Set(selectedSlugs);
+                      group.slugs.forEach(s => allIn ? next.delete(s) : next.add(s));
+                      setSelectedSlugs(next);
+                    }}
+                    className="text-xs text-zinc-600 hover:text-zinc-400"
+                  >
+                    {group.slugs.every(s => selectedSlugs.has(s)) ? "quitar grupo" : "agregar grupo"}
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {group.slugs.map((slug, i) => {
+                    const on = selectedSlugs.has(slug);
+                    return (
+                      <button
+                        key={slug}
+                        onClick={() => {
+                          const next = new Set(selectedSlugs);
+                          on ? next.delete(slug) : next.add(slug);
+                          setSelectedSlugs(next);
+                        }}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+                          on
+                            ? "bg-red-600/20 border-red-500/60 text-red-300"
+                            : "bg-zinc-800 border-zinc-700 text-zinc-600"
+                        }`}
+                      >
+                        {group.short[i]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+
+            <div className="text-center text-zinc-500 text-xs pt-1 border-t border-zinc-800">
+              {selectedSlugs.size === 0
+                ? "⚠️ Seleccioná al menos 1 pregunta"
+                : `${selectedSlugs.size} pregunta${selectedSlugs.size !== 1 ? "s" : ""} · una de cada una`}
+            </div>
+          </div>
+
           <button
-            className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-xl font-bold transition-colors"
+            className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-xl font-bold transition-colors w-full"
             onClick={joinGame}
-            disabled={!nickname.trim()}
+            disabled={!nickname.trim() || selectedSlugs.size === 0}
           >
-            JUGAR
+            JUGAR ({selectedSlugs.size} preguntas)
           </button>
         </div>
       )}

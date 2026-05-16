@@ -7,13 +7,10 @@ import time
 
 MAX_PLAYERS = 10
 START_DELAY = 30
-QUESTIONS_PER_GAME = 9
 PROCEDURAL_RATIO = 1.0
 
-# ─── Filtro de entidades activas ─────────────────────────────────────────────
-# Controlá qué tablas participan en el juego.
-# Para juego general:    []  (sin filtro — todos los generadores)
-ACTIVE_ENTITY_TYPES = ["country", "youtuber"]  # TEST: países + youtubers
+# Filtro por defecto si el jugador no elige generadores
+ACTIVE_ENTITY_TYPES = ["country", "youtuber", "videogame"]
 
 # ── Keywords para inferir tags cuando la DB no los tiene ─────────────────────
 TAG_KEYWORDS: dict[str, list[str]] = {
@@ -160,6 +157,7 @@ class GameRoom:
         self.answers: dict[str, dict] = {}
         self.start_task: asyncio.Task | None = None
         self.start_time: float | None = None
+        self.selected_slugs: list[str] | None = None  # elegidos por el 1er jugador
 
     async def _broadcast(self, message: dict):
         await self.ws.broadcast_to(self.player_ids, message)
@@ -167,11 +165,16 @@ class GameRoom:
     def _get_questions(self, all_questions: list[dict]) -> list[dict]:
         return get_questions_for_mode(self.mode, all_questions)
 
-    async def add_player(self, player_id: str, nickname: str, all_questions: list[dict]):
+    async def add_player(self, player_id: str, nickname: str, all_questions: list[dict], selected_slugs: list[str] | None = None):
         if self.state not in ("WAITING", "STARTING"):
             return
         if len(self.players) >= MAX_PLAYERS:
             return
+
+        # El primer jugador en llegar define los generadores para esta partida
+        if self.selected_slugs is None and selected_slugs:
+            self.selected_slugs = selected_slugs
+            print(f"[room:{self.mode}] generadores elegidos: {selected_slugs}")
 
         self.player_ids.add(player_id)
         self.players[player_id] = {
@@ -250,9 +253,12 @@ class GameRoom:
 
     def _available_slugs(self) -> list[str]:
         """
-        Devuelve todos los slugs del engine que coincidan con ACTIVE_ENTITY_TYPES.
-        Si ACTIVE_ENTITY_TYPES está vacío, devuelve todos los generadores.
+        Si el primer jugador eligió slugs, usa esos.
+        Si no, filtra el engine por ACTIVE_ENTITY_TYPES.
         """
+        if self.selected_slugs is not None:
+            return self.selected_slugs
+
         engine = self.runtime_engine
         if not engine or not engine.loaded:
             return []
@@ -270,26 +276,17 @@ class GameRoom:
 
     def _build_slug_queue(self):
         """
-        Cola para una partida completa:
-        - Cada generador disponible aparece al menos 1 vez
-        - Los slots restantes se rellenan al azar entre los disponibles
-        - Todo mezclado — orden impredecible cada partida
-
-        Escala automáticamente: agregar generadores al DB + reload
-        los incorpora sin tocar código.
+        Una pregunta por cada generador disponible, en orden aleatorio.
+        Si el jugador eligió generadores, usa exactamente esos.
         """
         available = self._available_slugs()
         if not available:
             self._slug_queue = []
             return
-        base = available[:]
-        random.shuffle(base)
-        extra_n = max(0, QUESTIONS_PER_GAME - len(base))
-        extra = [random.choice(available) for _ in range(extra_n)]
-        queue = base + extra
+        queue = available[:]
         random.shuffle(queue)
         self._slug_queue = queue
-        print(f"[queue] {len(queue)} preguntas de {len(available)} generadores: {available}")
+        print(f"[queue] {len(queue)} preguntas: {queue}")
 
     def _next_slug(self) -> str:
         if not getattr(self, "_slug_queue", None):
@@ -516,11 +513,11 @@ class GameRoom:
 
     async def _game_loop(self, all_questions: list[dict]):
         self.state = "QUESTION"
-        self._build_slug_queue()   # siempre fresca al inicio de cada partida
+        self._build_slug_queue()
         pool = self._get_questions(all_questions)
-        if not pool and not (self.runtime_engine and self.runtime_engine.loaded):
-            raise RuntimeError("Sin preguntas disponibles y motor procedural no cargado")
-        total = QUESTIONS_PER_GAME
+        total = len(self._slug_queue) if self._slug_queue else 9
+        if total == 0:
+            raise RuntimeError("No hay generadores seleccionados para jugar")
 
         for i in range(total):
             question = self._pick_next_question(pool)
@@ -600,6 +597,7 @@ class GameRoom:
         self.answers = {}
         self.start_task = None
         self.start_time = None
+        self.selected_slugs = None
 
     def _build_scoreboard(self) -> list[dict]:
         return sorted(
@@ -713,9 +711,9 @@ class GameManager:
             if not self.questions:
                 self._load_from_json()
 
-    async def add_player(self, player_id: str, nickname: str, mode: str):
+    async def add_player(self, player_id: str, nickname: str, mode: str, selected_slugs: list[str] | None = None):
         room = self.get_room(mode)
-        await room.add_player(player_id, nickname, self.questions)
+        await room.add_player(player_id, nickname, self.questions, selected_slugs)
 
     async def remove_player(self, player_id: str, mode: str):
         room = self.rooms.get(mode)

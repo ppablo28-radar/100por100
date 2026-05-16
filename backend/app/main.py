@@ -202,9 +202,10 @@ async def websocket_endpoint(websocket: WebSocket):
             if message_type == "JOIN_GAME":
                 nickname = data.get("nickname", "").strip()
                 mode = data.get("mode", "general").strip().lower() or "general"
+                selected_slugs = data.get("selected_slugs") or None
                 if nickname:
                     player_modes[player_id] = mode
-                    await game_manager.add_player(player_id, nickname, mode)
+                    await game_manager.add_player(player_id, nickname, mode, selected_slugs)
 
             elif message_type == "SUBMIT_ANSWER":
                 answer = data.get("answer")

@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(python -c \"from app.game_manager import GameManager; from app.generator_engine.engine import RuntimeEngine; from app.generator_engine.ranking_order import RankingOrderGenerator; from app.generator_engine.closest_number import ClosestNumberGenerator; print\\('OK'\\)\")",
+      "PowerShell(head -20)"
     ]
   }
 }
