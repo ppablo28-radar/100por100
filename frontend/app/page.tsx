@@ -79,6 +79,16 @@ const GENERATOR_GROUPS = [
     short: ["Más Superficie","Ordenar Sup.","Adivinar Sup."],
   },
   {
+    label: "🌍 Países · PIB per cápita",
+    slugs: ["higher-lower-paises-pib","ranking-paises-pib","closest-number-paises-pib"],
+    short: ["Más PIB","Ordenar PIB","Adivinar PIB"],
+  },
+  {
+    label: "🌍 Países · Esperanza de vida",
+    slugs: ["higher-lower-paises-vida","ranking-paises-vida","closest-number-paises-vida"],
+    short: ["Más Esperanza","Ordenar Vida","Adivinar Vida"],
+  },
+  {
     label: "📺 YouTubers · Suscriptores",
     slugs: ["higher-lower-youtubers-subs","ranking-youtubers-subs","closest-number-youtubers-subs"],
     short: ["Más Subs","Ordenar Subs","Adivinar Subs"],
