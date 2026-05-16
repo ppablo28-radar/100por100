@@ -830,20 +830,30 @@ export default function Home() {
               );
             })}
 
-            <div className="text-center text-zinc-500 text-xs pt-1 border-t border-zinc-800">
-              {selectedSlugs.size === 0
-                ? "⚠️ Seleccioná al menos 1 pregunta"
-                : `${selectedSlugs.size} pregunta${selectedSlugs.size !== 1 ? "s" : ""} · una de cada una`}
-            </div>
+            {(() => {
+              const active = [...selectedSlugs].filter(s => engineSlugs.size === 0 || engineSlugs.has(s)).length;
+              return (
+                <div className="text-center text-zinc-500 text-xs pt-1 border-t border-zinc-800">
+                  {active === 0
+                    ? "⚠️ Seleccioná al menos 1 pregunta"
+                    : `${active} pregunta${active !== 1 ? "s" : ""} · una de cada una`}
+                </div>
+              );
+            })()}
           </div>
 
-          <button
-            className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-xl font-bold transition-colors w-full"
-            onClick={joinGame}
-            disabled={!nickname.trim() || selectedSlugs.size === 0}
-          >
-            JUGAR ({selectedSlugs.size} preguntas)
-          </button>
+          {(() => {
+            const activeCount = [...selectedSlugs].filter(s => engineSlugs.size === 0 || engineSlugs.has(s)).length;
+            return (
+              <button
+                className="bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed px-10 py-3 rounded-lg text-xl font-bold transition-colors w-full"
+                onClick={joinGame}
+                disabled={!nickname.trim() || activeCount === 0}
+              >
+                JUGAR ({activeCount} preguntas)
+              </button>
+            );
+          })()}
         </div>
       )}
 
