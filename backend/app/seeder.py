@@ -24,6 +24,11 @@ ATTRIBUTES = {
     "height_cm":          ("Altura",             "integer", "cm"),
     "speed_kmh":          ("Velocidad máxima",   "float",   "km/h"),
     "metacritic":         ("Metacritic",         "integer", "puntos"),
+    "diameter_km":        ("Diámetro",           "integer", "km"),
+    "distance_sun_mkm":   ("Distancia al Sol",   "float",   "millones de km"),
+    "moons_count":        ("Número de lunas",    "integer", "lunas"),
+    "surface_temp_c":     ("Temperatura media",  "float",   "°C"),
+    "market_value_m_eur": ("Valor de mercado",   "integer", "millones €"),
 }
 
 # ─── Países ───────────────────────────────────────────────────────────────────
@@ -150,6 +155,46 @@ VIDEOGAMES = [
     {"slug": "elden-ring",       "name": "Elden Ring",              "release_year": 2022, "units_sold_m": 25,   "metacritic": 96},
 ]
 
+# ─── Planetas ────────────────────────────────────────────────────────────────
+# {slug, name, diameter_km, distance_sun_mkm, moons_count, surface_temp_c}
+
+PLANETS = [
+    {"slug": "mercurio", "name": "Mercurio", "diameter_km": 4879,   "distance_sun_mkm": 57.9,   "moons_count": 0,   "surface_temp_c": 167},
+    {"slug": "venus",    "name": "Venus",    "diameter_km": 12104,  "distance_sun_mkm": 108.2,  "moons_count": 0,   "surface_temp_c": 464},
+    {"slug": "tierra",   "name": "Tierra",   "diameter_km": 12742,  "distance_sun_mkm": 149.6,  "moons_count": 1,   "surface_temp_c": 15},
+    {"slug": "marte",    "name": "Marte",    "diameter_km": 6779,   "distance_sun_mkm": 227.9,  "moons_count": 2,   "surface_temp_c": -60},
+    {"slug": "jupiter",  "name": "Júpiter",  "diameter_km": 139820, "distance_sun_mkm": 778.5,  "moons_count": 95,  "surface_temp_c": -110},
+    {"slug": "saturno",  "name": "Saturno",  "diameter_km": 116460, "distance_sun_mkm": 1432.0, "moons_count": 146, "surface_temp_c": -140},
+    {"slug": "urano",    "name": "Urano",    "diameter_km": 50724,  "distance_sun_mkm": 2867.0, "moons_count": 28,  "surface_temp_c": -195},
+    {"slug": "neptuno",  "name": "Neptuno",  "diameter_km": 49244,  "distance_sun_mkm": 4515.0, "moons_count": 16,  "surface_temp_c": -200},
+]
+
+# ─── Futbolistas ──────────────────────────────────────────────────────────────
+# {slug, name, goals_career, height_cm, market_value_m_eur}
+
+FOOTBALLERS = [
+    {"slug": "messi",        "name": "Lionel Messi",       "goals_career": 820, "height_cm": 169, "market_value_m_eur": 25},
+    {"slug": "cristiano",    "name": "Cristiano Ronaldo",  "goals_career": 890, "height_cm": 187, "market_value_m_eur": 15},
+    {"slug": "pele",         "name": "Pelé",               "goals_career": 767, "height_cm": 173, "market_value_m_eur": None},
+    {"slug": "ronaldo-r9",   "name": "Ronaldo Nazário",    "goals_career": 414, "height_cm": 183, "market_value_m_eur": None},
+    {"slug": "maradona",     "name": "Diego Maradona",     "goals_career": 312, "height_cm": 165, "market_value_m_eur": None},
+    {"slug": "ronaldinho",   "name": "Ronaldinho",         "goals_career": 306, "height_cm": 181, "market_value_m_eur": None},
+    {"slug": "neymar",       "name": "Neymar Jr",          "goals_career": 400, "height_cm": 175, "market_value_m_eur": 40},
+    {"slug": "mbappe",       "name": "Kylian Mbappé",      "goals_career": 290, "height_cm": 178, "market_value_m_eur": 200},
+    {"slug": "haaland",      "name": "Erling Haaland",     "goals_career": 290, "height_cm": 194, "market_value_m_eur": 200},
+    {"slug": "lewandowski",  "name": "Robert Lewandowski", "goals_career": 630, "height_cm": 185, "market_value_m_eur": 15},
+    {"slug": "benzema",      "name": "Karim Benzema",      "goals_career": 424, "height_cm": 185, "market_value_m_eur": 20},
+    {"slug": "zlatan",       "name": "Zlatan Ibrahimovic", "goals_career": 570, "height_cm": 195, "market_value_m_eur": None},
+    {"slug": "kane",         "name": "Harry Kane",         "goals_career": 290, "height_cm": 188, "market_value_m_eur": 100},
+    {"slug": "vinicius",     "name": "Vinicius Jr",        "goals_career": 130, "height_cm": 176, "market_value_m_eur": 180},
+    {"slug": "yamal",        "name": "Lamine Yamal",       "goals_career": 40,  "height_cm": 180, "market_value_m_eur": 180},
+    {"slug": "lautaro",      "name": "Lautaro Martínez",   "goals_career": 150, "height_cm": 174, "market_value_m_eur": 110},
+    {"slug": "suarez",       "name": "Luis Suárez",        "goals_career": 450, "height_cm": 182, "market_value_m_eur": None},
+    {"slug": "falcao",       "name": "Radamel Falcao",     "goals_career": 350, "height_cm": 177, "market_value_m_eur": None},
+    {"slug": "james-r",      "name": "James Rodríguez",    "goals_career": 160, "height_cm": 180, "market_value_m_eur": 8},
+    {"slug": "de-bruyne",    "name": "Kevin De Bruyne",    "goals_career": 120, "height_cm": 181, "market_value_m_eur": 60},
+]
+
 # ─── Generadores ──────────────────────────────────────────────────────────────
 
 GENERATORS = [
@@ -265,6 +310,70 @@ GENERATORS = [
         "attribute_name": "Copias vendidas", "unit": "millones",
         "question_text": "¿Cuántos millones de copias vendió",
         "min_options": 4, "max_options": 8}},
+    # Planetas · Diámetro
+    {"slug": "higher-lower-planetas-diametro", "type": "higher_lower", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "diameter_km",
+        "attribute_name": "Diámetro", "unit": "km",
+        "direction": "higher", "min_options": 2, "max_options": 8,
+        "question_text": "¿Cuál de estos planetas es más grande?"}},
+    {"slug": "ranking-planetas-diametro", "type": "ranking_order", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "diameter_km",
+        "attribute_name": "Diámetro", "unit": "km",
+        "direction": "desc", "min_items": 2, "max_items": 8,
+        "question_text": "Ordená estos planetas de mayor a menor tamaño"}},
+    {"slug": "closest-number-planetas-diametro", "type": "closest_number", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "diameter_km",
+        "attribute_name": "Diámetro", "unit": "km",
+        "question_text": "¿Cuántos km de diámetro tiene",
+        "min_options": 4, "max_options": 8}},
+    # Planetas · Distancia al Sol
+    {"slug": "higher-lower-planetas-distancia", "type": "higher_lower", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "distance_sun_mkm",
+        "attribute_name": "Distancia al Sol", "unit": "millones de km",
+        "direction": "higher", "min_options": 2, "max_options": 8,
+        "question_text": "¿Cuál de estos planetas está más lejos del Sol?"}},
+    {"slug": "ranking-planetas-distancia", "type": "ranking_order", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "distance_sun_mkm",
+        "attribute_name": "Distancia al Sol", "unit": "millones de km",
+        "direction": "asc", "min_items": 2, "max_items": 8,
+        "question_text": "Ordená estos planetas de más cercano a más lejano del Sol"}},
+    {"slug": "closest-number-planetas-distancia", "type": "closest_number", "config": {
+        "allowed_entity_types": ["planet"], "attribute_slug": "distance_sun_mkm",
+        "attribute_name": "Distancia al Sol", "unit": "millones de km",
+        "question_text": "¿A cuántos millones de km del Sol está",
+        "min_options": 4, "max_options": 8}},
+    # Futbolistas · Goles en carrera
+    {"slug": "higher-lower-futbolistas-goles", "type": "higher_lower", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "goals_career",
+        "attribute_name": "Goles en carrera", "unit": "goles",
+        "direction": "higher", "min_options": 2, "max_options": 8,
+        "question_text": "¿Quién tiene más goles en su carrera?"}},
+    {"slug": "ranking-futbolistas-goles", "type": "ranking_order", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "goals_career",
+        "attribute_name": "Goles en carrera", "unit": "goles",
+        "direction": "desc", "min_items": 2, "max_items": 6,
+        "question_text": "Ordená estos futbolistas de más a menos goles en carrera"}},
+    {"slug": "closest-number-futbolistas-goles", "type": "closest_number", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "goals_career",
+        "attribute_name": "Goles en carrera", "unit": "goles",
+        "question_text": "¿Cuántos goles hizo en su carrera",
+        "min_options": 4, "max_options": 8}},
+    # Futbolistas · Altura
+    {"slug": "higher-lower-futbolistas-altura", "type": "higher_lower", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "height_cm",
+        "attribute_name": "Altura", "unit": "cm",
+        "direction": "higher", "min_options": 2, "max_options": 8,
+        "question_text": "¿Cuál de estos futbolistas es más alto?"}},
+    {"slug": "ranking-futbolistas-altura", "type": "ranking_order", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "height_cm",
+        "attribute_name": "Altura", "unit": "cm",
+        "direction": "desc", "min_items": 2, "max_items": 6,
+        "question_text": "Ordená estos futbolistas de mayor a menor altura"}},
+    {"slug": "closest-number-futbolistas-altura", "type": "closest_number", "config": {
+        "allowed_entity_types": ["footballer"], "attribute_slug": "height_cm",
+        "attribute_name": "Altura", "unit": "cm",
+        "question_text": "¿Cuántos cm mide",
+        "min_options": 4, "max_options": 8}},
 ]
 
 # ─── Funciones de seed ────────────────────────────────────────────────────────
@@ -320,7 +429,29 @@ async def seed_all(db_url: str) -> dict:
 
         log.append(f"✓ {len(VIDEOGAMES)} videojuegos procesados")
 
-        # 5. Generadores
+        # 5. Planetas
+        for p in PLANETS:
+            await _upsert_entity(conn, "planet", p["slug"], p["name"], log)
+            eid = await _get_entity_id(conn, p["slug"])
+            for attr_slug in ("diameter_km", "distance_sun_mkm", "moons_count", "surface_temp_c"):
+                val = p.get(attr_slug)
+                if val is not None and attr_slug in attr_ids:
+                    await _set_attr(conn, eid, attr_ids[attr_slug], float(val))
+
+        log.append(f"✓ {len(PLANETS)} planetas procesados")
+
+        # 6. Futbolistas
+        for f in FOOTBALLERS:
+            await _upsert_entity(conn, "footballer", f["slug"], f["name"], log)
+            eid = await _get_entity_id(conn, f["slug"])
+            for attr_slug in ("goals_career", "height_cm", "market_value_m_eur"):
+                val = f.get(attr_slug)
+                if val is not None and attr_slug in attr_ids:
+                    await _set_attr(conn, eid, attr_ids[attr_slug], float(val))
+
+        log.append(f"✓ {len(FOOTBALLERS)} futbolistas procesados")
+
+        # 7. Generadores
         for gen in GENERATORS:
             row = await conn.fetchrow(
                 "SELECT id FROM procedural_generators WHERE slug=$1", gen["slug"]

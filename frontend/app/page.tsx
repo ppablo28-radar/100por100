@@ -94,6 +94,26 @@ const GENERATOR_GROUPS = [
     short: ["Más Subs","Ordenar Subs","Adivinar Subs"],
   },
   {
+    label: "🪐 Planetas · Tamaño",
+    slugs: ["higher-lower-planetas-diametro","ranking-planetas-diametro","closest-number-planetas-diametro"],
+    short: ["Más Grande","Ordenar Tamaño","Adivinar km"],
+  },
+  {
+    label: "🪐 Planetas · Distancia al Sol",
+    slugs: ["higher-lower-planetas-distancia","ranking-planetas-distancia","closest-number-planetas-distancia"],
+    short: ["Más Lejano","Ordenar Dist.","Adivinar Dist."],
+  },
+  {
+    label: "⚽ Futbolistas · Goles",
+    slugs: ["higher-lower-futbolistas-goles","ranking-futbolistas-goles","closest-number-futbolistas-goles"],
+    short: ["Más Goles","Ordenar Goles","Adivinar Goles"],
+  },
+  {
+    label: "⚽ Futbolistas · Altura",
+    slugs: ["higher-lower-futbolistas-altura","ranking-futbolistas-altura","closest-number-futbolistas-altura"],
+    short: ["Más Alto","Ordenar Altura","Adivinar Altura"],
+  },
+  {
     label: "🎮 Juegos · Año",
     slugs: ["higher-lower-games-year","ranking-games-year","closest-number-games-year"],
     short: ["Más Reciente","Ordenar Año","Adivinar Año"],
